@@ -770,21 +770,18 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       <div class="proof-stat"><div class="n">Free</div><div class="l">For homeowners</div></div>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="hero-wall"></div>
-    <div class="hero-demo-wrap">
-      <div class="hero-demo-inner">
-        <div class="demo-toolbar">
-          <div class="demo-dot" style="background:#E24B4A"></div>
-          <div class="demo-dot" style="background:#E8C87A;margin-left:5px"></div>
-          <div class="demo-dot" style="background:#3DB06A;margin-left:5px"></div>
-          <span class="demo-label">Viewframe — Visualiser</span>
-        </div>
-        <div class="demo-canvas" id="hero-canvas">
-          <div class="detect-chip" id="detect-chip" style="display:none">✦ 3 elements detected</div>
-          <!-- Windows rendered by JS -->
+  <div class="hero-right" style="display:flex;align-items:center;justify-content:center;padding:48px;">
+    <div id="hero-ba" style="position:relative;width:100%;max-width:520px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 24px 64px rgba(0,0,0,0.35);user-select:none;touch-action:none;">
+      <img src="hero-after.jpg" alt="After — new window frames" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
+      <img src="hero-before.jpg" id="hba-before" alt="Before — original windows" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;clip-path:inset(0 50% 0 0);" draggable="false">
+      <div id="hba-handle" style="position:absolute;top:0;bottom:0;left:50%;width:44px;transform:translateX(-50%);cursor:ew-resize;display:flex;flex-direction:column;align-items:center;z-index:10;">
+        <div style="flex:1;width:3px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,0.4);"></div>
+        <div style="position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;background:#fff;border-radius:50%;box-shadow:0 2px 16px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/></svg>
         </div>
       </div>
+      <span style="position:absolute;bottom:14px;left:14px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.05em;">BEFORE</span>
+      <span style="position:absolute;bottom:14px;right:14px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.05em;">AFTER</span>
     </div>
   </div>
 </section>
@@ -2423,6 +2420,28 @@ window.addEventListener('resize',()=>{
       }
     },w.delay+1000);
   });
+})();
+
+/* ── HERO BEFORE/AFTER SLIDER ── */
+(function(){
+  const wrap=document.getElementById('hero-ba');
+  const handle=document.getElementById('hba-handle');
+  const before=document.getElementById('hba-before');
+  if(!wrap||!handle||!before)return;
+  let dragging=false;
+  function move(x){
+    const rect=wrap.getBoundingClientRect();
+    const pct=Math.max(2,Math.min(98,((x-rect.left)/rect.width)*100));
+    handle.style.left=pct+'%';
+    before.style.clipPath='inset(0 '+(100-pct)+'% 0 0)';
+  }
+  handle.addEventListener('mousedown',e=>{dragging=true;e.preventDefault();});
+  handle.addEventListener('touchstart',e=>{dragging=true;},{passive:true});
+  window.addEventListener('mousemove',e=>{if(dragging)move(e.clientX);});
+  window.addEventListener('touchmove',e=>{if(dragging&&e.touches[0])move(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('mouseup',()=>dragging=false);
+  window.addEventListener('touchend',()=>dragging=false);
+  wrap.addEventListener('click',e=>{move(e.clientX);});
 })();
 </script>
 
