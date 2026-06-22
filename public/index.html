@@ -2471,7 +2471,7 @@ async function runTransform(){
   if(!S._photoB64||!S._photoMime){alert('Please upload a photo first.');return;}
   const els=S.elements||[];
   const style=els.length?(els[0].type||'window-casement'):'window-casement';
-  const frameColour=els.length?(els[0].fc||'#4A4A4A'):'#4A4A4A';
+  const frameColour=S.fc||'#4A4A4A';
 
   document.getElementById('transform-modal').classList.add('show');
   document.getElementById('transform-loading').style.display='block';
