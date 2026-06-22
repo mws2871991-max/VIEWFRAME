@@ -158,6 +158,71 @@ app.get('/api/share', shareLimit, (req, res) => {
   res.json(layout);
 });
 
+// ── POST /api/transform ───────────────────────────────────────────────────────
+// Accepts: { image, mimeType, style, frameColour }
+// Returns: { url } — a Replicate CDN URL for the transformed image
+const transformLimit = rateLimit({ windowMs: 60_000, max: 3, standardHeaders: true, legacyHeaders: false,
+  message: { error: 'Too many transformations — please wait a minute.' }
+});
+
+app.post('/api/transform', transformLimit, async (req, res) => {
+  const { image, mimeType, style, frameColour } = req.body || {};
+  if (!image || !mimeType) return res.status(400).json({ error: 'Missing image.' });
+
+  const replicateKey = process.env.REPLICATE_API_TOKEN;
+  if (!replicateKey) return res.status(500).json({ error: 'Replicate API token not set.' });
+
+  const colourNames = {
+    '#FFFFFF': 'bright white', '#F5F0E8': 'warm cream / ivory', '#C8A97A': 'light oak wood grain',
+    '#4A4A4A': 'anthracite grey (RAL 7016)', '#8B6853': 'dark chocolate brown (RAL 8017)',
+    '#2C3E50': 'dark navy blue', '#1A1A1A': 'jet black', '#7A9E7E': 'sage green',
+    '#D4742A': 'terracotta orange', '#5C5C5C': 'slate grey'
+  };
+  const styleNames = {
+    'window-casement': 'casement', 'window-sash': 'sash', 'window-double': 'double casement',
+    'window-bay': 'bay', 'window-skylight': 'skylight', 'window-tilt': 'tilt and turn',
+    'door-single': 'single', 'door-double': 'double', 'door-bifold': 'bifold',
+    'door-sliding': 'sliding patio', 'door-french': 'french', 'door-patio': 'patio'
+  };
+
+  const colourName = colourNames[frameColour] || 'anthracite grey (RAL 7016)';
+  const styleName  = styleNames[style] || 'casement';
+  const prompt = `Replace all windows and doors on this house with modern ${styleName} windows and doors with ${colourName} coloured frames. The window and door frames must be ${colourName}. Keep the house walls, roof, garden and all surroundings exactly the same — only change the window and door frames. Photorealistic, high quality, architectural photography.`;
+
+  try {
+    const predRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${replicateKey}`, 'Content-Type': 'application/json', 'Prefer': 'wait=60' },
+      body: JSON.stringify({ input: { prompt, input_image: `data:${mimeType};base64,${image}`, output_format: 'jpg', safety_tolerance: 5 } })
+    });
+    if (!predRes.ok) {
+      const err = await predRes.json().catch(() => ({}));
+      return res.status(502).json({ error: `Transformation failed (${predRes.status}).` });
+    }
+    const pred = await predRes.json();
+    if (pred.status === 'succeeded' && pred.output) {
+      const url = Array.isArray(pred.output) ? pred.output[0] : pred.output;
+      return res.json({ url });
+    }
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const poll = await fetch(`https://api.replicate.com/v1/predictions/${pred.id}`, {
+        headers: { 'Authorization': `Bearer ${replicateKey}` }
+      });
+      const d = await poll.json();
+      if (d.status === 'succeeded') {
+        const url = Array.isArray(d.output) ? d.output[0] : d.output;
+        return res.json({ url });
+      }
+      if (d.status === 'failed') return res.status(502).json({ error: 'Transformation failed — try again.' });
+    }
+    return res.status(504).json({ error: 'Transformation timed out — try again.' });
+  } catch (err) {
+    console.error('Transform error:', err.message);
+    return res.status(502).json({ error: "Couldn't reach transformation service." });
+  }
+});
+
 // ── POST /api/waitlist ────────────────────────────────────────────────────────
 app.post('/api/waitlist', (req, res) => {
   const { email, role } = req.body || {};

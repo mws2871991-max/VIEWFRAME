@@ -868,6 +868,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
           </button>
         </div>
       </div>
+      <button class="app-tb-btn" onclick="runTransform()" id="transform-btn" style="display:none" title="AI-generate a photorealistic transformation of your house">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        AI Transform
+      </button>
       <button class="app-tb-btn prim" onclick="showShare()">
         <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
@@ -2422,10 +2426,134 @@ window.addEventListener('resize',()=>{
 })();
 </script>
 
+
+<!-- TRANSFORM MODAL -->
+<div class="modal-bg" id="transform-modal" style="z-index:300">
+  <div class="modal" role="dialog" aria-modal="true" style="width:680px;max-width:calc(100vw - 40px)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <h3 id="transform-modal-title" style="font-size:20px">AI Transformation</h3>
+      <button onclick="closeTransformModal()" style="font-size:20px;color:var(--ink-3);padding:4px 8px">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--ink-3);margin-bottom:16px">Generating a photorealistic preview of your new windows. Drag the slider to compare.</p>
+    <div id="transform-loading" style="text-align:center;padding:40px 0">
+      <div style="font-size:32px;margin-bottom:12px">✦</div>
+      <div style="font-size:14px;color:var(--ink-2);font-weight:600" id="transform-status">Seeing how your home looks…</div>
+      <div style="font-size:12px;color:var(--ink-3);margin-top:6px">Usually takes 15–30 seconds</div>
+    </div>
+    <div id="transform-result" style="display:none">
+      <div id="ba-wrap" style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#111;user-select:none;touch-action:none">
+        <img id="ba-after" alt="After" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+        <img id="ba-before" alt="Before" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;clip-path:inset(0 50% 0 0)">
+        <div id="ba-handle" style="position:absolute;top:0;bottom:0;left:50%;width:44px;transform:translateX(-50%);cursor:ew-resize;display:flex;flex-direction:column;align-items:center;z-index:10">
+          <div style="flex:1;width:3px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,0.4)"></div>
+          <div style="position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;background:#fff;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round"><polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/></svg>
+          </div>
+        </div>
+        <span style="position:absolute;bottom:12px;left:14px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.04em">BEFORE</span>
+        <span style="position:absolute;bottom:12px;right:14px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.04em">AFTER</span>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+        <a id="transform-dl" href="#" download="viewframe-transformation.jpg" class="btn btn-ghost" style="font-size:13px;padding:8px 18px">Download</a>
+        <button onclick="closeTransformModal()" class="btn btn-primary" style="font-size:13px;padding:8px 18px">Done</button>
+      </div>
+    </div>
+    <div id="transform-error" style="display:none;font-size:13px;color:var(--danger);background:var(--danger-lt);border-radius:var(--r);padding:12px;margin-top:8px"></div>
+  </div>
+</div>
+
 <!-- jsPDF — used only by exportSpecSheet() for the PDF spec sheet export.
      Loaded at the end of the page so it never blocks initial render.
      If this fails to load (offline, blocked CDN, etc.), exportSpecSheet()
      checks for it and shows a clear error instead of throwing. -->
+<script>
+async function runTransform(){
+  if(!S._photoB64||!S._photoMime){alert('Please upload a photo first.');return;}
+  const els=S.elements||[];
+  const style=els.length?(els[0].type||'window-casement'):'window-casement';
+  const frameColour=els.length?(els[0].fc||'#4A4A4A'):'#4A4A4A';
+
+  document.getElementById('transform-modal').classList.add('show');
+  document.getElementById('transform-loading').style.display='block';
+  document.getElementById('transform-result').style.display='none';
+  document.getElementById('transform-error').style.display='none';
+
+  const statuses=['Seeing how your home looks…','Applying window styles…','Rendering frames and glazing…','Almost there…'];
+  let si=0;
+  const iv=setInterval(()=>{
+    document.getElementById('transform-status').textContent=statuses[si++%statuses.length];
+  },4000);
+
+  try{
+    const r=await fetch('/api/transform',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:S._photoB64,mimeType:S._photoMime,style,frameColour})
+    });
+    clearInterval(iv);
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||'Transformation failed');}
+    const data=await r.json();
+    if(!data.url)throw new Error('No result returned');
+
+    // Get the original photo as data URL for before side
+    const beforeSrc='data:'+S._photoMime+';base64,'+S._photoB64;
+    document.getElementById('ba-before').src=beforeSrc;
+    document.getElementById('ba-after').src=data.url;
+    document.getElementById('transform-dl').href=data.url;
+    document.getElementById('transform-loading').style.display='none';
+    document.getElementById('transform-result').style.display='block';
+    initBaSlider();
+  }catch(err){
+    clearInterval(iv);
+    document.getElementById('transform-loading').style.display='none';
+    const errEl=document.getElementById('transform-error');
+    errEl.textContent='Transformation failed: '+err.message;
+    errEl.style.display='block';
+  }
+}
+
+function closeTransformModal(){
+  document.getElementById('transform-modal').classList.remove('show');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTransformModal();});
+
+function initBaSlider(){
+  const wrap=document.getElementById('ba-wrap');
+  const handle=document.getElementById('ba-handle');
+  const beforeImg=document.getElementById('ba-before');
+  let dragging=false;
+  function move(x){
+    const rect=wrap.getBoundingClientRect();
+    let pct=Math.max(5,Math.min(95,((x-rect.left)/rect.width)*100));
+    handle.style.left=pct+'%';
+    beforeImg.style.clipPath='inset(0 '+(100-pct)+'% 0 0)';
+  }
+  handle.addEventListener('mousedown',e=>{dragging=true;e.stopPropagation();e.preventDefault();});
+  handle.addEventListener('touchstart',e=>{dragging=true;e.stopPropagation();},{passive:true});
+  window.addEventListener('mousemove',e=>{if(dragging)move(e.clientX);});
+  window.addEventListener('touchmove',e=>{if(dragging&&e.touches[0])move(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('mouseup',()=>dragging=false);
+  window.addEventListener('touchend',()=>dragging=false);
+  wrap.addEventListener('click',e=>{if(!dragging)move(e.clientX);});
+}
+
+// Show Transform button after photo + detect
+const _origLoadPhoto=loadPhoto;
+// Patch updateAll to show transform button once elements exist
+const _origUpdateAll=updateAll;
+function updateAll(){
+  _origUpdateAll();
+  const tb=document.getElementById('transform-btn');
+  if(tb)tb.style.display=S.elements&&S.elements.length?'':'none';
+}
+// Also show after photo load
+document.getElementById('photo-input').addEventListener('change',()=>{
+  setTimeout(()=>{
+    const tb=document.getElementById('transform-btn');
+    if(tb&&S._photoB64)tb.style.display='';
+  },500);
+});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 </body>
 </html>
