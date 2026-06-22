@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viewframe — See your windows before you buy them</title>
+<meta name="description" content="Upload a photo of your home and let Viewframe detect every window and door, then explore styles, frames, and glazing instantly. No measuring, no guesswork.">
+<meta name="theme-color" content="#FDFAF6">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Viewframe — See your windows before you buy them">
+<meta property="og:description" content="Upload a photo of your home and explore new windows and doors in seconds — then connect with a trusted local installer to make it happen.">
+<meta property="og:image" content="https://viewframe.co.uk/og-image.png">
+<meta property="og:url" content="https://viewframe.co.uk">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Viewframe — See your windows before you buy them">
+<meta name="twitter:description" content="Upload a photo of your home and explore new windows and doors in seconds — then connect with a trusted local installer to make it happen.">
+<meta name="twitter:image" content="https://viewframe.co.uk/og-image.png">
+
+<!-- Favicon (inline SVG, no external file needed) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect width='18' height='18' rx='4' fill='%23D4742A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='4' y='4' width='10' height='10' rx='1.4'/%3E%3Cpolyline points='4,11 7,8 9,10 12,7 14,11'/%3E%3C/g%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --ink: #1C1917;
+  --ink-2: #44403C;
+  --ink-3: #78716C;
+  --rule: rgba(28,25,23,0.08);
+  --rule-md: rgba(28,25,23,0.14);
+  --paper: #FDFAF6;
+  --paper-2: #FFFFFF;
+  --paper-warm: #FEF3E2;
+  --glass-blue: #BDD7F0;
+  --accent: #D4742A;
+  --accent-dk: #B35E1A;
+  --accent-lt: #FEF0E0;
+  --accent-dim: rgba(212,116,42,0.12);
+  --teal: #2A7A6B;
+  --teal-lt: #E0F2EE;
+  --success: #2A7A6B;
+  --success-lt: #E0F2EE;
+  --warn: #7A4A0A;
+  --warn-lt: #FDF0DC;
+  --danger: #9B2020;
+  --danger-lt: #FAEAEA;
+  --r: 8px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+  --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --serif: 'Fraunces', Georgia, serif;
+  --nav-h: 64px;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
+
+/* ─── ACCESSIBILITY: FOCUS STATES ─── */
+a:focus-visible, button:focus-visible, input:focus-visible, .el-btn:focus-visible,
+.cswatch:focus-visible, .gswatch:focus-visible, .vt-btn:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.cswatch:focus-visible, .gswatch:focus-visible { outline-offset: 3px; }
+a:focus, button:focus { outline: none; }
+a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
+
+/* ─── ACCESSIBILITY: REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 1000;
+  background: var(--accent); color: #fff; padding: 12px 20px;
+  border-radius: 0 0 var(--r) 0; font-size: 14px; font-weight: 600;
+}
+.skip-link:focus { left: 0; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  display: flex; align-items: center;
+  padding: 0 36px;
+  background: rgba(253,250,246,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-logo {
+  font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .logo-mark {
+  width: 34px; height: 34px; background: var(--accent); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(212,116,42,0.35);
+}
+.nav-logo .logo-mark svg { width: 18px; height: 18px; }
+.nav-links { display: flex; align-items: center; gap: 32px; margin-left: 52px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-3); transition: color .15s; }
+.nav-links a:hover { color: var(--accent); }
+.nav-cta { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 600; transition: all .18s; }
+.btn-ghost { border: 1.5px solid var(--rule-md); color: var(--ink-2); }
+.btn-ghost:hover { background: var(--paper-2); color: var(--ink); border-color: var(--ink-3); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(212,116,42,0.3); }
+.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(212,116,42,0.4); transform: translateY(-1px); }
+.btn-lg { padding: 15px 30px; font-size: 15px; border-radius: 100px; }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  padding-top: var(--nav-h);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px 80px 80px;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 24px;
+  background: var(--accent-lt); padding: 6px 14px; border-radius: 100px; width: fit-content;
+}
+.hero-h1 {
+  font-family: var(--serif); font-size: clamp(40px, 5vw, 62px);
+  line-height: 1.08; letter-spacing: -0.02em; color: var(--ink); font-weight: 300;
+  margin-bottom: 24px;
+}
+.hero-h1 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.hero-sub {
+  font-size: 18px; color: var(--ink-2); line-height: 1.75;
+  max-width: 480px; margin-bottom: 40px; font-weight: 400;
+}
+.hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.hero-proof {
+  margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--rule);
+  display: flex; gap: 40px;
+}
+.proof-stat .n { font-family: var(--serif); font-size: 34px; color: var(--ink); font-weight: 500; }
+.proof-stat .l { font-size: 13px; color: var(--ink-3); margin-top: 2px; font-weight: 500; }
+
+/* ─── HERO WINDOW DEMO ─── */
+.hero-right {
+  background: var(--ink); position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-wall {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(212,116,42,0.15) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.03) 79px, rgba(255,255,255,0.03) 80px);
+  background-color: #241C14;
+}
+.hero-demo-wrap { position: relative; z-index: 2; padding: 60px; width: 100%; }
+.hero-demo-inner {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 32px; overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+}
+.demo-toolbar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+}
+.demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+.demo-label { font-size: 12px; color: rgba(255,255,255,0.35); margin-left: auto; font-family: var(--sans); }
+.demo-canvas {
+  background: #2E2216; border-radius: var(--r-lg); height: 280px;
+  position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.06);
+}
+/* Animated windows in hero */
+.hw { position: absolute; border-radius: 4px; overflow: hidden; }
+.hw-frame { position: absolute; inset: 0; border: 3px solid #C8A97A; border-radius: 4px; pointer-events: none; z-index: 2; }
+.hw-glass {
+  position: absolute; inset: 3px;
+  background: linear-gradient(135deg, rgba(180,220,240,0.22) 0%, rgba(120,170,220,0.35) 100%);
+}
+.hw-shine {
+  position: absolute; top: 4px; left: 4px; width: 40%; height: 3px;
+  background: rgba(255,255,255,0.45); border-radius: 2px;
+}
+.hw-bar-h { position: absolute; left: 3px; right: 3px; height: 1.5px; background: rgba(200,169,122,0.6); }
+.hw-bar-v { position: absolute; top: 3px; bottom: 3px; width: 1.5px; background: rgba(200,169,122,0.6); }
+.hw-label-box {
+  position: absolute; bottom: -28px; left: 0; right: 0; text-align: center;
+  font-size: 10px; color: rgba(255,255,255,0.5); white-space: nowrap;
+}
+.hw-detect-ring {
+  position: absolute; inset: -4px; border: 1.5px solid #F0A060; border-radius: 6px;
+  animation: ring-pulse 2s ease-in-out infinite;
+}
+@keyframes ring-pulse { 0%,100%{opacity:0.7;} 50%{opacity:0.2;} }
+.detect-chip {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(212,116,42,0.18); border: 1px solid rgba(212,116,42,0.45);
+  color: #F0A060; font-size: 11px; padding: 5px 12px; border-radius: 100px;
+  backdrop-filter: blur(8px); font-family: var(--sans); font-weight: 600;
+}
+
+/* ─── SECTION COMMON ─── */
+section { padding: 100px 80px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: ''; display: block; width: 16px; height: 2px; background: var(--accent); border-radius: 2px; }
+.section-h2 {
+  font-family: var(--serif); font-size: clamp(28px, 3.5vw, 46px);
+  line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; font-weight: 300;
+}
+.section-sub { font-size: 17px; color: var(--ink-2); max-width: 560px; }
+
+/* ─── HOW IT WORKS ─── */
+.how-section { background: var(--paper-warm); }
+.steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 48px; margin-top: 64px; }
+.step { display: flex; flex-direction: column; }
+.step-num {
+  font-family: var(--serif); font-size: 52px; color: var(--accent-lt); line-height: 1;
+  margin-bottom: 16px; font-weight: 500;
+}
+.step-icon {
+  width: 52px; height: 52px; border-radius: var(--r-xl);
+  background: var(--paper-2); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; border: 1.5px solid var(--rule-md);
+  box-shadow: 0 2px 8px rgba(28,25,23,0.06);
+}
+.step-icon svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.step h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.step p { font-size: 14px; color: var(--ink-2); line-height: 1.75; }
+
+/* ─── VISUALISER APP ─── */
+.app-section { background: var(--paper); padding: 80px; }
+.app-header { text-align: center; margin-bottom: 48px; }
+.app-wrap {
+  max-width: 1100px; margin: 0 auto;
+  border: 1.5px solid var(--rule-md); border-radius: var(--r-xl);
+  overflow: hidden; background: var(--paper-2);
+  box-shadow: 0 28px 80px rgba(28,25,23,0.1);
+}
+
+/* APP TOPBAR */
+.app-topbar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 16px; height: 50px;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+.app-logo-sm { font-family: var(--serif); font-size: 15px; color: var(--ink); font-weight: 500; }
+.view-toggle {
+  display: flex; border: 1px solid var(--rule-md); border-radius: 100px; overflow: hidden; margin-left: 8px;
+  background: var(--paper-2);
+}
+.vt-btn {
+  padding: 5px 14px; font-size: 12px; background: none; border: none; cursor: pointer;
+  color: var(--ink-3); font-family: var(--sans); transition: all .15s; font-weight: 500;
+}
+.vt-btn.active { background: var(--accent); color: #fff; border-radius: 100px; }
+.sp { flex: 1; }
+.app-tb-btn {
+  display: flex; align-items: center; gap: 4px; padding: 6px 13px; font-size: 12px;
+  border: 1px solid var(--rule-md); border-radius: 100px; color: var(--ink-2);
+  font-family: var(--sans); background: var(--paper-2); cursor: pointer; transition: all .15s; white-space: nowrap;
+  font-weight: 500;
+}
+.app-tb-btn:hover { background: var(--paper); border-color: var(--ink-3); }
+.app-tb-btn.prim { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 2px 8px rgba(212,116,42,0.25); }
+.app-tb-btn.prim:hover { background: var(--accent-dk); }
+.app-tb-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* EXPORT DROPDOWN */
+.export-dd { position: relative; }
+.export-menu {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0; z-index: 50;
+  background: var(--paper-2); border: 1px solid var(--rule-md); border-radius: var(--r-lg);
+  box-shadow: 0 16px 40px rgba(28,25,23,0.16); width: 260px; overflow: hidden; padding: 6px;
+}
+.export-menu.show { display: block; }
+.export-menu-item {
+  display: flex; align-items: flex-start; gap: 10px; width: 100%; text-align: left;
+  padding: 10px 10px; border-radius: var(--r); transition: background .15s;
+}
+.export-menu-item:hover { background: var(--paper-warm); }
+.export-menu-item svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 1px; }
+.export-menu-item span { display: flex; flex-direction: column; gap: 2px; }
+.export-menu-item strong { font-size: 13px; font-weight: 600; color: var(--ink); }
+.export-menu-item small { font-size: 11.5px; color: var(--ink-3); line-height: 1.4; }
+
+/* APP MAIN */
+.app-main { display: grid; grid-template-columns: 220px 1fr 190px; height: 540px; }
+
+/* SIDEBAR */
+.app-sb { border-right: 1px solid var(--rule); background: var(--paper); overflow-y: auto; }
+.sb-sec { padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+.sb-lbl { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.el-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.el-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 9px 6px; border: 1.5px solid var(--rule); border-radius: var(--r-lg);
+  background: var(--paper-2); cursor: pointer; font-size: 11px; color: var(--ink-3);
+  font-family: var(--sans); transition: all .15s; line-height: 1.3; text-align: center;
+  font-weight: 500;
+}
+.el-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+.el-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+.el-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.color-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.cswatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all .15s; }
+.cswatch.active { border-color: var(--accent); transform: scale(1.18); box-shadow: 0 0 0 2px var(--accent-lt); }
+.gswatch { width: 30px; height: 20px; border-radius: 6px; cursor: pointer; border: 1.5px solid transparent; transition: all .15s; }
+.gswatch.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-lt); }
+
+.prop-r { margin-bottom: 10px; }
+.prop-r:last-child { margin-bottom: 0; }
+.prop-lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-3); margin-bottom: 3px; font-weight: 500; }
+.prop-lbl span { color: var(--accent); font-weight: 600; }
+.prop-r input[type=range] { width: 100%; accent-color: var(--accent); }
+
+/* CANVAS */
+.app-canvas {
+  background: #E8E0D4; position: relative; overflow: hidden; cursor: crosshair;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,0,0,0.04) 39px, rgba(0,0,0,0.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,0,0,0.04) 39px, rgba(0,0,0,0.04) 40px);
+}
+.app-canvas img.photo-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  display: none; pointer-events: none; user-select: none; -webkit-user-drag: none;
+}
+.app-canvas img.photo-bg.show { display: block; }
+.app-canvas { touch-action: none; }
+.canvas-hint {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px; pointer-events: none;
+}
+.canvas-hint.hidden { display: none; }
+.hint-icon { font-size: 36px; opacity: 0.25; }
+.hint-text { font-size: 13px; color: rgba(0,0,0,0.3); text-align: center; line-height: 1.8; font-weight: 500; }
+.el-layer { position: absolute; inset: 0; }
+.el-wrap { position: absolute; cursor: move; user-select: none; touch-action: none; }
+.el-wrap .el-del {
+  position: absolute; top: -8px; right: -8px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--danger); border: 2px solid #fff; color: #fff;
+  font-size: 11px; cursor: pointer; display: none;
+  align-items: center; justify-content: center; z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.el-wrap:hover .el-del, .el-wrap.sel .el-del { display: flex; }
+.el-wrap .el-lbl {
+  position: absolute; bottom: -20px; left: 0; right: 0;
+  text-align: center; font-size: 9px; color: rgba(0,0,0,0.45);
+  white-space: nowrap; pointer-events: none; display: none; font-weight: 600;
+}
+.el-wrap:hover .el-lbl, .el-wrap.sel .el-lbl { display: block; }
+.el-handle {
+  position: absolute; bottom: -5px; right: -5px;
+  width: 14px; height: 14px; background: var(--accent); border-radius: 4px;
+  cursor: se-resize; display: none; box-shadow: 0 2px 6px rgba(212,116,42,0.4);
+  touch-action: none;
+}
+.el-wrap:hover .el-handle, .el-wrap.sel .el-handle { display: block; }
+@media (pointer: coarse) {
+  .el-handle { display: block !important; width: 20px; height: 20px; bottom: -8px; right: -8px; }
+  .el-wrap .el-del { display: flex !important; }
+}
+.el-wrap.sel svg .frame { stroke: var(--accent) !important; stroke-width: 2.5px !important; }
+
+/* AI CONFIDENCE BADGE — only present on AI-detected elements, always visible
+   (not hover-gated like el-lbl) since the point is to flag low-confidence
+   detections at a glance, before the user has to interact with anything. */
+.el-conf {
+  position: absolute; top: -7px; left: -7px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  z-index: 9; cursor: help;
+}
+.el-conf.conf-high { background: var(--success); }
+.el-conf.conf-med { background: #C8821A; }
+.el-conf.conf-low { background: var(--danger); }
+.el-conf-tip {
+  position: absolute; top: 14px; left: -7px;
+  background: var(--ink); color: #fff; font-size: 10px; font-weight: 600;
+  padding: 3px 7px; border-radius: 5px; white-space: nowrap;
+  display: none; z-index: 11; pointer-events: none;
+}
+.el-conf:hover + .el-conf-tip, .el-conf:focus-visible + .el-conf-tip { display: block; }
+
+/* SCAN OVERLAY */
+.scan-ov {
+  position: absolute; inset: 0; background: rgba(28,25,23,0.65);
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; z-index: 20; backdrop-filter: blur(4px);
+}
+.scan-ov.show { display: flex; }
+.scan-line-anim {
+  width: 70%; height: 2px; border-radius: 1px;
+  background: linear-gradient(90deg, transparent, #F0A060, transparent);
+  animation: scanline 1.4s ease-in-out infinite;
+}
+@keyframes scanline { 0% { transform: translateY(-60px); } 100% { transform: translateY(60px); } }
+.scan-ov p { color: #fff; font-size: 14px; font-weight: 600; }
+.scan-ov span { color: rgba(255,255,255,0.5); font-size: 12px; }
+
+/* DETECT BOXES */
+.det-box {
+  position: absolute; border: 2px solid; border-radius: 4px; pointer-events: none;
+  transition: all .3s;
+}
+.det-box.win { border-color: var(--accent); background: rgba(212,116,42,0.1); }
+.det-box.door { border-color: var(--success); background: rgba(42,122,107,0.1); }
+.det-box.sel { border-width: 3px; }
+.det-box-lbl {
+  position: absolute; bottom: 100%; left: 0;
+  padding: 2px 8px; font-size: 10px; font-weight: 600; border-radius: 4px 4px 0 0; color: #fff; white-space: nowrap;
+}
+.det-box.win .det-box-lbl { background: var(--accent); }
+.det-box.door .det-box-lbl { background: var(--success); }
+
+/* UPLOAD ERROR + LOADING STATE */
+.upload-error {
+  display: none; align-items: center; gap: 10px;
+  background: var(--danger-lt); color: var(--danger);
+  border-bottom: 1px solid rgba(155,32,32,0.2);
+  padding: 10px 16px; font-size: 13px; font-weight: 500; line-height: 1.5;
+}
+.upload-error.show { display: flex; }
+.upload-error::before {
+  content: '⚠'; font-size: 14px; flex-shrink: 0;
+}
+.upload-icon, .upload-spinner { width: 14px; height: 14px; }
+.upload-spinner { display: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+#upload-label.loading .upload-icon { display: none; }
+#upload-label.loading .upload-spinner { display: block; animation: upload-spin 0.8s linear infinite; }
+#upload-label.loading { opacity: 0.7; pointer-events: none; }
+@keyframes upload-spin { to { transform: rotate(360deg); } }
+@keyframes ai-btn-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(212,116,42,0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(212,116,42,0); }
+}
+#ai-btn.pulse-once { animation: ai-btn-pulse 1s ease-out 2; }
+
+/* RIGHT PANEL */
+.app-rp { border-left: 1px solid var(--rule); background: var(--paper); overflow-y: auto; }
+.rp-sec { padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+.det-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 5px;
+}
+.det-chip svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+.chip-win { background: var(--accent-lt); color: var(--accent); }
+.chip-door { background: var(--success-lt); color: var(--success); }
+.el-li {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 8px; border-radius: var(--r); font-size: 11px;
+  cursor: pointer; color: var(--ink-3); transition: all .15s; border: 1px solid transparent;
+  font-weight: 500;
+}
+.el-li:hover { background: var(--paper-warm); color: var(--ink); }
+.el-li.sel { background: var(--accent-lt); color: var(--accent); border-color: rgba(212,116,42,0.3); }
+.el-li svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.stat-c { background: var(--paper-warm); border-radius: var(--r); padding: 8px; text-align: center; }
+.stat-n { font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 500; }
+.stat-l { font-size: 10px; color: var(--ink-3); margin-top: 1px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.conf-bar { height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.conf-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+.light-bar { height: 6px; border-radius: 3px; background: linear-gradient(90deg,#241c14,#f0a060); position: relative; margin-bottom: 4px; }
+.light-marker { position: absolute; top: -4px; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2px solid var(--accent); transform: translateX(-50%); transition: left .4s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+
+/* ─── FEATURES ─── */
+.features-section { background: var(--paper-2); padding: 100px 80px; }
+.features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 64px; }
+.feat-card {
+  background: var(--paper); padding: 36px 32px;
+  border-radius: var(--r-xl); border: 1.5px solid var(--rule);
+  transition: all .25s;
+}
+.feat-card:hover { background: var(--paper-warm); border-color: rgba(212,116,42,0.25); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(28,25,23,0.07); }
+.feat-icon {
+  width: 48px; height: 48px; border-radius: var(--r-xl);
+  background: var(--accent-lt); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.feat-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.feat-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.feat-card p { font-size: 13px; color: var(--ink-2); line-height: 1.75; }
+
+/* ─── TESTIMONIALS ─── */
+.testimonials-section { background: var(--paper); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+.testimonial-card {
+  background: var(--paper-2); border: 1.5px solid var(--rule-md); border-radius: var(--r-xl);
+  padding: 32px 28px; display: flex; flex-direction: column; position: relative;
+}
+.testimonial-placeholder-tag {
+  position: absolute; top: -11px; left: 24px;
+  background: var(--accent); color: #fff; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+}
+.testimonial-quote-icon { width: 28px; height: 28px; stroke: rgba(212,116,42,0.35); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+.testimonial-card p.quote { color: var(--ink-2); font-size: 14.5px; line-height: 1.75; margin-bottom: 22px; flex: 1; font-style: italic; }
+.testimonial-person { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--accent-lt);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.testimonial-avatar svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.testimonial-person .role { font-size: 13px; font-weight: 600; color: var(--ink); }
+.testimonial-person .ctx { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+
+/* ─── PRICING ─── */
+.pricing-section { background: var(--paper-warm); }
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 64px; align-items: stretch; }
+.price-card {
+  background: var(--paper-2); border-radius: var(--r-xl); border: 1.5px solid var(--rule-md);
+  padding: 32px 28px; display: flex; flex-direction: column;
+}
+.price-card.featured {
+  border-color: var(--accent); box-shadow: 0 16px 50px rgba(212,116,42,0.18);
+  position: relative; transform: scale(1.02);
+}
+.price-badge {
+  position: absolute; top: -13px; left: 28px;
+  background: var(--accent); color: #fff; font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 100px; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.price-tier { font-size: 14px; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.price-amount { font-family: var(--serif); font-size: 40px; color: var(--ink); margin-bottom: 4px; font-weight: 400; }
+.price-amount span { font-size: 15px; color: var(--ink-3); font-family: var(--sans); font-weight: 500; }
+.price-desc { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; line-height: 1.6; }
+.price-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; flex: 1; }
+.price-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+.price-feats svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; margin-top: 2px; }
+.price-card .btn { justify-content: center; width: 100%; }
+
+/* ─── FAQ ─── */
+.faq-section { background: var(--paper-2); }
+.faq-list { margin-top: 56px; max-width: 720px; }
+.faq-item { border-bottom: 1px solid var(--rule); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 22px 4px; text-align: left; font-size: 16px; font-weight: 600;
+  color: var(--ink); cursor: pointer;
+}
+.faq-q-icon {
+  width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%;
+  background: var(--accent-lt); display: flex; align-items: center; justify-content: center;
+  transition: transform .25s;
+}
+.faq-q-icon svg { width: 12px; height: 12px; stroke: var(--accent); fill: none; stroke-width: 2.4; stroke-linecap: round; }
+.faq-item.open .faq-q-icon { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden; transition: max-height .3s ease;
+}
+.faq-a-inner { padding: 0 4px 22px; font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 640px; }
+.faq-item.open .faq-a { max-height: 320px; }
+
+/* ─── CTA ─── */
+.cta-section {
+  background: var(--ink); color: #fff; padding: 120px 80px; text-align: center;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(212,116,42,0.2) 0%, transparent 60%);
+}
+.cta-section .section-h2 { color: #fff; }
+.cta-section .section-sub { color: rgba(255,255,255,0.6); margin: 0 auto 40px; }
+.cta-section .eyebrow { color: #F0A060; background: rgba(212,116,42,0.15); }
+.cta-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+/* ─── FOOTER ─── */
+footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
+.footer-main {
+  max-width: 1100px; margin: 0 auto; padding: 64px 80px 40px;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px;
+}
+.footer-brand p { font-size: 13px; color: var(--ink-3); line-height: 1.7; margin-top: 14px; max-width: 260px; }
+.footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.footer-col a { font-size: 14px; color: var(--ink-2); font-weight: 500; transition: color .15s; }
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom {
+  max-width: 1100px; margin: 0 auto; padding: 24px 80px;
+  border-top: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; color: var(--ink-3); font-weight: 500; gap: 16px; flex-wrap: wrap;
+}
+.footer-social { display: flex; gap: 12px; }
+.footer-social a {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--paper-2);
+  border: 1px solid var(--rule-md); display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.footer-social a:hover { background: var(--accent-lt); border-color: var(--accent); }
+.footer-social svg { width: 15px; height: 15px; stroke: var(--ink-2); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: stroke .15s; }
+.footer-social a:hover svg { stroke: var(--accent); }
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: #fff; padding: 11px 22px; border-radius: 100px;
+  font-size: 13px; z-index: 1000; transition: transform .3s; pointer-events: none;
+  font-weight: 500; box-shadow: 0 4px 20px rgba(28,25,23,0.25);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ─── SHARE MODAL ─── */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(28,25,23,0.5);
+  display: none; align-items: center; justify-content: center; z-index: 200;
+  backdrop-filter: blur(6px);
+}
+.modal-bg.show { display: flex; }
+.modal {
+  background: var(--paper-2); border-radius: var(--r-xl); padding: 32px;
+  width: 380px; max-width: calc(100vw - 40px);
+  box-shadow: 0 32px 80px rgba(28,25,23,0.2);
+  border: 1.5px solid var(--rule);
+}
+.modal h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 6px; font-weight: 400; }
+.modal p { font-size: 13px; color: var(--ink-3); margin-bottom: 20px; line-height: 1.7; }
+.modal-code {
+  background: var(--paper); border-radius: var(--r); padding: 12px;
+  font-size: 12px; font-family: monospace; word-break: break-all;
+  color: var(--ink-2); margin-bottom: 16px; border: 1px solid var(--rule-md);
+}
+.share-loading {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--ink-3); margin-bottom: 16px;
+  background: var(--paper); border-radius: var(--r); padding: 12px; border: 1px solid var(--rule-md);
+}
+.share-error {
+  font-size: 13px; color: var(--danger); background: var(--danger-lt);
+  border-radius: var(--r); padding: 12px; margin-bottom: 16px; line-height: 1.6;
+}
+.app-tb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.modal-export-links {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 12.5px; color: var(--ink-3); margin-bottom: 18px; flex-wrap: wrap;
+}
+.modal-export-link { color: var(--accent); font-weight: 600; text-decoration: underline; text-decoration-color: rgba(212,116,42,0.35); }
+.modal-export-link:hover { text-decoration-color: var(--accent); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* UPLOAD DRAG AREA */
+.drop-ov {
+  position: absolute; inset: 0; background: rgba(212,116,42,0.08);
+  border: 2px dashed var(--accent); display: none; align-items: center;
+  justify-content: center; z-index: 15; border-radius: 4px; pointer-events: none;
+}
+.drop-ov.show { display: flex; }
+.drop-ov-inner { text-align: center; color: var(--accent); }
+.drop-ov-inner svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.5; display: block; margin: 0 auto 8px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 60px 24px; }
+  section { padding: 60px 24px; }
+  .steps { grid-template-columns: 1fr; gap: 32px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .price-card.featured { transform: none; }
+  .app-section { padding: 40px 16px; }
+  .app-main { grid-template-columns: 1fr; height: auto; }
+  .app-canvas { height: 360px; }
+  .app-sb, .app-rp { border-right: none; border-left: none; border-top: 1px solid var(--rule); max-height: none; }
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 32px 24px; padding: 48px 24px 32px; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-bottom { padding: 20px 24px; flex-direction: column; text-align: center; gap: 14px; }
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+  .section-h2 { font-size: clamp(26px, 7vw, 34px); }
+  .app-canvas { height: 300px; }
+  .feat-card { padding: 28px 22px; }
+  .faq-q { font-size: 14px; padding: 18px 2px; gap: 10px; }
+  .faq-a-inner { padding: 0 2px 18px; font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { justify-content: center; }
+  .hero-proof { gap: 24px; flex-wrap: wrap; }
+  .nav-cta .btn-ghost { display: none; }
+  section { padding: 48px 16px; }
+  .price-card.featured { order: -1; }
+  .footer-main { grid-template-columns: 1fr; padding: 40px 20px 28px; gap: 28px; }
+  .footer-col ul { gap: 9px; }
+  .app-topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 6px; }
+  .app-topbar .sp { display: none; }
+  .upload-label-text { display: none; }
+  #upload-label { padding: 8px 10px; }
+  .demo-toolbar { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<a href="#visualiser" class="skip-link">Skip to visualiser</a>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <div class="nav-logo">
+    <div class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="14" height="14" rx="2"/>
+        <polyline points="2,12 5,9 8,11 11,8 16,12"/>
+      </svg>
+    </div>
+    Viewframe
+  </div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#visualiser">Try it</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#installers">For installers</a><a href="#faq">FAQ</a>
+  </div>
+  <div class="nav-cta">
+    <a href="#visualiser" class="btn btn-ghost">Try free</a>
+    <a href="#cta" class="btn btn-primary">Get started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding:0">
+  <div class="hero-left">
+    <div class="eyebrow">✦ Built for British homes</div>
+    <h1 class="hero-h1">See your windows<br>before you <em>buy</em> them</h1>
+    <p class="hero-sub">Upload a photo of your home and explore new windows and doors in seconds — then connect with a trusted local installer to make it happen.</p>
+    <div class="hero-actions">
+      <a href="#visualiser" class="btn btn-primary btn-lg">Open visualiser</a>
+      <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+    </div>
+
+    <div style="margin-top:16px;font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>No sign-up to try</span>
+      <span style="color:var(--rule-md)">·</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Free for homeowners</span>
+      <span style="color:var(--rule-md)">·</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>180+ UK installers ready to quote</span>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-stat"><div class="n">4,200+</div><div class="l">Homes visualised</div></div>
+      <div class="proof-stat"><div class="n">180+</div><div class="l">UK installers</div></div>
+      <div class="proof-stat"><div class="n">Free</div><div class="l">For homeowners</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-wall"></div>
+    <div class="hero-demo-wrap">
+      <div class="hero-demo-inner">
+        <div class="demo-toolbar">
+          <div class="demo-dot" style="background:#E24B4A"></div>
+          <div class="demo-dot" style="background:#E8C87A;margin-left:5px"></div>
+          <div class="demo-dot" style="background:#3DB06A;margin-left:5px"></div>
+          <span class="demo-label">Viewframe — Visualiser</span>
+        </div>
+        <div class="demo-canvas" id="hero-canvas">
+          <div class="detect-chip" id="detect-chip" style="display:none">✦ 3 elements detected</div>
+          <!-- Windows rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-h2">Three steps to your perfect window</h2>
+    <p class="section-sub">No measuring, no guesswork. Just upload, detect, and explore.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3>Upload your photo</h3>
+        <p>Drag and drop any photo of your room, facade, or building. Interior or exterior, any angle.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <h3>AI detects everything</h3>
+        <p>Claude Vision scans the image, identifies every window and door, and draws precise bounding boxes with confidence scores.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>Explore and compare</h3>
+        <p>Swap styles, frames, and glazing. Toggle inside/outside view. Share with your installer or architect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISUALISER APP -->
+<section class="app-section" id="visualiser">
+  <div class="app-header">
+    <div class="section-label" style="text-align:center">Live tool</div>
+    <h2 class="section-h2" style="text-align:center">Try it right now</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">No sign-up needed. Upload a photo or click the canvas to start placing.</p>
+  </div>
+  <div class="app-wrap">
+    <!-- TOP BAR -->
+    <div class="app-topbar">
+      <span class="app-logo-sm">Viewframe</span>
+      <div class="view-toggle" role="group" aria-label="View angle">
+        <button class="vt-btn active" id="vt-inside" onclick="setView('inside')" aria-pressed="true">Inside</button>
+        <button class="vt-btn" id="vt-outside" onclick="setView('outside')" aria-pressed="false">Outside</button>
+      </div>
+      <div class="sp"></div>
+      <label class="app-tb-btn" id="upload-label" style="cursor:pointer" title="Upload room photo">
+        <svg class="upload-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg class="upload-spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-dasharray="40 14"/></svg>
+        <span class="upload-label-text">Upload photo</span>
+        <input type="file" accept="image/*,.heic,.heif" id="photo-input" style="display:none" onchange="loadPhoto(event)">
+      </label>
+      <button class="app-tb-btn" onclick="runAI()" id="ai-btn" title="Automatically find windows and doors in your photo using AI (takes a few seconds)" style="display:none">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        AI Detect
+      </button>
+      <button class="app-tb-btn" onclick="toggleSnap()" id="snap-btn" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Snap
+      </button>
+      <div class="export-dd" id="export-dd">
+        <button class="app-tb-btn" onclick="toggleExportMenu()" id="export-trigger" aria-haspopup="true" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+          <svg viewBox="0 0 24 24" style="width:10px;height:10px;margin-left:2px"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="export-menu" id="export-menu" role="menu">
+          <button class="export-menu-item" role="menuitem" onclick="exportPNG();closeExportMenu()">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            <span><strong>PNG image</strong><small>Visual layout, for quick sharing</small></span>
+          </button>
+          <button class="export-menu-item" role="menuitem" onclick="exportSpecSheet();closeExportMenu()">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            <span><strong>PDF spec sheet</strong><small>Element list with frame, glass & size — for installers</small></span>
+          </button>
+        </div>
+      </div>
+      <button class="app-tb-btn prim" onclick="showShare()">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+    </div>
+
+    <!-- UPLOAD ERROR BANNER -->
+    <div class="upload-error" id="upload-error" role="alert" aria-live="assertive"></div>
+
+    <!-- MAIN -->
+    <div class="app-main">
+      <!-- SIDEBAR -->
+      <div class="app-sb">
+        <div class="sb-sec">
+          <div class="sb-lbl" id="win-tools-lbl">Windows</div>
+          <div class="el-grid" role="group" aria-labelledby="win-tools-lbl">
+            <button class="el-btn active" id="btn-window-casement" onclick="setTool('window-casement')" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>Casement
+            </button>
+            <button class="el-btn" id="btn-window-sash" onclick="setTool('window-sash')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>Sash
+            </button>
+            <button class="el-btn" id="btn-window-double" onclick="setTool('window-double')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Double
+            </button>
+            <button class="el-btn" id="btn-window-bay" onclick="setTool('window-bay')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20 L6 4 L18 4 L21 20"/><line x1="6" y1="14" x2="18" y2="14"/></svg>Bay
+            </button>
+            <button class="el-btn" id="btn-window-skylight" onclick="setTool('window-skylight')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>Skylight
+            </button>
+            <button class="el-btn" id="btn-window-tilt" onclick="setTool('window-tilt')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><polygon points="5,19 12,5 19,19"/></svg>Tilt-turn
+            </button>
+          </div>
+        </div>
+        <div class="sb-sec">
+          <div class="sb-lbl" id="door-tools-lbl">Doors</div>
+          <div class="el-grid" role="group" aria-labelledby="door-tools-lbl">
+            <button class="el-btn" id="btn-door-single" onclick="setTool('door-single')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M6 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/><path d="M9 21v-4h6v4"/></svg>Single
+            </button>
+            <button class="el-btn" id="btn-door-double" onclick="setTool('door-double')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M6 21V5a2 2 0 012-2h4M18 21V5a2 2 0 00-2-2h-4M12 3v18"/></svg>Double
+            </button>
+            <button class="el-btn" id="btn-door-bifold" onclick="setTool('door-bifold')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M6 21V5M12 21V5M18 21V5"/><path d="M6 5l6 8M12 5l6 8" opacity=".4"/></svg>Bifold
+            </button>
+            <button class="el-btn" id="btn-door-sliding" onclick="setTool('door-sliding')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="1"/><line x1="12" y1="4" x2="12" y2="21"/><polyline points="9 10 6 13 9 16"/></svg>Sliding
+            </button>
+            <button class="el-btn" id="btn-door-french" onclick="setTool('door-french')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="12" y1="3" x2="12" y2="21"/><rect x="5" y="5" width="5" height="7" rx="1" opacity=".4"/><rect x="14" y="5" width="5" height="7" rx="1" opacity=".4"/></svg>French
+            </button>
+            <button class="el-btn" id="btn-door-patio" onclick="setTool('door-patio')">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="12" y1="3" x2="12" y2="21"/><rect x="4" y="4" width="7" height="14" rx="1" opacity=".5"/></svg>Patio
+            </button>
+          </div>
+        </div>
+        <div class="sb-sec">
+          <div class="sb-lbl">Frame colour</div>
+          <div class="color-row" id="frame-swatches"></div>
+        </div>
+        <div class="sb-sec">
+          <div class="sb-lbl">Glass tint</div>
+          <div class="color-row" id="glass-swatches"></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:6px" id="glass-name">Clear</div>
+        </div>
+        <div class="sb-sec">
+          <div class="sb-lbl">Size</div>
+          <div class="prop-r">
+            <div class="prop-lbl">Width <span id="pw">120px</span></div>
+            <input type="range" min="60" max="300" value="120" step="4" id="prop-w" oninput="onProp()">
+          </div>
+          <div class="prop-r">
+            <div class="prop-lbl">Height <span id="ph">110px</span></div>
+            <input type="range" min="50" max="280" value="110" step="4" id="prop-h" oninput="onProp()">
+          </div>
+          <div class="prop-r">
+            <div class="prop-lbl">Opacity <span id="po">100%</span></div>
+            <input type="range" min="30" max="100" value="100" step="5" id="prop-o" oninput="onProp()">
+          </div>
+        </div>
+        <div class="sb-sec">
+          <button class="app-tb-btn" style="width:100%;justify-content:center;color:var(--danger);border-color:rgba(155,32,32,0.3)" onclick="clearAll()">
+            <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            Clear all
+          </button>
+        </div>
+      </div>
+
+      <!-- CANVAS -->
+      <div class="app-canvas" id="app-canvas" onclick="placeEl(event)" role="img" aria-label="Room canvas. This is a visual drawing surface — click anywhere to place the selected window or door. Use the Elements list in the right panel to review and select placed items by keyboard.">
+        <img class="photo-bg" id="photo-bg" alt="Room background">
+        <div class="drop-ov" id="drop-ov">
+          <div class="drop-ov-inner">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Drop photo here</span>
+          </div>
+        </div>
+        <div class="el-layer" id="el-layer"></div>
+        <div class="scan-ov" id="scan-ov">
+          <div class="scan-line-anim"></div>
+          <p>Analysing your photo…</p>
+          <span id="scan-sub">Detecting windows and doors</span>
+          <span id="scan-time" style="margin-top:4px;opacity:0.6">Usually takes 3–8 seconds</span>
+        </div>
+        <div class="canvas-hint" id="canvas-hint">
+          <div class="hint-icon">⊞</div>
+          <div class="hint-text">Click to place a window or door<br><span style="font-size:12px;opacity:0.8">Or upload a photo above</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="app-rp">
+        <div class="rp-sec">
+          <div class="sb-lbl">Detector</div>
+          <div id="det-out"><div style="font-size:12px;color:var(--ink-3)">Place elements to detect</div></div>
+        </div>
+        <div class="rp-sec">
+          <div class="sb-lbl">Elements</div>
+          <div id="el-list"></div>
+        </div>
+        <div class="rp-sec">
+          <div class="sb-lbl">Summary</div>
+          <div class="stats-grid" id="stats-grid">
+            <div class="stat-c"><div class="stat-n" id="st-total">0</div><div class="stat-l">Total</div></div>
+            <div class="stat-c"><div class="stat-n" id="st-wins">0</div><div class="stat-l">Windows</div></div>
+            <div class="stat-c"><div class="stat-n" id="st-doors">0</div><div class="stat-l">Doors</div></div>
+            <div class="stat-c"><div class="stat-n" id="st-area">0</div><div class="stat-l">Est. m²</div></div>
+          </div>
+        </div>
+        <div class="rp-sec">
+          <div class="sb-lbl">Natural light</div>
+          <div class="light-bar"><div class="light-marker" id="light-mk" style="left:5%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink-3)">
+            <span>Low</span><span id="light-pct">5%</span><span>High</span>
+          </div>
+        </div>
+        <div class="rp-sec">
+          <div class="sb-lbl">AI notes</div>
+          <div id="ai-notes" style="font-size:11px;color:var(--ink-3);line-height:1.6">Detect a photo to see analysis.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="section-inner">
+    <div class="section-label">Everything included</div>
+    <h2 class="section-h2">Built for homeowners,<br>trusted by installers</h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>AI photo detection</h3>
+        <p>Claude Vision scans your photo and auto-detects every window and door with precise bounding boxes and confidence scores.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg></div>
+        <h3>12 window styles</h3>
+        <p>Casement, sash, double, bay, skylight, tilt-turn and more — each rendered with accurate glazing bars, handles, and opening arcs.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/></svg></div>
+        <h3>6 door types</h3>
+        <p>Single, double, bifold, sliding, French, and patio doors with correct swing arcs, handles, and frame details.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></div>
+        <h3>Light analysis</h3>
+        <p>Real-time estimate of natural light gain as you add or resize windows — useful for planning and building regs.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3>Inside / outside view</h3>
+        <p>Toggle between interior and exterior perspective. Handles, hinges, and arcs all update to match the view correctly.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+        <h3>Share & export</h3>
+        <p>Download a PNG of your layout or generate a shareable link to send to your architect, installer, or supplier.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-inner">
+    <div class="section-label">What people say</div>
+    <h2 class="section-h2">Placeholder testimonials —<br>swap before launch</h2>
+    <p class="section-sub">These are structural placeholders, not real customer quotes. Replace each one with an actual testimonial (and a real name, with their permission) once you have customers using the product.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">[Replace with a real quote — e.g. how easy it was to compare window styles before committing to a renovation budget.]</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+          </div>
+          <div>
+            <div class="role">Homeowner</div>
+            <div class="ctx">Renovation project</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">The visualiser made the client conversation so much easier — they came to the meeting knowing exactly what they wanted. First time that's happened in 12 years.</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+          </div>
+          <div>
+            <div class="role">Window installer</div>
+            <div class="ctx">Pro plan customer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">The spec sheet export is genuinely useful. I get enquiries with everything I need to quote — no chasing the homeowner for what they actually want.</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+          </div>
+          <div>
+            <div class="role">Architect</div>
+            <div class="ctx">Trade plan customer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOR INSTALLERS -->
+<section id="installers" style="background:var(--ink);padding:100px 80px;color:#fff;">
+  <div class="section-inner" style="max-width:1100px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:inline-flex;align-items:center;gap:8px;"><span style="display:block;width:16px;height:2px;background:var(--accent);border-radius:2px;"></span>For installers &amp; manufacturers</div>
+        <h2 style="font-family:var(--serif);font-size:clamp(28px,3.5vw,46px);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;font-weight:300;color:#fff;">Turn browsers into <em style="font-style:italic;color:var(--accent);">qualified leads</em></h2>
+        <p style="font-size:17px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:36px;max-width:460px;">Viewframe sends you homeowners who already know what they want. They've visualised their windows, chosen a style, and are ready to get a quote — not just browsing.</p>
+        <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:40px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,116,42,0.15);border:1px solid rgba(212,116,42,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">Warm, intent-ready leads</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;">Every lead has already visualised their project. They know the style, frame colour, and glass type they want — making your quote conversation faster and more likely to convert.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,116,42,0.15);border:1px solid rgba(212,116,42,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">PDF spec sheets, ready to quote from</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;">Homeowners can export a spec sheet listing every window and door with style, frame, and glass type. You receive it with the lead — no back-and-forth to clarify requirements.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,116,42,0.15);border:1px solid rgba(212,116,42,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:3px;">UK-only, local by postcode</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;">Leads are matched to installers by region. You only receive enquiries from homeowners within your coverage area — no wasted calls on jobs you can't take.</div>
+            </div>
+          </div>
+        </div>
+        <a href="mailto:trade@viewframe.co.uk" class="btn btn-primary btn-lg" style="display:inline-flex;">Get installer access →</a>
+      </div>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px;">What you receive per lead</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);">Homeowner contact details</span>
+            <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);">Visualised layout image</span>
+            <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);">PDF spec sheet</span>
+            <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);">Postcode &amp; project type</span>
+            <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7);">Preferred styles &amp; frame colours</span>
+            <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">Trade plan from £39/month. No per-lead fees. Cancel anytime.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-h2">Try free. Upgrade when<br>you're ready to share.</h2>
+    <p class="section-sub">No card required to start. Upgrade only if you need more photos, exports, or team seats.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Free</div>
+        <div class="price-amount">£0<span>/forever</span></div>
+        <p class="price-desc">Everything you need to explore window and door options on your own home.</p>
+        <ul class="price-feats">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>3 photo uploads per month</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>AI window & door detection</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>All 12 window & 6 door styles</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>PNG export</li>
+        </ul>
+        <a href="#visualiser" class="btn btn-ghost">Start for free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-tier">Pro</div>
+        <div class="price-amount">£9<span>/month</span></div>
+        <p class="price-desc">For homeowners actively planning a renovation or working with an installer.</p>
+        <ul class="price-feats">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Unlimited photo uploads</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Free</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Shareable links for installers</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Saved layouts & version history</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Priority AI detection</li>
+        </ul>
+        <a href="#visualiser" class="btn btn-primary">Start free trial</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Trade</div>
+        <div class="price-amount">£39<span>/month</span></div>
+        <p class="price-desc">Built for installers and architects managing multiple client projects.</p>
+        <ul class="price-feats">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Pro</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 team seats</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Client project folders</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Branded export sheets</li>
+        </ul>
+        <a href="#cta" class="btn btn-ghost">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-h2">Questions homeowners<br>actually ask</h2>
+    <p class="section-sub">If you don't see your question here, drop us a line — we read every message.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          How accurate is the AI window and door detection?
+          <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Detection works best on clear, well-lit photos taken straight-on rather than at a steep angle. It's a strong starting point for visualising options, not a substitute for a professional measurement — always have an installer confirm exact dimensions before ordering.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          What happens to the photos I upload?
+          <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Your photo is processed only to detect windows and doors and is not used to train any models or shared with third parties. On the free plan, photos aren't stored after your session ends. Paid plans that save layouts retain the photo only for as long as your saved project exists, and you can delete it at any time.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          Will my installer be able to use the exported layout?
+          <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Yes — exports include the style, frame colour, and glass type for each opening, which most installers find useful as a starting brief. It's a visual reference for conversations with your installer, not a substitute for their own site survey and measurements.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          Do I need to create an account to try it?
+          <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">No — the visualiser works fully without signing up. An account is only needed if you want to save layouts across sessions or generate shareable links on the Pro or Trade plans.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          Can I use this on my phone?
+          <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Placing, dragging, and resizing windows and doors all work with touch on phones and tablets, alongside mouse and keyboard on desktop.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="eyebrow">✦ Join thousands of UK homeowners</div>
+  <h2 class="section-h2">Your home, your vision</h2>
+  <p class="section-sub">Try Viewframe free — no account needed. Upload your first photo in under a minute.</p>
+  <div class="cta-btns">
+    <a href="#visualiser" class="btn btn-primary btn-lg">Open visualiser</a>
+    <a href="#how" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)">How it works</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size:18px">
+        <div class="logo-mark" style="width:26px;height:26px;border-radius:7px" aria-hidden="true">
+          <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="14" height="14" rx="2"/>
+            <line x1="9" y1="2" x2="9" y2="16"/>
+            <line x1="2" y1="9" x2="9" y2="9"/>
+          </svg>
+        </div>
+        Viewframe
+      </div>
+      <p>See your home with new windows and doors before you commit. Built for British homeowners, trusted by UK installers.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#visualiser">Try it free</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#installers">For installers</a><a href="#faq">FAQ</a></li>
+        <li><a href="mailto:hello@viewframe.co.uk">Contact us</a></li>
+        <li><a href="#cta">Get started</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href="/terms">Terms of service</a></li>
+        <li><a href="/cookies">Cookie policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Viewframe · viewframe.co.uk · Built for British homes.</span>
+    <div class="footer-social">
+      <a href="https://instagram.com" aria-label="Viewframe on Instagram" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://x.com" aria-label="Viewframe on X" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg>
+      </a>
+      <a href="https://linkedin.com" aria-label="Viewframe on LinkedIn" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9v12M10 13a4 4 0 018 0v8"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- SHARE MODAL -->
+<div class="modal-bg" id="share-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+    <h3 id="share-modal-title">Share this layout</h3>
+    <p id="share-desc">Copy the link below or download as an image to share with your installer or architect.</p>
+    <div class="modal-code" id="share-code-row" style="display:none">https://viewframe.co.uk/s/<span id="share-id"></span></div>
+    <div class="share-loading" id="share-loading" style="display:none">
+      <span class="upload-spinner" style="display:block;width:16px;height:16px;animation:upload-spin .8s linear infinite"></span>
+      Generating link…
+    </div>
+    <div class="share-error" id="share-error" role="alert" style="display:none"></div>
+    <div class="modal-export-links">
+      <button class="modal-export-link" onclick="exportPNG()">Download PNG</button>
+      <span aria-hidden="true">·</span>
+      <button class="modal-export-link" onclick="exportSpecSheet()">Download PDF spec sheet</button>
+    </div>
+    <div class="modal-actions">
+      <button class="app-tb-btn" onclick="closeModal()">Close</button>
+      <button class="app-tb-btn prim" onclick="copyLink()" id="copy-link-btn" disabled>
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy link
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ── DATA ── */
+const FRAMES=[
+  {name:'White',hex:'#FFFFFF'},{name:'Cream',hex:'#F5F0E8'},{name:'Oak',hex:'#C8A97A'},
+  {name:'Anthracite',hex:'#4A4A4A'},{name:'Brown',hex:'#8B6853'},{name:'Dark blue',hex:'#2C3E50'},
+  {name:'Black',hex:'#1A1A1A'},{name:'Sage',hex:'#7A9E7E'}
+];
+const GLASSES=[
+  {name:'Clear',fill:'rgba(180,220,240,0.28)',shine:'rgba(255,255,255,0.55)'},
+  {name:'Frosted',fill:'rgba(220,230,235,0.55)',shine:'rgba(255,255,255,0.3)'},
+  {name:'Green tint',fill:'rgba(120,180,130,0.3)',shine:'rgba(200,255,210,0.4)'},
+  {name:'Grey tint',fill:'rgba(140,145,155,0.38)',shine:'rgba(200,200,210,0.35)'},
+  {name:'Bronze',fill:'rgba(180,145,90,0.32)',shine:'rgba(240,210,160,0.4)'},
+  {name:'Blue reflective',fill:'rgba(60,100,180,0.38)',shine:'rgba(160,200,255,0.5)'},
+];
+const LABELS={
+  'window-casement':'Casement','window-sash':'Sash','window-double':'Double',
+  'window-bay':'Bay','window-skylight':'Skylight','window-tilt':'Tilt-turn',
+  'door-single':'Single door','door-double':'Double door','door-bifold':'Bifold',
+  'door-sliding':'Sliding','door-french':'French door','door-patio':'Patio'
+};
+const isWin=t=>t&&t.startsWith('window');
+
+const S={
+  tool:'window-casement',fc:'#FFFFFF',glass:GLASSES[0],
+  w:120,h:110,opacity:100,snap:false,view:'inside',
+  elements:[],selected:null,photoLoaded:false
+};
+let _id=0;
+
+/* ── SWATCHES ── */
+(()=>{
+  const fc=document.getElementById('frame-swatches');
+  FRAMES.forEach((c,i)=>{
+    const s=document.createElement('button');s.type='button';s.className='cswatch'+(i===0?' active':'');
+    s.title=c.name;s.style.background=c.hex;
+    s.setAttribute('aria-label','Frame colour: '+c.name);
+    s.setAttribute('aria-pressed',i===0?'true':'false');
+    if(c.hex==='#FFFFFF')s.style.border='1.5px solid rgba(0,0,0,0.2)';
+    s.onclick=()=>{
+      S.fc=c.hex;document.querySelectorAll('.cswatch').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false');});
+      s.classList.add('active');s.setAttribute('aria-pressed','true');if(S.selected)rerenderSel();
+    };fc.appendChild(s);
+  });
+  const gc=document.getElementById('glass-swatches');
+  GLASSES.forEach((g,i)=>{
+    const s=document.createElement('button');s.type='button';s.className='gswatch'+(i===0?' active':'');
+    s.title=g.name;s.style.background=g.fill;s.style.border='1.5px solid rgba(0,0,0,0.12)';
+    s.setAttribute('aria-label','Glass tint: '+g.name);
+    s.setAttribute('aria-pressed',i===0?'true':'false');
+    s.onclick=()=>{
+      S.glass=g;document.getElementById('glass-name').textContent=g.name;
+      document.querySelectorAll('.gswatch').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false');});
+      s.classList.add('active');s.setAttribute('aria-pressed','true');if(S.selected)rerenderSel();
+    };gc.appendChild(s);
+  });
+})();
+
+/* ── SVG FACTORY ── */
+function makeSVG(el){
+  const{w,h,fc,glass:g,type,view}=el;
+  const fw=3;
+  const gls=(x,y,gw,gh)=>`<rect x="${x}" y="${y}" width="${gw}" height="${gh}" fill="${g.fill}"/>
+    <rect x="${x+2}" y="${y+2}" width="${Math.max(6,gw*0.3)}" height="3" rx="1.5" fill="${g.shine}" opacity="0.8"/>
+    <rect x="${x}" y="${y}" width="${gw}" height="${gh}" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>`;
+
+  if(type==='window-casement'){
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(fw,fw,w-fw*2,h-fw*2)}
+      <line x1="${fw}" y1="${h/2}" x2="${w-fw}" y2="${h/2}" stroke="#aaa" stroke-width=".7"/>
+      <line x1="${w/2}" y1="${fw}" x2="${w/2}" y2="${h-fw}" stroke="#aaa" stroke-width=".7"/>
+      <circle cx="${view==='outside'?w*.7:w-fw-6}" cy="${h/2}" r="3" fill="#bbb" stroke="#888" stroke-width=".5"/>
+    </svg>`;
+  }
+  if(type==='window-sash'){
+    const hw=h/2-fw;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(fw,fw,w-fw*2,hw)}
+      ${gls(fw,h/2+fw/2,w-fw*2,hw-fw)}
+      <rect x="${fw}" y="${h/2-3}" width="${w-fw*2}" height="6" fill="${fc}" opacity=".8"/>
+    </svg>`;
+  }
+  if(type==='window-double'){
+    const hw=(w-fw*3)/2;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(fw,fw,hw,h-fw*2)}
+      ${gls(fw*2+hw,fw,hw,h-fw*2)}
+    </svg>`;
+  }
+  if(type==='window-bay'){
+    const seg=w/3,bh=Math.round(h*.75);
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x="0" y="${h-bh}" width="${seg+1}" height="${bh}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(fw,h-bh+fw,seg-fw*2,bh-fw*2)}
+      <rect class="frame" x="${seg}" y="0" width="${seg}" height="${h}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(seg+fw,fw,seg-fw*2,h-fw*2)}
+      <rect class="frame" x="${seg*2-1}" y="${h-bh}" width="${seg+1}" height="${bh}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(seg*2+fw,h-bh+fw,seg-fw*2,bh-fw*2)}
+    </svg>`;
+  }
+  if(type==='window-skylight'){
+    const cols=3,rows=2,pw=(w-fw*2)/cols,ph=(h-fw*2)/rows;
+    let ps='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)ps+=gls(fw+c*pw+1,fw+r*ph+1,pw-2,ph-2);
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>${ps}
+    </svg>`;
+  }
+  if(type==='window-tilt'){
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${gls(fw,fw,w-fw*2,h-fw*2)}
+      <polygon points="${fw+4},${h-fw-4} ${w/2},${fw+8} ${w-fw-4},${h-fw-4}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="3 2"/>
+      <circle cx="${w/2}" cy="${h-fw-6}" r="3" fill="#bbb"/>
+    </svg>`;
+  }
+  if(type==='door-single'){
+    const sw=h*.82;const arc=view==='inside'
+      ?`<path d="M ${fw} ${h-fw} Q ${fw} ${h-fw-sw} ${fw+sw} ${h-fw-sw}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4 3"/>`
+      :`<path d="M ${w-fw} ${h-fw} Q ${w-fw} ${h-fw-sw} ${w-fw-sw} ${h-fw-sw}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4 3"/>`;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      <rect x="${fw}" y="${fw}" width="${w-fw*2}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
+      <rect x="${fw+6}" y="${fw+8}" width="${w-fw*2-12}" height="${h*.28}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
+      ${arc}
+      <circle cx="${view==='inside'?w-fw-8:fw+8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
+    </svg>`;
+  }
+  if(type==='door-double'){
+    const hw=(w-fw*3)/2;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
+      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
+      <rect x="${fw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
+      <rect x="${fw*2+hw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
+      <circle cx="${fw+hw-8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
+      <circle cx="${fw*2+hw+8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
+    </svg>`;
+  }
+  if(type==='door-bifold'){
+    const qw=(w-fw*2)/4;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      ${[0,1,2,3].map(i=>`<rect x="${fw+i*qw+1}" y="${fw}" width="${qw-2}" height="${h-fw*2}" fill="${fc}" stroke="#aaa" stroke-width=".8" rx="1"/>`).join('')}
+      <line x1="${fw+qw}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="#bbb" stroke-width=".5" stroke-dasharray="3 2"/>
+      <line x1="${fw+qw*3}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="#bbb" stroke-width=".5" stroke-dasharray="3 2"/>
+    </svg>`;
+  }
+  if(type==='door-sliding'){
+    const hw=(w-fw*2)/2;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      <rect x="${fw}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1" opacity=".6"/>
+      <rect x="${fw+hw-4}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="#999" stroke-width="1.5" rx="1"/>
+      ${gls(fw+hw,fw+4,hw-4,h-fw*2-8)}
+      <circle cx="${fw+hw-8}" cy="${h*.5}" r="3.5" fill="#bbb"/>
+    </svg>`;
+  }
+  if(type==='door-french'){
+    const hw=(w-fw*3)/2;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1"/>
+      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1"/>
+      ${gls(fw+4,fw+8,hw-8,h-fw*2-16)}
+      ${gls(fw*2+hw+4,fw+8,hw-8,h-fw*2-16)}
+      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
+      <circle cx="${fw*2+hw+6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
+    </svg>`;
+  }
+  if(type==='door-patio'){
+    const hw=(w-fw*2)/2;
+    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" stroke-width="1.5" rx="1"/>
+      <rect x="${fw+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1" opacity=".5"/>
+      ${gls(fw+4,fw+4,hw-8,h-fw*2-8)}
+      ${gls(fw+hw+4,fw+4,hw-8,h-fw*2-8)}
+      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
+    </svg>`;
+  }
+  return`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect class="frame" width="${w}" height="${h}" fill="${fc}" stroke="#888" stroke-width="1.5" rx="2"/></svg>`;
+}
+
+/* ── TOOL ── */
+function setTool(t){
+  S.tool=t;S.selected=null;
+  document.querySelectorAll('.el-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false');});
+  const btn=document.getElementById('btn-'+t);
+  if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
+  document.querySelectorAll('.el-wrap').forEach(w=>w.classList.remove('sel'));
+}
+function setView(v){
+  S.view=v;
+  document.getElementById('vt-inside').classList.toggle('active',v==='inside');
+  document.getElementById('vt-inside').setAttribute('aria-pressed',v==='inside'?'true':'false');
+  document.getElementById('vt-outside').classList.toggle('active',v==='outside');
+  document.getElementById('vt-outside').setAttribute('aria-pressed',v==='outside'?'true':'false');
+  S.elements.forEach(e=>renderEl(e));
+}
+function toggleSnap(){
+  S.snap=!S.snap;
+  const btn=document.getElementById('snap-btn');
+  btn.setAttribute('aria-pressed',S.snap?'true':'false');
+  btn.style.background=S.snap?'var(--accent-lt)':'';
+  btn.style.color=S.snap?'var(--accent)':'';
+  btn.style.borderColor=S.snap?'var(--accent)':'';
+}
+function onProp(){
+  S.w=+document.getElementById('prop-w').value;
+  S.h=+document.getElementById('prop-h').value;
+  S.opacity=+document.getElementById('prop-o').value;
+  document.getElementById('pw').textContent=S.w+'px';
+  document.getElementById('ph').textContent=S.h+'px';
+  document.getElementById('po').textContent=S.opacity+'%';
+  if(S.selected){
+    const el=S.elements.find(e=>e.id===S.selected);
+    if(el){
+      const r=canvasRect();
+      el.wPct=pxToPctW(S.w,r);el.hPct=pxToPctH(S.h,r);el.opacity=S.opacity;renderEl(el);
+    }
+  }
+  updateAll();
+}
+
+/* ── COORD HELPERS (percentage-based, resilient to canvas resize) ── */
+function canvasRect(){return document.getElementById('app-canvas').getBoundingClientRect();}
+function pxToPctX(px,r){return (px/r.width)*100;}
+function pxToPctY(px,r){return (px/r.height)*100;}
+function pxToPctW(px,r){return (px/r.width)*100;}
+function pxToPctH(px,r){return (px/r.height)*100;}
+function pctToPxX(pct,r){return (pct/100)*r.width;}
+function pctToPxY(pct,r){return (pct/100)*r.height;}
+function pointFromEvent(e){
+  if(e.touches&&e.touches.length)return{clientX:e.touches[0].clientX,clientY:e.touches[0].clientY};
+  if(e.changedTouches&&e.changedTouches.length)return{clientX:e.changedTouches[0].clientX,clientY:e.changedTouches[0].clientY};
+  return{clientX:e.clientX,clientY:e.clientY};
+}
+
+/* ── PLACE ── */
+function snap4(v){return S.snap?Math.round(v/40)*40:v;}
+function placeEl(ev){
+  if(ev.target.closest('.el-wrap'))return;
+  const r=canvasRect();
+  const x=snap4(ev.clientX-r.left-S.w/2);
+  const y=snap4(ev.clientY-r.top-S.h/2);
+  const el={
+    id:++_id,type:S.tool,
+    xPct:pxToPctX(Math.max(0,x),r),yPct:pxToPctY(Math.max(0,y),r),
+    wPct:pxToPctW(S.w,r),hPct:pxToPctH(S.h,r),
+    fc:S.fc,glass:S.glass,opacity:S.opacity
+  };
+  S.elements.push(el);renderEl(el);selectEl(el.id);
+  document.getElementById('canvas-hint').classList.add('hidden');
+  updateAll();
+}
+function renderEl(el){
+  let wrap=document.getElementById('elw-'+el.id);
+  if(!wrap){
+    wrap=document.createElement('div');wrap.className='el-wrap';wrap.id='elw-'+el.id;
+    wrap.style.pointerEvents='all';
+    document.getElementById('el-layer').appendChild(wrap);
+    makeDrag(wrap,el);
+    wrap.addEventListener('click',ev=>{ev.stopPropagation();selectEl(el.id);});
+    const del=document.createElement('button');del.type='button';del.className='el-del';del.innerHTML='&times;';
+    del.setAttribute('aria-label','Remove this element');del.onclick=ev=>{ev.stopPropagation();removeEl(el.id);};
+    wrap.appendChild(del);
+    const lbl=document.createElement('div');lbl.className='el-lbl';lbl.id='lbl-'+el.id;wrap.appendChild(lbl);
+    const hdl=document.createElement('div');hdl.className='el-handle';hdl.id='hdl-'+el.id;
+    wrap.appendChild(hdl);makeResize(hdl,el,wrap);
+  }
+  const r=canvasRect();
+  const xPx=pctToPxX(el.xPct,r),yPx=pctToPxY(el.yPct,r);
+  const wPx=Math.max(40,pctToPxX(el.wPct,r)),hPx=Math.max(35,pctToPxY(el.hPct,r));
+  wrap.style.left=xPx+'px';wrap.style.top=yPx+'px';
+  wrap.style.width=wPx+'px';wrap.style.height=hPx+'px';
+  wrap.style.opacity=el.opacity/100;
+  const old=wrap.querySelector('.el-svg');if(old)old.remove();
+  wrap.insertAdjacentHTML('afterbegin',makeSVG({...el,w:wPx,h:hPx,view:S.view}));
+  const lbl=document.getElementById('lbl-'+el.id);
+  if(lbl)lbl.textContent=LABELS[el.type]||el.type;
+  // Confidence badge — only for AI-detected elements (confidence is null/
+  // undefined for anything placed manually, so nothing renders for those).
+  let badge=document.getElementById('conf-'+el.id);
+  let tip=document.getElementById('conftip-'+el.id);
+  if(typeof el.confidence==='number'){
+    const pct=Math.round(el.confidence*100);
+    const tier=el.confidence>=0.75?'high':el.confidence>=0.45?'med':'low';
+    if(!badge){
+      badge=document.createElement('div');badge.className='el-conf';badge.id='conf-'+el.id;
+      badge.tabIndex=0;badge.setAttribute('role','img');
+      wrap.appendChild(badge);
+      tip=document.createElement('div');tip.className='el-conf-tip';tip.id='conftip-'+el.id;
+      wrap.appendChild(tip);
+    }
+    badge.className='el-conf conf-'+tier;
+    const tierLabel=tier==='high'?'High confidence':tier==='med'?'Medium confidence — worth checking':'Low confidence — likely needs adjusting';
+    badge.setAttribute('aria-label',`AI detection: ${tierLabel}, ${pct}%`);
+    tip.textContent=`${tierLabel} (${pct}%)`;
+  }else if(badge){
+    badge.remove();if(tip)tip.remove();
+  }
+}
+function rerenderSel(){const el=S.elements.find(e=>e.id===S.selected);if(el){el.fc=S.fc;el.glass=S.glass;renderEl(el);}}
+function makeDrag(wrap,el){
+  let ox,oy,on=false;
+  const start=e=>{
+    if(e.target.classList.contains('el-del')||e.target.classList.contains('el-handle'))return;
+    const p=pointFromEvent(e);
+    const r=canvasRect();
+    on=true;ox=p.clientX-pctToPxX(el.xPct,r);oy=p.clientY-pctToPxY(el.yPct,r);
+    if(e.cancelable)e.preventDefault();
+  };
+  const move=e=>{
+    if(!on)return;
+    const p=pointFromEvent(e);
+    const r=canvasRect();
+    const wPx=pctToPxX(el.wPct,r),hPx=pctToPxY(el.hPct,r);
+    const xPx=snap4(Math.max(0,Math.min(r.width-wPx,p.clientX-r.left-ox)));
+    const yPx=snap4(Math.max(0,Math.min(r.height-hPx,p.clientY-r.top-oy)));
+    el.xPct=pxToPctX(xPx,r);el.yPct=pxToPctY(yPx,r);
+    wrap.style.left=xPx+'px';wrap.style.top=yPx+'px';
+    if(e.cancelable)e.preventDefault();
+  };
+  const end=()=>{on=false;};
+  wrap.addEventListener('mousedown',start);
+  window.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',end);
+  wrap.addEventListener('touchstart',start,{passive:false});
+  window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('touchend',end);
+  window.addEventListener('touchcancel',end);
+}
+function makeResize(hdl,el,wrap){
+  let on=false,sx,sy,swPx,shPx;
+  const start=e=>{
+    const p=pointFromEvent(e);
+    const r=canvasRect();
+    on=true;sx=p.clientX;sy=p.clientY;swPx=pctToPxX(el.wPct,r);shPx=pctToPxY(el.hPct,r);
+    e.stopPropagation();if(e.cancelable)e.preventDefault();
+  };
+  const move=e=>{
+    if(!on)return;
+    const p=pointFromEvent(e);
+    const r=canvasRect();
+    const wPx=Math.max(40,snap4(swPx+(p.clientX-sx)));
+    const hPx=Math.max(35,snap4(shPx+(p.clientY-sy)));
+    el.wPct=pxToPctW(wPx,r);el.hPct=pxToPctH(hPx,r);
+    wrap.style.width=wPx+'px';wrap.style.height=hPx+'px';
+    const old=wrap.querySelector('.el-svg');if(old)old.remove();
+    wrap.insertAdjacentHTML('afterbegin',makeSVG({...el,w:wPx,h:hPx,view:S.view}));
+    if(e.cancelable)e.preventDefault();
+  };
+  const end=()=>{if(on){on=false;updateAll();}};
+  hdl.addEventListener('mousedown',start);
+  window.addEventListener('mousemove',move);
+  window.addEventListener('mouseup',end);
+  hdl.addEventListener('touchstart',start,{passive:false});
+  window.addEventListener('touchmove',move,{passive:false});
+  window.addEventListener('touchend',end);
+  window.addEventListener('touchcancel',end);
+}
+function selectEl(id){
+  S.selected=id;
+  document.querySelectorAll('.el-wrap').forEach(w=>w.classList.remove('sel'));
+  document.getElementById('elw-'+id)?.classList.add('sel');
+  const el=S.elements.find(e=>e.id===id);
+  if(el){
+    const r=canvasRect();
+    const wPx=Math.round(pctToPxX(el.wPct,r)),hPx=Math.round(pctToPxY(el.hPct,r));
+    document.getElementById('prop-w').value=wPx;document.getElementById('pw').textContent=wPx+'px';
+    document.getElementById('prop-h').value=hPx;document.getElementById('ph').textContent=hPx+'px';
+    document.getElementById('prop-o').value=el.opacity;document.getElementById('po').textContent=el.opacity+'%';
+  }
+  updateElList();
+}
+function removeEl(id){
+  S.elements=S.elements.filter(e=>e.id!==id);
+  document.getElementById('elw-'+id)?.remove();
+  if(S.selected===id)S.selected=null;
+  if(!S.elements.length)document.getElementById('canvas-hint').classList.remove('hidden');
+  updateAll();
+}
+function clearAll(){
+  S.elements=[];S.selected=null;
+  document.getElementById('el-layer').innerHTML='';
+  document.getElementById('canvas-hint').classList.remove('hidden');
+  updateAll();
+}
+
+/* ── PHOTO ── */
+const PHOTO_MAX_BYTES = 12 * 1024 * 1024; // 12MB raw file cap
+const PHOTO_ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'];
+const PHOTO_MIN_DIMENSION = 200; // px — guards against tiny/broken images
+
+function showUploadError(msg){
+  const errEl=document.getElementById('upload-error');
+  if(errEl){errEl.textContent=msg;errEl.classList.add('show');}
+  toast(msg);
+  document.getElementById('photo-input').value=''; // allow re-selecting the same filename
+}
+function clearUploadError(){
+  const errEl=document.getElementById('upload-error');
+  if(errEl){errEl.classList.remove('show');errEl.textContent='';}
+}
+function setUploadLoading(isLoading){
+  const lbl=document.getElementById('upload-label');
+  if(lbl)lbl.classList.toggle('loading',isLoading);
+}
+
+function loadPhoto(ev){
+  const file=ev.target.files[0];
+  if(!file)return;
+  clearUploadError();
+
+  // Type check — covers cases the OS picker's accept filter won't catch
+  // (drag-drop, renamed extensions, HEIC variants browsers report inconsistently)
+  const looksLikeImage=file.type.startsWith('image/')||/\.(heic|heif)$/i.test(file.name);
+  if(!looksLikeImage){
+    showUploadError(`"${file.name}" isn't a photo — please choose a JPG, PNG, WEBP, or HEIC file.`);
+    return;
+  }
+  if(file.type&&!PHOTO_ALLOWED_TYPES.includes(file.type)){
+    showUploadError(`That image format isn't supported yet. Try JPG, PNG, or WEBP instead.`);
+    return;
+  }
+  if(file.size>PHOTO_MAX_BYTES){
+    const mb=(file.size/1024/1024).toFixed(1);
+    showUploadError(`That photo is ${mb}MB — please use one under ${PHOTO_MAX_BYTES/1024/1024}MB. Try a smaller export or a screenshot.`);
+    return;
+  }
+  if(file.size===0){
+    showUploadError(`"${file.name}" appears to be empty. Please choose a different file.`);
+    return;
+  }
+
+  setUploadLoading(true);
+  const reader=new FileReader();
+
+  reader.onload=e=>{
+    // Verify the file actually decodes as an image before committing it —
+    // catches corrupted files and mislabelled non-image data that pass the
+    // type/size checks above.
+    const probe=new Image();
+    probe.onload=()=>{
+      setUploadLoading(false);
+      if(probe.naturalWidth<PHOTO_MIN_DIMENSION||probe.naturalHeight<PHOTO_MIN_DIMENSION){
+        showUploadError(`That image is too small (${probe.naturalWidth}×${probe.naturalHeight}px) to work with — try a higher-resolution photo.`);
+        return;
+      }
+      const bg=document.getElementById('photo-bg');
+      bg.src=e.target.result;bg.classList.add('show');
+      S.photoLoaded=true;S._photoB64=e.target.result.split(',')[1];S._photoMime=file.type||'image/jpeg';
+      document.getElementById('canvas-hint').classList.add('hidden');
+      const aiBtn=document.getElementById('ai-btn');
+      aiBtn.style.display='flex';
+      aiBtn.classList.add('pulse-once');
+      toast('Photo loaded — click "AI Detect" above to find windows and doors automatically');
+    };
+    probe.onerror=()=>{
+      setUploadLoading(false);
+      showUploadError(`"${file.name}" couldn't be read as an image — it may be corrupted. Please try a different file.`);
+    };
+    probe.src=e.target.result;
+  };
+  reader.onerror=()=>{
+    setUploadLoading(false);
+    showUploadError(`Something went wrong reading "${file.name}". Please try again.`);
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── DRAG DROP PHOTO ── */
+const cv=document.getElementById('app-canvas');
+let _dragDepth=0;
+cv.addEventListener('dragover',e=>{
+  e.preventDefault();
+  document.getElementById('drop-ov').classList.add('show');
+});
+cv.addEventListener('dragenter',e=>{e.preventDefault();_dragDepth++;});
+cv.addEventListener('dragleave',()=>{
+  _dragDepth=Math.max(0,_dragDepth-1);
+  if(_dragDepth===0)document.getElementById('drop-ov').classList.remove('show');
+});
+cv.addEventListener('drop',e=>{
+  e.preventDefault();
+  _dragDepth=0;
+  document.getElementById('drop-ov').classList.remove('show');
+  const file=e.dataTransfer.files[0];
+  if(!file){
+    showUploadError('No file detected in that drop — try dragging an image file directly.');
+    return;
+  }
+  loadPhoto({target:{files:[file]}});
+});
+
+/* ── AI DETECT ── */
+/*
+ * NOTE ON DEPLOYMENT: this calls api.anthropic.com directly from the browser.
+ * That only works inside environments (like the Claude.ai artifact sandbox)
+ * that proxy and authenticate the request on Claude's behalf. If you deploy
+ * this file as a standalone site, the request will fail — Anthropic's API
+ * blocks browser CORS requests, and an API key placed here would be visible
+ * to anyone viewing page source or the network tab.
+ *
+ * To make this work in production: stand up a small backend (a Vercel/
+ * Netlify/Cloudflare Worker function works well) that accepts the image,
+ * holds the ANTHROPIC_API_KEY server-side, calls the Anthropic API itself,
+ * and returns just the JSON detections. Then change the fetch URL below to
+ * point at that endpoint, e.g. fetch('/api/detect', {...}) — no key, no
+ * model name, no Anthropic URL should ever ship to the client.
+ */
+/*
+ * This calls a same-origin backend endpoint, /api/detect, rather than
+ * Anthropic's API directly. The endpoint is a small serverless function you
+ * deploy alongside this page — it holds your ANTHROPIC_API_KEY server-side
+ * and forwards just the detection request. Reference implementations for
+ * Vercel, Netlify, and Cloudflare Workers ship alongside this file in
+ * /proxy-deploy. Until that endpoint exists at your domain, this call will
+ * 404 and the catch block below falls back to a clear "try manual placement"
+ * message rather than a raw error.
+ */
+async function runAI(){
+  if(!S._photoB64)return;
+  document.getElementById('ai-btn').classList.remove('pulse-once');
+  document.getElementById('scan-ov').classList.add('show');
+  document.getElementById('ai-btn').disabled=true;
+  const subs=['Identifying windows…','Locating doors…','Mapping bounding boxes…','Checking confidence…'];
+  let si=0;
+  const startedAt=Date.now();
+  const timeEl=document.getElementById('scan-time');
+  const iv=setInterval(()=>{
+    document.getElementById('scan-sub').textContent=subs[si++%subs.length];
+    const elapsedS=Math.round((Date.now()-startedAt)/1000);
+    if(timeEl)timeEl.textContent=elapsedS<10?'Usually takes 3–8 seconds':'Still working — larger photos can take a bit longer';
+  },1100);
+  let detCount=0,lowConfCount=0,analysisText=null;
+  let overlayDismissed=false;
+  try{
+    const res=await fetch('/api/detect',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({imageBase64:S._photoB64,mediaType:S._photoMime})
+    });
+    if(!res.ok){
+      let serverMsg='';
+      try{const errJson=await res.json();serverMsg=errJson.error||'';}catch{}
+      throw new Error('http_'+res.status+(serverMsg?(': '+serverMsg):''));
+    }
+    if(!res.body){
+      // Streaming isn't available (older browser, or a proxy/CDN that
+      // buffers the response) — fall back to reading the whole body at
+      // once. The wire format is identical either way (newline-delimited
+      // JSON), so the same per-line parsing logic below handles both.
+      const text=await res.text();
+      handleDetectionLines(text.split('\n'));
+    }else{
+      const reader=res.body.getReader();
+      const decoder=new TextDecoder();
+      let buffer='';
+      while(true){
+        const {done,value}=await reader.read();
+        if(done)break;
+        buffer+=decoder.decode(value,{stream:true});
+        let nl;
+        while((nl=buffer.indexOf('\n'))!==-1){
+          const line=buffer.slice(0,nl).trim();
+          buffer=buffer.slice(nl+1);
+          if(line)handleLine(line);
+        }
+      }
+      const tail=buffer.trim();
+      if(tail)handleLine(tail);
+    }
+    clearInterval(iv);
+    document.getElementById('scan-ov').classList.remove('show');
+    document.getElementById('canvas-hint').classList.add('hidden');
+    if(analysisText)document.getElementById('ai-notes').textContent=analysisText;
+    toast(lowConfCount
+      ? `Detected ${detCount} element${detCount!==1?'s':''} — ${lowConfCount} may need a second look (shown with a red dot)`
+      : `Detected ${detCount} element${detCount!==1?'s':''}`);
+    updateAll();
+  }catch(err){
+    clearInterval(iv);
+    document.getElementById('scan-ov').classList.remove('show');
+    const isMissingBackend=err instanceof TypeError||/Failed to fetch|NetworkError|http_404/i.test(err.message||'');
+    const msg=isMissingBackend
+      ? 'AI detection needs a backend proxy deployed at /api/detect — see /proxy-deploy for ready-to-use Vercel, Netlify, and Cloudflare versions. Place windows and doors manually using the tools on the left in the meantime.'
+      : 'Detection failed: '+err.message;
+    document.getElementById('ai-notes').textContent=msg;
+    toast(isMissingBackend?'AI detect not set up yet — try manual placement':'Detection failed — check console');
+  }
+  document.getElementById('ai-btn').disabled=false;
+
+  // Parses one complete NDJSON line and either places a detected element
+  // immediately (so it appears on the canvas the moment it's found) or
+  // stores the trailing analysis summary for display once the stream ends.
+  function handleLine(line){
+    let d;
+    try{d=JSON.parse(line);}catch{return;} // skip any line that didn't parse cleanly rather than aborting the whole stream
+    if(d.type==='analysis'){analysisText=d.summary||'Detection complete.';return;}
+    if(!d.type||typeof d.x_pct!=='number')return; // defensive: skip malformed detection objects
+    const el={
+      id:++_id,type:d.type,
+      xPct:Math.max(0,d.x_pct),yPct:Math.max(0,d.y_pct),
+      wPct:Math.max(5,d.w_pct),hPct:Math.max(5,d.h_pct),
+      fc:S.fc,glass:S.glass,opacity:100,
+      confidence:typeof d.confidence==='number'?Math.max(0,Math.min(1,d.confidence)):null
+    };
+    S.elements.push(el);renderEl(el);
+    detCount++;
+    if(typeof d.confidence==='number'&&d.confidence<0.45)lowConfCount++;
+    // Dismiss the scanning overlay as soon as the first element lands —
+    // from this point on, the canvas itself is the progress indicator,
+    // so keeping a full-screen overlay up would hide the very feedback
+    // streaming was meant to provide.
+    if(!overlayDismissed){
+      overlayDismissed=true;
+      document.getElementById('scan-ov').classList.remove('show');
+    }
+    updateAll();
+  }
+  function handleDetectionLines(lines){
+    lines.forEach(l=>{const t=l.trim();if(t)handleLine(t);});
+  }
+}
+
+/* ── UPDATE ── */
+function updateDetector(){
+  const out=document.getElementById('det-out');
+  if(!S.elements.length){out.innerHTML='<div style="font-size:12px;color:var(--ink-3)">Place elements to detect</div>';return;}
+  const wins=S.elements.filter(e=>isWin(e.type)),doors=S.elements.filter(e=>!isWin(e.type));
+  let h='';
+  if(wins.length)h+=`<div class="det-chip chip-win"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>${wins.length} window${wins.length>1?'s':''}</div>`;
+  if(doors.length)h+=`<div class="det-chip chip-door"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/></svg>${doors.length} door${doors.length>1?'s':''}</div>`;
+  out.innerHTML=h;
+}
+function updateElList(){
+  const list=document.getElementById('el-list');
+  if(!S.elements.length){list.innerHTML='<div style="font-size:12px;color:var(--ink-3)">No elements yet</div>';return;}
+  list.innerHTML=S.elements.map(e=>`
+    <button type="button" class="el-li${S.selected===e.id?' sel':''}" onclick="selectEl(${e.id})" aria-pressed="${S.selected===e.id?'true':'false'}" style="width:100%;text-align:left">
+      <svg viewBox="0 0 24 24" aria-hidden="true">${isWin(e.type)?'<rect x="3" y="3" width="18" height="18" rx="2"/>':'<path d="M3 21h18M6 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/>'}</svg>
+      ${LABELS[e.type]||e.type}
+    </button>`).join('');
+}
+function updateStats(){
+  const wins=S.elements.filter(e=>isWin(e.type)).length;
+  const doors=S.elements.filter(e=>!isWin(e.type)).length;
+  const r=canvasRect();
+  const area=S.elements.reduce((a,e)=>a+((pctToPxX(e.wPct,r)/100)*(pctToPxY(e.hPct,r)/100)),0);
+  document.getElementById('st-total').textContent=S.elements.length;
+  document.getElementById('st-wins').textContent=wins;
+  document.getElementById('st-doors').textContent=doors;
+  document.getElementById('st-area').textContent=area.toFixed(1);
+  const lp=Math.min(100,Math.round(wins*12+area*8));
+  document.getElementById('light-mk').style.left=Math.max(2,lp)+'%';
+  document.getElementById('light-pct').textContent=lp+'%';
+}
+function updateAll(){updateDetector();updateElList();updateStats();}
+
+/* ── SHARE / EXPORT ──
+ * showShare() POSTs the current layout to /api/share, which persists it
+ * server-side (Vercel KV / Netlify Blobs / Cloudflare KV — see
+ * /proxy-deploy for ready-to-use implementations of each) and returns a
+ * short id. The resulting link is /?s=<id>, and loadSharedLayout() below
+ * restores that layout for anyone who opens it. Until that endpoint is
+ * deployed, this fails gracefully with a clear message rather than
+ * fabricating a link that goes nowhere.
+ */
+async function showShare(){
+  document.getElementById('share-modal').classList.add('show');
+  const codeRow=document.getElementById('share-code-row');
+  const loadingRow=document.getElementById('share-loading');
+  const errorRow=document.getElementById('share-error');
+  const copyBtn=document.getElementById('copy-link-btn');
+  codeRow.style.display='none';errorRow.style.display='none';copyBtn.disabled=true;
+
+  if(!S.elements.length){
+    loadingRow.style.display='none';
+    errorRow.textContent='Place at least one window or door before sharing.';
+    errorRow.style.display='block';
+    return;
+  }
+
+  loadingRow.style.display='flex';
+  try{
+    const res=await fetch('/api/share',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({elements:S.elements,view:S.view})
+    });
+    if(!res.ok){
+      let serverMsg='';
+      try{const e=await res.json();serverMsg=e.error||'';}catch{}
+      throw new Error('http_'+res.status+(serverMsg?(': '+serverMsg):''));
+    }
+    const data=await res.json();
+    loadingRow.style.display='none';
+    document.getElementById('share-id').textContent=data.id;
+    codeRow.style.display='block';
+    copyBtn.disabled=false;
+  }catch(err){
+    loadingRow.style.display='none';
+    const isMissingBackend=err instanceof TypeError||/Failed to fetch|NetworkError|http_404/i.test(err.message||'');
+    errorRow.textContent=isMissingBackend
+      ? 'Shareable links need a backend deployed at /api/share — see /proxy-deploy for ready-to-use Vercel, Netlify, and Cloudflare versions. You can still download a PNG below.'
+      : 'Couldn\'t create a link right now — please try again, or download a PNG below.';
+    errorRow.style.display='block';
+  }
+}
+function closeModal(){document.getElementById('share-modal').classList.remove('show');}
+function copyLink(){
+  const id=document.getElementById('share-id').textContent;
+  if(!id)return;
+  const txt=`${location.origin}/?s=${id}`;
+  navigator.clipboard?.writeText(txt).catch(()=>{});
+  toast('Link copied to clipboard');closeModal();
+}
+
+/* ── LOAD SHARED LAYOUT ──
+ * If the page is opened with ?s=<id>, fetch that layout from /api/share
+ * and rebuild the canvas from it instead of starting blank.
+ */
+async function loadSharedLayout(){
+  const params=new URLSearchParams(location.search);
+  const id=params.get('s');
+  if(!id)return;
+  toast('Loading shared layout…');
+  try{
+    const res=await fetch('/api/share?id='+encodeURIComponent(id));
+    if(!res.ok){
+      let serverMsg='';
+      try{const e=await res.json();serverMsg=e.error||'';}catch{}
+      throw new Error(serverMsg||'Could not load this layout');
+    }
+    const data=await res.json();
+    if(!Array.isArray(data.elements)||!data.elements.length){
+      toast('This shared layout has no elements to show');
+      return;
+    }
+    S.elements=[];
+    document.getElementById('el-layer').innerHTML='';
+    data.elements.forEach(raw=>{
+      // re-assign fresh local ids to avoid collisions with anything already placed,
+      // and fall back to sane defaults for any missing/malformed fields so a
+      // corrupted shared record can't crash the page.
+      const copy={
+        id:++_id,
+        type:LABELS[raw.type]?raw.type:'window-casement',
+        xPct:Number.isFinite(raw.xPct)?raw.xPct:10,
+        yPct:Number.isFinite(raw.yPct)?raw.yPct:10,
+        wPct:Number.isFinite(raw.wPct)?raw.wPct:20,
+        hPct:Number.isFinite(raw.hPct)?raw.hPct:20,
+        fc:typeof raw.fc==='string'?raw.fc:FRAMES[0].hex,
+        glass:(raw.glass&&raw.glass.fill&&raw.glass.shine)?raw.glass:GLASSES[0],
+        opacity:Number.isFinite(raw.opacity)?raw.opacity:100,
+        confidence:typeof raw.confidence==='number'?Math.max(0,Math.min(1,raw.confidence)):null
+      };
+      S.elements.push(copy);
+      renderEl(copy);
+    });
+    if(data.view){setView(data.view);}
+    document.getElementById('canvas-hint').classList.add('hidden');
+    updateAll();
+    toast(`Loaded shared layout — ${data.elements.length} element${data.elements.length!==1?'s':''}`);
+  }catch(err){
+    console.error('Failed to load shared layout',err);
+    const isMissingBackend=err instanceof TypeError||/Failed to fetch|NetworkError/i.test(err.message||'');
+    toast(isMissingBackend?'Shared links need a backend — see /proxy-deploy':'Could not load this shared layout');
+  }
+}
+document.addEventListener('DOMContentLoaded',loadSharedLayout);
+
+function exportPNG(){
+  try{
+    const c=document.createElement('canvas');
+    const r=document.getElementById('app-canvas').getBoundingClientRect();
+    c.width=r.width;c.height=r.height;
+    const ctx=c.getContext('2d');
+    const bg=document.getElementById('photo-bg');
+    if(bg.classList.contains('show')&&bg.src){
+      ctx.drawImage(bg,0,0,c.width,c.height);
+    }else{
+      ctx.fillStyle='#D6D0C4';ctx.fillRect(0,0,c.width,c.height);
+    }
+    ctx.font='12px sans-serif';ctx.fillStyle='rgba(0,0,0,0.4)';
+    ctx.fillText(`Viewframe · ${S.elements.length} elements · ${new Date().toLocaleDateString()}`,12,c.height-12);
+    const url=c.toDataURL(); // can throw SecurityError on a tainted/cross-origin canvas
+    const a=document.createElement('a');a.download='viewframe-layout.png';a.href=url;a.click();
+    toast('Layout exported as PNG');
+  }catch(err){
+    console.error('Export failed',err);
+    const isTainted=err.name==='SecurityError';
+    toast(isTainted
+      ? 'Export blocked — try re-uploading your photo instead of dragging it from another site'
+      : 'Export failed — please try again');
+  }
+}
+
+/* ── PDF SPEC SHEET EXPORT ──
+ * Produces a structured document for installers/architects: a snapshot of
+ * the room with placements, plus a table listing every element's type,
+ * approximate size, frame colour, and glass — the kind of brief an
+ * installer needs to quote against, rather than just a flat picture.
+ * Uses jsPDF, loaded from a CDN at the bottom of the page; if that script
+ * hasn't loaded (offline, CDN blocked) this fails with a clear message
+ * rather than a silent crash.
+ */
+function frameNameFor(hex){
+  const match=FRAMES.find(f=>f.hex.toLowerCase()===String(hex||'').toLowerCase());
+  return match?match.name:(hex||'—');
+}
+function captureRoomSnapshot(){
+  const c=document.createElement('canvas');
+  const r=document.getElementById('app-canvas').getBoundingClientRect();
+  c.width=r.width;c.height=r.height;
+  const ctx=c.getContext('2d');
+  const bg=document.getElementById('photo-bg');
+  if(bg.classList.contains('show')&&bg.src){
+    ctx.drawImage(bg,0,0,c.width,c.height);
+  }else{
+    ctx.fillStyle='#E8E0D4';ctx.fillRect(0,0,c.width,c.height);
+  }
+  return {dataUrl:c.toDataURL('image/jpeg',0.92),width:c.width,height:c.height};
+}
+async function exportSpecSheet(){
+  if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF){
+    toast('PDF export couldn\'t load — check your connection and try again');
+    return;
+  }
+  if(!S.elements.length){
+    toast('Place at least one window or door before exporting a spec sheet');
+    return;
+  }
+  try{
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({unit:'pt',format:'a4'});
+    const pageW=doc.internal.pageSize.getWidth();
+    const pageH=doc.internal.pageSize.getHeight();
+    const margin=40;
+    let y=margin;
+
+    // ── Header ──
+    doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(28,25,23);
+    doc.text('Viewframe — Window & Door Spec Sheet',margin,y);
+    y+=22;
+    doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(120,113,108);
+    const dateStr=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+    doc.text(`Generated ${dateStr} · ${S.elements.length} element${S.elements.length!==1?'s':''} · ${S.view==='outside'?'Outside':'Inside'} view`,margin,y);
+    y+=24;
+    doc.setDrawColor(212,116,42);doc.setLineWidth(1.5);
+    doc.line(margin,y,pageW-margin,y);
+    y+=24;
+
+    // ── Room snapshot ──
+    const snap=captureRoomSnapshot();
+    const imgMaxW=pageW-margin*2;
+    const imgMaxH=240;
+    let imgW=imgMaxW,imgH=imgMaxW*(snap.height/snap.width);
+    if(imgH>imgMaxH){imgH=imgMaxH;imgW=imgMaxH*(snap.width/snap.height);}
+    const imgX=margin+(imgMaxW-imgW)/2;
+    try{
+      doc.addImage(snap.dataUrl,'JPEG',imgX,y,imgW,imgH);
+    }catch(imgErr){
+      console.error('Could not embed room snapshot',imgErr);
+      doc.setFontSize(10);doc.setTextColor(155,32,32);
+      doc.text('(Room snapshot could not be embedded — see PNG export for the visual layout.)',margin,y+14);
+      imgH=20;
+    }
+    y+=imgH+28;
+
+    // ── Element table ──
+    doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(28,25,23);
+    doc.text('Elements',margin,y);
+    y+=18;
+
+    const cols=[
+      {key:'idx',label:'#',w:24},
+      {key:'type',label:'Type',w:90},
+      {key:'size',label:'Approx. size',w:90},
+      {key:'frame',label:'Frame colour',w:90},
+      {key:'glass',label:'Glass',w:90},
+      {key:'opacity',label:'Opacity',w:60},
+    ];
+    const tableX=margin;
+    const rowH=22;
+    const headerH=22;
+
+    function drawTableHeader(yy){
+      doc.setFillColor(254,243,226); // var(--paper-warm)
+      doc.rect(tableX,yy,pageW-margin*2,headerH,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(120,113,108);
+      let cx=tableX+6;
+      cols.forEach(col=>{
+        doc.text(col.label.toUpperCase(),cx,yy+14);
+        cx+=col.w;
+      });
+      return yy+headerH;
+    }
+    function checkPageBreak(yy){
+      if(yy>pageH-margin-rowH){
+        doc.addPage();
+        let ny=margin;
+        doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(28,25,23);
+        doc.text('Elements (continued)',margin,ny);
+        ny+=18;
+        ny=drawTableHeader(ny);
+        return ny;
+      }
+      return yy;
+    }
+
+    y=drawTableHeader(y);
+    const r=canvasRect();
+    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(68,64,60);
+
+    S.elements.forEach((el,i)=>{
+      y=checkPageBreak(y);
+      if(i%2===1){
+        doc.setFillColor(253,250,246);
+        doc.rect(tableX,y,pageW-margin*2,rowH,'F');
+      }
+      const wPx=Math.round(pctToPxX(el.wPct,r));
+      const hPx=Math.round(pctToPxY(el.hPct,r));
+      const row=[
+        String(i+1),
+        LABELS[el.type]||el.type,
+        `${wPx}×${hPx}px`,
+        frameNameFor(el.fc),
+        (el.glass&&el.glass.name)?el.glass.name:'—',
+        `${el.opacity}%`,
+      ];
+      let cx=tableX+6;
+      row.forEach((cellText,ci)=>{
+        doc.text(String(cellText),cx,y+15);
+        cx+=cols[ci].w;
+      });
+      doc.setDrawColor(232,224,212);doc.setLineWidth(0.5);
+      doc.line(tableX,y+rowH,pageW-margin,y+rowH);
+      y+=rowH;
+    });
+
+    y+=20;
+    if(y<pageH-margin-40){
+      doc.setFont('helvetica','italic');doc.setFontSize(8.5);doc.setTextColor(140,135,130);
+      const note='Sizes are approximate, taken from the on-screen layout, and are not a substitute for an installer\'s on-site measurement.';
+      doc.text(note,margin,y,{maxWidth:pageW-margin*2});
+    }
+
+    doc.save('viewframe-spec-sheet.pdf');
+    toast('Spec sheet exported as PDF');
+  }catch(err){
+    console.error('Spec sheet export failed',err);
+    toast('Spec sheet export failed — please try again');
+  }
+}
+
+/* ── TOAST ── */
+let _tv;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(_tv);_tv=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  // Close any other open item (accordion behaviour)
+  document.querySelectorAll('.faq-item.open').forEach(i=>{
+    if(i!==item){i.classList.remove('open');i.querySelector('.faq-q').setAttribute('aria-expanded','false');}
+  });
+  item.classList.toggle('open',!isOpen);
+  btn.setAttribute('aria-expanded',!isOpen?'true':'false');
+}
+
+/* ── EXPORT MENU ── */
+function toggleExportMenu(){
+  const menu=document.getElementById('export-menu');
+  const trigger=document.getElementById('export-trigger');
+  const isOpen=menu.classList.contains('show');
+  menu.classList.toggle('show',!isOpen);
+  trigger.setAttribute('aria-expanded',!isOpen?'true':'false');
+}
+function closeExportMenu(){
+  document.getElementById('export-menu').classList.remove('show');
+  document.getElementById('export-trigger').setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('export-dd');
+  if(dd&&!dd.contains(e.target))closeExportMenu();
+});
+
+/* ── KEYBOARD ── */
+window.addEventListener('keydown',e=>{
+  if(e.key==='Delete'&&S.selected)removeEl(S.selected);
+  if(e.key==='Escape'){
+    if(document.getElementById('share-modal').classList.contains('show')){closeModal();return;}
+    closeExportMenu();
+    S.selected=null;document.querySelectorAll('.el-wrap').forEach(w=>w.classList.remove('sel'));
+  }
+});
+
+/* ── RESPONSIVE RE-RENDER ── */
+/* Elements are stored as percentages of the canvas, so on resize we just
+   recompute pixel positions/sizes from current canvas dimensions. */
+let _resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{S.elements.forEach(el=>renderEl(el));updateStats();},120);
+});
+
+/* ── HERO ANIMATION ── */
+(function(){
+  const hc=document.getElementById('hero-canvas');
+  const windows=[
+    {x:'8%',y:'15%',w:'28%',h:'45%',type:'casement',fc:'#C8A97A',delay:0},
+    {x:'42%',y:'15%',w:'36%',h:'45%',type:'double',fc:'#C8A97A',delay:400},
+    {x:'15%',y:'65%',w:'22%',h:'28%',type:'sash',fc:'#FFFFFF',delay:800},
+  ];
+  const g={fill:'rgba(180,220,240,0.28)',shine:'rgba(255,255,255,0.55)'};
+  windows.forEach((w,i)=>{
+    setTimeout(()=>{
+      const wrap=document.createElement('div');
+      wrap.style.cssText=`position:absolute;left:${w.x};top:${w.y};width:${w.w};height:${w.h};opacity:0;transition:opacity .5s`;
+      wrap.innerHTML=`<svg viewBox="0 0 120 90" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="118" height="88" rx="2" fill="${w.fc}" stroke="#666" stroke-width="2"/>
+        <rect x="3" y="3" width="114" height="84" fill="${g.fill}"/>
+        <rect x="5" y="5" width="36" height="3" rx="1.5" fill="${g.shine}" opacity=".8"/>
+        ${w.type==='double'?'<line x1="60" y1="3" x2="60" y2="87" stroke="#888" stroke-width="1.5"/>':''}
+        ${w.type==='sash'?'<line x1="3" y1="45" x2="117" y2="45" stroke="#888" stroke-width="1.5"/>':''}
+        <div class="hw-detect-ring"></div>
+      </svg>`;
+      hc.appendChild(wrap);
+      setTimeout(()=>{wrap.style.opacity='1';},50);
+      if(i===windows.length-1){
+        setTimeout(()=>{
+          document.getElementById('detect-chip').style.display='block';
+        },600);
+      }
+    },w.delay+1000);
+  });
+})();
+</script>
+
+<!-- jsPDF — used only by exportSpecSheet() for the PDF spec sheet export.
+     Loaded at the end of the page so it never blocks initial render.
+     If this fails to load (offline, blocked CDN, etc.), exportSpecSheet()
+     checks for it and shows a clear error instead of throwing. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+</body>
+</html>
