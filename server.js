@@ -216,4 +216,8 @@ app.post('/api/waitlist', (req, res) => {
 
 // ── START ──────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Viewframe running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Viewframe running on http://localhost:${PORT}`);
+  console.log('ANTHROPIC_API_KEY:', process.env.ANTHROPIC_API_KEY ? 'SET' : 'MISSING');
+  console.log('REPLICATE_API_TOKEN:', process.env.REPLICATE_API_TOKEN ? 'SET' : 'MISSING');
+});
