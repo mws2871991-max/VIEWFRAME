@@ -168,7 +168,7 @@ app.post('/api/transform', transformLimit, async (req, res) => {
 
   const colourName = colourNames[frameColour] || 'anthracite grey (RAL 7016)';
   const styleName  = styleNames[style] || 'casement';
-  const prompt = `Replace all windows and doors on this house with modern ${styleName} windows and doors with ${colourName} coloured frames. The window and door frames must be ${colourName}. Keep the house walls, roof, garden and all surroundings exactly the same — only change the window and door frames. Photorealistic, high quality, architectural photography.`;
+  const prompt = `Change all window and door frames on this house to ${colourName}. Every single window frame and door frame must be ${colourName} coloured. Replace the existing frames with modern ${styleName} style frames in ${colourName}. Do not change anything else — keep the brickwork, walls, roof, garden, driveway and surroundings exactly as they are. Only the window and door frames change colour to ${colourName}. Photorealistic, high quality, architectural photography.`;
 
   try {
     const predRes = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions', {
