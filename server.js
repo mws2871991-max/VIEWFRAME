@@ -83,7 +83,7 @@ Rules:
 
   try {
     const stream = await client.messages.stream({
-      model: 'claude-opus-4-8',
+      model: 'claude-sonnet-4-6',
       max_tokens: 1024,
       system: SYSTEM,
       messages: [{
