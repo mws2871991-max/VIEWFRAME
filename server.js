@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const Anthropic = require('@anthropic-ai/sdk');
 const { randomUUID } = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -48,81 +47,63 @@ app.use((req, res, next) => {
 });
 
 // ── POST /api/detect ──────────────────────────────────────────────────────────
-// Accepts: { imageBase64: string, mediaType: string }
-// Streams back NDJSON lines:
-//   { type, x_pct, y_pct, w_pct, h_pct, confidence }  (one per detection)
-//   { type: 'analysis', summary: string }               (trailing summary)
+// Accepts: { imageBase64, mediaType }  — frontend field names
+// Returns NDJSON: one detection object per line, trailing analysis line
 app.post('/api/detect', detectLimit, async (req, res) => {
   const { imageBase64, mediaType } = req.body || {};
-  if (!imageBase64 || !mediaType) {
-    return res.status(400).json({ error: 'imageBase64 and mediaType are required.' });
-  }
-  if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(mediaType)) {
-    return res.status(400).json({ error: 'Unsupported image type.' });
-  }
+  if (!imageBase64 || !mediaType) return res.status(400).json({ error: 'Missing imageBase64 or mediaType.' });
+  const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+  if (!allowed.includes(mediaType)) return res.status(400).json({ error: 'Unsupported image type.' });
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'API key not configured.' });
 
-  const SYSTEM = `You are a window and door detection specialist. Analyse the image and identify every window and door visible.
-
-For each one, output a JSON object on its own line (NDJSON format):
-{"type":"<type>","x_pct":<number>,"y_pct":<number>,"w_pct":<number>,"h_pct":<number>,"confidence":<0-1>}
-
-Rules:
-- x_pct, y_pct = top-left corner as % of image width/height (0–100)
-- w_pct, h_pct = width/height as % of image width/height (min 3)
-- type must be one of: window-casement, window-sash, window-double, window-bay, window-skylight, window-tilt, door-single, door-double, door-bifold, door-sliding, door-french, door-patio
-- confidence: 0.9 = very clear, 0.6 = partially visible, 0.3 = uncertain
-- Output ONLY detection JSON lines during scanning, then a single trailing line:
-  {"type":"analysis","summary":"<brief 1-2 sentence summary of the scene>"}
-- No markdown, no explanations, no extra text.`;
-
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Transfer-Encoding', 'chunked');
-  res.setHeader('X-Accel-Buffering', 'no');
-
+  let anthropicRes;
   try {
-    const stream = await client.messages.stream({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
-      system: SYSTEM,
-      messages: [{
-        role: 'user',
-        content: [{
-          type: 'image',
-          source: { type: 'base64', media_type: mediaType, data: imageBase64 }
-        }, {
-          type: 'text',
-          text: 'Detect all windows and doors in this image. Output one JSON object per line.'
-        }]
-      }]
+    anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6', max_tokens: 1024,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
+          { type: 'text', text: `Detect all windows and doors. Return ONLY a JSON array, no markdown. Each item: {"type":"window-casement"|"window-sash"|"window-double"|"window-bay"|"window-skylight"|"window-tilt"|"door-single"|"door-double"|"door-bifold"|"door-sliding"|"door-french"|"door-patio","confidence":0.0-1.0,"x_pct":0-100,"y_pct":0-100,"w_pct":1-100,"h_pct":1-100}. Add a final item {"type":"analysis","summary":"2-3 sentence overview"}.` }
+        ]}]
+      })
     });
-
-    let buffer = '';
-    for await (const chunk of stream) {
-      if (chunk.type === 'content_block_delta' && chunk.delta?.type === 'text_delta') {
-        buffer += chunk.delta.text;
-        let nl;
-        while ((nl = buffer.indexOf('\n')) !== -1) {
-          const line = buffer.slice(0, nl).trim();
-          buffer = buffer.slice(nl + 1);
-          if (line) res.write(line + '\n');
-        }
-      }
-    }
-    if (buffer.trim()) res.write(buffer.trim() + '\n');
-
-    appendLog('detections.jsonl', { ts: new Date().toISOString(), ok: true });
-    res.end();
   } catch (err) {
-    console.error('Detect error:', err.message);
-    appendLog('detections.jsonl', { ts: new Date().toISOString(), ok: false, err: err.message });
-    if (!res.headersSent) {
-      res.status(500).json({ error: 'Detection failed. Please try again.' });
-    } else {
-      res.end();
-    }
+    console.error('Detect fetch error:', err.message);
+    return res.status(502).json({ error: "Couldn't reach detection service." });
   }
+
+  if (!anthropicRes.ok) {
+    let detail = '';
+    try { detail = (await anthropicRes.json())?.error?.message || ''; } catch {}
+    console.error(`Anthropic ${anthropicRes.status}: ${detail}`);
+    return res.status(502).json({ error: `Detection failed (${anthropicRes.status}).` });
+  }
+
+  let data;
+  try { data = await anthropicRes.json(); } catch {
+    return res.status(502).json({ error: 'Unreadable response from detection service.' });
+  }
+
+  const raw = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+  const arrMatch = raw.replace(/```json|```/g, '').trim().match(/\[[\s\S]*\]/);
+  if (!arrMatch) return res.status(502).json({ error: 'No detections returned — try another photo.' });
+
+  let items;
+  try { items = JSON.parse(arrMatch[0]); } catch {
+    return res.status(502).json({ error: 'Could not parse detections.' });
+  }
+
+  // Write each detection as an NDJSON line so the frontend streaming logic works
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  for (const item of items) {
+    res.write(JSON.stringify(item) + '\n');
+  }
+  appendLog('detections.jsonl', { ts: new Date().toISOString(), count: items.filter(i => i.type !== 'analysis').length });
+  res.end();
 });
 
 // ── POST /api/share ───────────────────────────────────────────────────────────
