@@ -67,7 +67,7 @@ app.post('/api/detect', detectLimit, async (req, res) => {
         model: 'claude-sonnet-4-6', max_tokens: 1024,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
-          { type: 'text', text: `Detect all windows and doors. Return ONLY a JSON array, no markdown. Each item: {"type":"window-casement"|"window-sash"|"window-double"|"window-bay"|"window-skylight"|"window-tilt"|"door-single"|"door-double"|"door-bifold"|"door-sliding"|"door-french"|"door-patio","confidence":0.0-1.0,"x_pct":0-100,"y_pct":0-100,"w_pct":1-100,"h_pct":1-100}. Add a final item {"type":"analysis","summary":"2-3 sentence overview"}.` }
+          { type: 'text', text: `Detect all windows and doors. Return ONLY a JSON array, no markdown. Each item: {"type":"window-casement"|"window-sash"|"window-double"|"window-bay"|"window-flush"|"window-tilt"|"door-single"|"door-double"|"door-bifold"|"door-sliding"|"door-french"|"door-patio","confidence":0.0-1.0,"x_pct":0-100,"y_pct":0-100,"w_pct":1-100,"h_pct":1-100}. Add a final item {"type":"analysis","summary":"2-3 sentence overview"}.` }
         ]}]
       })
     });
@@ -161,7 +161,7 @@ app.post('/api/transform', transformLimit, async (req, res) => {
   };
   const styleNames = {
     'window-casement': 'casement', 'window-sash': 'sash', 'window-double': 'double casement',
-    'window-bay': 'bay', 'window-skylight': 'skylight', 'window-tilt': 'tilt and turn',
+    'window-bay': 'bay', 'window-flush': 'flush', 'window-tilt': 'tilt and turn',
     'door-single': 'single', 'door-double': 'double', 'door-bifold': 'bifold',
     'door-sliding': 'sliding patio', 'door-french': 'french', 'door-patio': 'patio'
   };
