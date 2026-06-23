@@ -214,6 +214,20 @@ app.post('/api/waitlist', (req, res) => {
   res.json({ ok: true });
 });
 
+
+// ── POST /api/event ───────────────────────────────────────────────────────────
+app.post('/api/event', (req, res) => {
+  const { name, props } = req.body || {};
+  if (!name || typeof name !== 'string' || name.length > 100) return res.status(400).end();
+  appendLog('events.jsonl', { ts: new Date().toISOString(), name: name.slice(0,100), props: props || {} });
+  res.json({ ok: true });
+});
+
+// ── 404 ───────────────────────────────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
 // ── START ──────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

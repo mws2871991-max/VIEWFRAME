@@ -23,6 +23,7 @@
 <!-- Favicon (inline SVG, no external file needed) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect width='18' height='18' rx='4' fill='%23D4742A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='4' y='4' width='10' height='10' rx='1.4'/%3E%3Cpolyline points='4,11 7,8 9,10 12,7 14,11'/%3E%3C/g%3E%3C/svg%3E">
 
+<link rel="canonical" href="https://viewframe.co.uk/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
@@ -706,6 +707,19 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   .footer-main { grid-template-columns: 1fr; padding: 40px 20px 28px; gap: 28px; }
   .footer-col ul { gap: 9px; }
   .app-topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 6px; }
+
+  /* Mobile home panel */
+  #home-panel { padding: 10px 12px; gap: 8px; }
+  #home-panel > div { gap: 16px; }
+  .hp-swatch { width: 28px; height: 28px; }
+  .hp-style { padding: 6px 12px; font-size: 12px; }
+  /* Mobile mode explainer strip */
+  .mode-explainer { display: none; }
+  /* Ensure canvas fills width on mobile */
+  .app-canvas { min-width: 0; }
+  /* Gallery sliders on mobile */
+  .gal-slider { touch-action: none; }
+
   .app-topbar .sp { display: none; }
   .upload-label-text { display: none; }
   #upload-label { padding: 8px 10px; }
@@ -745,6 +759,26 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 .gal-tag-before { left:12px; }
 .gal-tag-after { right:12px; }
 </style>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Viewframe",
+  "url": "https://viewframe.co.uk",
+  "description": "Upload a photo of your home and visualise new windows and doors before you buy. Free for UK homeowners.",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+  "provider": {
+    "@type": "Organization",
+    "name": "Viewframe",
+    "email": "mws2871991@gmail.com",
+    "url": "https://viewframe.co.uk"
+  }
+}
+</script>
 </head>
 <body>
 <a href="#visualiser" class="skip-link">Skip to visualiser</a>
@@ -890,6 +924,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <span class="upload-label-text">Upload photo</span>
         <input type="file" accept="image/*,.heic,.heif" id="photo-input" style="display:none" onchange="loadPhoto(event)">
       </label>
+      <button class="app-tb-btn" onclick="loadDemoPhoto()" id="demo-btn" title="Try with a sample house photo">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        Try demo
+      </button>
       <button class="app-tb-btn" onclick="runAI()" id="ai-btn" title="Automatically find windows and doors in your photo using AI (takes a few seconds)" style="display:none">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         AI Detect
@@ -1869,6 +1907,7 @@ function setUploadLoading(isLoading){
 }
 
 function loadPhoto(ev){
+  track('photo_uploaded');
   const file=ev.target.files[0];
   if(!file)return;
   clearUploadError();
@@ -1981,6 +2020,7 @@ cv.addEventListener('drop',e=>{
  * message rather than a raw error.
  */
 async function runAI(){
+  track('ai_detect_started');
   if(!S._photoB64)return;
   document.getElementById('ai-btn').classList.remove('pulse-once');
   document.getElementById('scan-ov').classList.add('show');
@@ -2285,6 +2325,7 @@ function captureRoomSnapshot(){
   return {dataUrl:c.toDataURL('image/jpeg',0.92),width:c.width,height:c.height};
 }
 async function exportSpecSheet(){
+  track('pdf_exported');
   if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF){
     toast('PDF export couldn\'t load — check your connection and try again');
     return;
@@ -2504,6 +2545,23 @@ window.addEventListener('resize',()=>{
 })();
 
 
+
+/* ── ANALYTICS ── */
+function track(name, props){
+  try{ fetch('/api/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,props:props||{}})}); }catch(_){}
+}
+
+/* ── DEMO PHOTO ── */
+async function loadDemoPhoto(){
+  track('demo_photo_clicked');
+  try{
+    const r = await fetch('gallery-1-before.jpg');
+    const blob = await r.blob();
+    const file = new File([blob], 'demo-house.jpg', {type:'image/jpeg'});
+    loadPhoto({target:{files:[file]}});
+  }catch(e){ alert('Could not load demo photo.'); }
+}
+
 /* ── MODE SWITCHER ── */
 function setMode(m){
   const wrap=document.getElementById('app-wrap')||document.querySelector('.app-wrap');
@@ -2658,6 +2716,7 @@ document.addEventListener('DOMContentLoaded',()=>{
      checks for it and shows a clear error instead of throwing. -->
 <script>
 async function runTransform(){
+  track('transform_started');
   if(!S._photoB64||!S._photoMime){alert('Please upload a photo first.');return;}
   const els=S.elements||[];
   const style=els.length?(els[0].type||'window-casement'):'window-casement';
