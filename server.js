@@ -215,6 +215,25 @@ app.post('/api/waitlist', (req, res) => {
 });
 
 
+// ── POST /api/quote-request ───────────────────────────────────────────────────
+app.post('/api/quote-request', (req, res) => {
+  const { name, email, postcode, design } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required.' });
+  }
+  if (!postcode || typeof postcode !== 'string' || postcode.trim().length < 3) {
+    return res.status(400).json({ error: 'Postcode required.' });
+  }
+  appendLog('quote_requests.jsonl', {
+    ts: new Date().toISOString(),
+    name: (name || '').slice(0, 100),
+    email,
+    postcode: postcode.trim().toUpperCase().slice(0, 10),
+    design: design || {}
+  });
+  res.json({ ok: true });
+});
+
 // ── POST /api/event ───────────────────────────────────────────────────────────
 app.post('/api/event', (req, res) => {
   const { name, props } = req.body || {};

@@ -1039,7 +1039,11 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         AI Transform
       </button>
-      <span id="share-btn-wrap"><button class="app-tb-btn prim" onclick="showShare()">
+      <button class="app-tb-btn prim" onclick="showQuoteModal()" id="quote-btn" style="background:var(--accent);color:#fff;gap:6px;">
+        <svg viewBox="0 0 24 24" style="stroke:#fff"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Request quotes
+      </button>
+      <span id="share-btn-wrap"><button class="app-tb-btn" onclick="showShare()">
         <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
       </button></span>
@@ -1062,6 +1066,12 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <div>
           <div class="hp-label">Window style</div>
           <div class="hp-styles" id="hp-styles"></div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+          <button onclick="showQuoteModal()" style="display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Request installer quotes
+          </button>
         </div>
       </div>
     </div>
@@ -1481,6 +1491,52 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     </div>
   </div>
 </footer>
+
+<!-- QUOTE REQUEST MODAL -->
+<div class="modal-bg" id="quote-modal" onclick="if(event.target===this)closeQuoteModal()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title" style="max-width:460px;">
+    <button onclick="closeQuoteModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--ink-3);font-size:20px;line-height:1;" aria-label="Close">✕</button>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Get quotes</div>
+      <h3 id="quote-modal-title" style="font-family:var(--serif);font-size:24px;font-weight:300;letter-spacing:-0.01em;color:var(--ink);line-height:1.2;">Request quotes from local installers</h3>
+      <p style="font-size:14px;color:var(--ink-2);margin-top:10px;line-height:1.6;">We'll pass your design and contact details to vetted window installers in your area. No obligation — just quotes.</p>
+    </div>
+
+    <div id="quote-form-wrap">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Your name</label>
+          <input id="q-name" type="text" placeholder="Jane Smith" autocomplete="name"
+            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Email address</label>
+          <input id="q-email" type="email" placeholder="jane@example.com" autocomplete="email"
+            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Your postcode</label>
+          <input id="q-postcode" type="text" placeholder="SW1A 1AA" autocomplete="postal-code" maxlength="8"
+            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
+        </div>
+      </div>
+      <div style="background:var(--accent-lt);border-radius:var(--r);padding:12px 16px;margin-top:16px;font-size:13px;color:var(--accent);line-height:1.5;" id="quote-design-summary"></div>
+      <p style="font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.5;">Your design details will be shared with installers. We will never share your data with anyone else. <a href="/privacy.html" style="color:var(--accent);">Privacy policy →</a></p>
+      <div id="quote-error" style="display:none;color:var(--danger);font-size:13px;margin-top:8px;"></div>
+      <div class="modal-actions" style="margin-top:20px;">
+        <button class="app-tb-btn" onclick="closeQuoteModal()">Cancel</button>
+        <button class="app-tb-btn prim" onclick="submitQuoteRequest()" id="quote-submit-btn" style="background:var(--accent);color:#fff;">Send quote request →</button>
+      </div>
+    </div>
+
+    <div id="quote-success" style="display:none;text-align:center;padding:24px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">✓</div>
+      <h4 style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--ink);margin-bottom:10px;">Request sent</h4>
+      <p style="font-size:15px;color:var(--ink-2);line-height:1.6;max-width:320px;margin:0 auto 20px;">We'll match you with installers in your area. Expect to hear from them within 2–3 business days.</p>
+      <button class="app-tb-btn prim" onclick="closeQuoteModal()" style="background:var(--accent);color:#fff;">Done</button>
+    </div>
+  </div>
+</div>
 
 <!-- SHARE MODAL -->
 <div class="modal-bg" id="share-modal" onclick="if(event.target===this)closeModal()">
@@ -2228,6 +2284,56 @@ async function showShare(){
   }
 }
 function closeModal(){document.getElementById('share-modal').classList.remove('show');}
+
+/* ── QUOTE REQUEST MODAL ── */
+function showQuoteModal(){
+  // Reset state
+  document.getElementById('quote-form-wrap').style.display='block';
+  document.getElementById('quote-success').style.display='none';
+  document.getElementById('quote-error').style.display='none';
+  document.getElementById('quote-submit-btn').disabled=false;
+  // Build design summary from current state
+  const els=S.elements||[];
+  const fc=S.fc||'—';
+  const count=els.length;
+  const styles=[...new Set(els.map(e=>e.type||'').filter(Boolean))].join(', ')||'—';
+  const summEl=document.getElementById('quote-design-summary');
+  if(count>0){
+    summEl.style.display='block';
+    summEl.innerHTML=`<strong>Your design:</strong> ${count} opening${count!==1?'s':''} · Frame: ${fc}${styles&&styles!=='—'?' · Style: '+styles:''}`;
+  } else {
+    summEl.style.display='none';
+  }
+  document.getElementById('quote-modal').classList.add('show');
+  track('quote_modal_opened');
+  setTimeout(()=>document.getElementById('q-name').focus(),100);
+}
+function closeQuoteModal(){document.getElementById('quote-modal').classList.remove('show');}
+async function submitQuoteRequest(){
+  const name=document.getElementById('q-name').value.trim();
+  const email=document.getElementById('q-email').value.trim();
+  const postcode=document.getElementById('q-postcode').value.trim();
+  const errEl=document.getElementById('quote-error');
+  errEl.style.display='none';
+  if(!name){errEl.textContent='Please enter your name.';errEl.style.display='block';document.getElementById('q-name').focus();return;}
+  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';errEl.style.display='block';document.getElementById('q-email').focus();return;}
+  if(!postcode||postcode.length<3){errEl.textContent='Please enter your postcode.';errEl.style.display='block';document.getElementById('q-postcode').focus();return;}
+  const btn=document.getElementById('quote-submit-btn');
+  btn.disabled=true; btn.textContent='Sending…';
+  const els=S.elements||[];
+  const design={frameColour:S.fc||null,elementCount:els.length,styles:[...new Set(els.map(e=>e.type||'').filter(Boolean))]};
+  try{
+    const r=await fetch('/api/quote-request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,postcode,design})});
+    if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Request failed');}
+    document.getElementById('quote-form-wrap').style.display='none';
+    document.getElementById('quote-success').style.display='block';
+    track('quote_request_submitted',{postcode});
+  }catch(e){
+    errEl.textContent=e.message||'Something went wrong — please try again.';
+    errEl.style.display='block';
+    btn.disabled=false; btn.textContent='Send quote request →';
+  }
+}
 function copyLink(){
   const id=document.getElementById('share-id').textContent;
   if(!id)return;
