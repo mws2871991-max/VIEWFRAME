@@ -695,6 +695,17 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   .feat-card { padding: 28px 22px; }
   .faq-q { font-size: 14px; padding: 18px 2px; gap: 10px; }
   .faq-a-inner { padding: 0 2px 18px; font-size: 13px; }
+  /* Inline-padded sections that can't use the generic override */
+  #gallery { padding: 48px 16px !important; }
+  #installers { padding: 48px 16px !important; }
+  #waitlist { padding: 48px 16px !important; }
+  /* Installer two-col grid → single col */
+  #installers .section-inner > div,
+  #installers [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; gap: 40px !important; }
+  /* Home panel: stack quote button below swatches */
+  #home-panel > div { flex-direction: column !important; align-items: flex-start !important; }
+  #home-panel > div > div:last-child { margin-left: 0 !important; width: 100%; }
+  #home-panel > div > div:last-child button { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
@@ -724,6 +735,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   .upload-label-text { display: none; }
   #upload-label { padding: 8px 10px; }
   .demo-toolbar { flex-wrap: wrap; }
+  /* Hide toolbar quote btn on mobile — accessible via home panel instead */
+  #quote-btn { display: none !important; }
+  /* Ensure share button text fits */
+  #share-btn-wrap .app-tb-btn { padding: 7px 10px; font-size: 12px; }
 }
 
 /* ── HOMEOWNER MODE ── */
