@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Viewframe | Visualise New Windows &amp; Doors Before You Buy</title>
 <meta name="description" content="Upload a photo of your home and let Viewframe detect every window and door, then explore styles, frames, and glazing instantly. No measuring, no guesswork.">
-<meta name="theme-color" content="#FDFAF6">
+<meta name="theme-color" content="#0F172A">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://viewframe.co.uk/og-image.png">
 
 <!-- Favicon (inline SVG, no external file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%231a1a1a'/%3E%3Cpath d='M6 6 L6 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 6 L15 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L25 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L34 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L6 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L15 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L25 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L34 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cline x1='6' y1='20' x2='34' y2='20' stroke='%238B6B4A' stroke-width='2'/%3E%3Cline x1='20' y1='6' x2='20' y2='34' stroke='%238B6B4A' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%230F172A'/%3E%3Cline x1='2' y1='20' x2='38' y2='20' stroke='%23C4A882' stroke-width='3'/%3E%3Cline x1='20' y1='2' x2='20' y2='38' stroke='%23C4A882' stroke-width='3'/%3E%3C/svg%3E">
 
 <link rel="canonical" href="https://viewframe.co.uk/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,29 +103,27 @@ nav {
   height: var(--nav-h);
   display: flex; align-items: center;
   padding: 0 36px;
-  background: rgba(248,250,252,0.95);
+  background: #0F172A;
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .nav-logo {
-  font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 500;
+  font-family: var(--serif); font-size: 22px; color: #fff; font-weight: 300;
   display: flex; align-items: center; gap: 10px;
 }
-.nav-logo .logo-mark { background: transparent !important; border: none !important; 
-  width: 34px; height: 34px; background: var(--accent); border-radius: 10px;
+.nav-logo .logo-mark { background: transparent !important; border: none !important;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(212,116,42,0.35);
 }
-.nav-logo .logo-mark svg { width: 18px; height: 18px; }
+.nav-logo .logo-mark svg { width: 28px; height: 28px; }
 .nav-links { display: flex; align-items: center; gap: 32px; margin-left: 52px; }
-.nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-3); transition: color .15s; }
-.nav-links a:hover { color: var(--accent); }
+.nav-links a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.55); transition: color .15s; }
+.nav-links a:hover { color: #fff; }
 .nav-cta { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 600; transition: all .18s; }
-.btn-ghost { border: 1.5px solid var(--rule-md); color: var(--ink-2); }
-.btn-ghost:hover { background: var(--paper-2); color: var(--ink); border-color: var(--ink-3); }
-.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(212,116,42,0.3); }
-.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(212,116,42,0.4); transform: translateY(-1px); }
+.btn-ghost { border: 1.5px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+.btn-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(139,107,74,0.4); }
+.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(139,107,74,0.5); transform: translateY(-1px); }
 .btn-lg { padding: 15px 30px; font-size: 15px; border-radius: 100px; }
 
 /* ─── HERO ─── */
@@ -789,16 +787,16 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <nav aria-label="Main navigation">
   <div class="nav-logo">
     <div class="logo-mark" aria-hidden="true" style="background:transparent;border:none;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
+  <path d="M4 4 L4 14" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 4 L14 4" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L26 4" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L36 14" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L4 26" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L14 36" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L26 36" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L36 26" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
+  <line x1="4" y1="20" x2="36" y2="20" stroke="#C4A882" stroke-width="1.8"/>
+  <line x1="20" y1="4" x2="20" y2="36" stroke="#C4A882" stroke-width="1.8"/>
 </svg></div>
     Viewframe
   </div>
@@ -819,8 +817,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <section class="hero" style="padding:0">
   <div class="hero-left">
     <div class="eyebrow">✦ Free while in beta</div>
-    <h1 class="hero-h1">Stop guessing how<br>new windows will <em>look</em></h1>
-    <p class="hero-sub">See exactly how black aluminium, white uPVC, or heritage timber frames would look on your home — before spending £10,000–£30,000. Upload a photo, get results in 30 seconds.</p>
+    <h1 class="hero-h1">See your home with<br>new windows — <em>before</em><br>you commit.</h1>
+    <p class="hero-sub">Upload a photo of your home. Viewframe detects every window and door, then lets you try different frames, colours, and glass styles before you spend a penny.</p>
     <div class="hero-actions">
       <a href="#visualiser" class="btn btn-primary btn-lg">Try it free — no sign-up</a>
       <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
