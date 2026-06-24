@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://viewframe.co.uk/og-image.png">
 
 <!-- Favicon (inline SVG, no external file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%231a1a1a'/%3E%3Cpath d='M6 6 L6 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 6 L15 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L25 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L34 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L6 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L15 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L25 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L34 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cline x1='6' y1='20' x2='34' y2='20' stroke='%23D4742A' stroke-width='2'/%3E%3Cline x1='20' y1='6' x2='20' y2='34' stroke='%23D4742A' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%231a1a1a'/%3E%3Cpath d='M6 6 L6 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 6 L15 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L25 6' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 6 L34 15' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L6 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M6 34 L15 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L25 34' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cpath d='M34 34 L34 25' stroke='%23fff' stroke-width='3' stroke-linecap='square'/%3E%3Cline x1='6' y1='20' x2='34' y2='20' stroke='%238B6B4A' stroke-width='2'/%3E%3Cline x1='20' y1='6' x2='20' y2='34' stroke='%238B6B4A' stroke-width='2'/%3E%3C/svg%3E">
 
 <link rel="canonical" href="https://viewframe.co.uk/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,27 +30,28 @@
 <style>
 /* ─── TOKENS ─── */
 :root {
-  --ink: #1C1917;
-  --ink-2: #44403C;
-  --ink-3: #78716C;
-  --rule: rgba(28,25,23,0.08);
-  --rule-md: rgba(28,25,23,0.14);
-  --paper: #FDFAF6;
+  /* ── Brand palette: Navy + Bronze ── */
+  --ink: #0F172A;
+  --ink-2: #475569;
+  --ink-3: #94A3B8;
+  --rule: rgba(15,23,42,0.08);
+  --rule-md: rgba(15,23,42,0.14);
+  --paper: #F8FAFC;
   --paper-2: #FFFFFF;
-  --paper-warm: #FEF3E2;
-  --glass-blue: #BDD7F0;
-  --accent: #D4742A;
-  --accent-dk: #B35E1A;
-  --accent-lt: #FEF0E0;
-  --accent-dim: rgba(212,116,42,0.12);
-  --teal: #2A7A6B;
-  --teal-lt: #E0F2EE;
-  --success: #2A7A6B;
-  --success-lt: #E0F2EE;
-  --warn: #7A4A0A;
-  --warn-lt: #FDF0DC;
-  --danger: #9B2020;
-  --danger-lt: #FAEAEA;
+  --paper-warm: #F1F5F9;
+  --glass-blue: #BFDBFE;
+  --accent: #8B6B4A;
+  --accent-dk: #6B4F34;
+  --accent-lt: #F5EDE4;
+  --accent-dim: rgba(139,107,74,0.12);
+  --teal: #0F172A;
+  --teal-lt: #E2D6CE;
+  --success: #166534;
+  --success-lt: #DCFCE7;
+  --warn: #854D0E;
+  --warn-lt: #FEF9C3;
+  --danger: #991B1B;
+  --danger-lt: #FEE2E2;
   --r: 8px;
   --r-lg: 14px;
   --r-xl: 22px;
@@ -102,7 +103,7 @@ nav {
   height: var(--nav-h);
   display: flex; align-items: center;
   padding: 0 36px;
-  background: rgba(253,250,246,0.92);
+  background: rgba(248,250,252,0.95);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--rule);
 }
@@ -796,8 +797,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   <path d="M4 36 L14 36" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
   <path d="M36 36 L26 36" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
   <path d="M36 36 L36 26" stroke="#fff" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#D4742A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#D4742A" stroke-width="1.8"/>
+  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
+  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
 </svg></div>
     Viewframe
   </div>
@@ -892,10 +893,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <div style="display:flex;gap:24px;flex-wrap:wrap;">
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="width:32px;height:32px;border-radius:8px;background:#fdf0e6;display:flex;align-items:center;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#d4742a" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#8B6B4A" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:600;color:#1a1a1a;">Homeowner mode</div>
+          <div style="font-size:13px;font-weight:600;color:#0F172A;">Homeowner mode</div>
           <div style="font-size:11px;color:#888;">Upload photo, pick colour and style, generate result</div>
         </div>
       </div>
@@ -916,16 +917,16 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <!-- TOP BAR -->
     <div class="app-topbar">
       <span class="app-logo-sm" style="display:flex;align-items:center;gap:7px;"><span style="width:22px;height:22px;display:inline-flex;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#D4742A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#D4742A" stroke-width="1.8"/>
+  <path d="M4 4 L4 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 4 L14 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L26 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L36 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L4 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L14 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L26 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L36 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
+  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
 </svg></span>Viewframe</span>
       <div style="display:flex;border:1px solid var(--rule-md);border-radius:100px;overflow:hidden;background:var(--paper-2);margin-left:8px;">
         <button id="mode-home" onclick="setMode('home')" style="padding:5px 14px;font-size:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;border-radius:100px;">Homeowner</button>
@@ -981,7 +982,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       </button></span>
     </div>
 
-    <div style="background:var(--success-lt);border-bottom:1px solid rgba(42,122,107,0.2);padding:8px 16px;font-size:12px;color:var(--teal);display:flex;align-items:center;gap:8px;">
+    <div style="background:var(--accent-lt);border-bottom:1px solid rgba(139,107,74,0.2);padding:8px 16px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:8px;">
       <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Your photo is processed privately and deleted immediately — never stored, never shared. <a href="/privacy.html" style="color:inherit;text-decoration:underline;font-weight:600;">How we handle your data &rarr;</a>
     </div>
@@ -1428,16 +1429,16 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <div class="footer-brand">
       <div class="nav-logo" style="font-size:18px;display:flex;align-items:center;gap:10px;">
         <span style="width:28px;height:28px;display:inline-flex;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#D4742A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#D4742A" stroke-width="1.8"/>
+  <path d="M4 4 L4 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 4 L14 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L26 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 4 L36 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L4 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M4 36 L14 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L26 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <path d="M36 36 L36 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
+  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
+  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
 </svg></span>
         Viewframe
       </div>
