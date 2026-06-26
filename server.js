@@ -234,6 +234,25 @@ app.post('/api/quote-request', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── POST /api/contact ─────────────────────────────────────────────────────────
+app.post('/api/contact', (req, res) => {
+  const { name, email, role, message } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required.' });
+  }
+  if (!message || typeof message !== 'string' || message.trim().length < 5) {
+    return res.status(400).json({ error: 'Message required.' });
+  }
+  appendLog('contacts.jsonl', {
+    ts: new Date().toISOString(),
+    name: (name || '').slice(0, 100),
+    email,
+    role: (role || '').slice(0, 50),
+    message: message.trim().slice(0, 2000)
+  });
+  res.json({ ok: true });
+});
+
 // ── POST /api/event ───────────────────────────────────────────────────────────
 app.post('/api/event', (req, res) => {
   const { name, props } = req.body || {};

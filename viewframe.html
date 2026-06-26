@@ -1300,9 +1300,55 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What does it cost?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
-        <div class="faq-a"><div class="faq-a-inner">Trade plan starts at £39/month — no per-lead fees, cancel anytime. The visualiser is always free for homeowners. <a href="mailto:trade@viewframe.co.uk" style="color:var(--accent);font-weight:600;">Email us</a> for a quote based on your region and expected lead volume.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">The visualiser is always free for homeowners. Installer access is by application — we match you to your postcode area and charge per qualified lead delivered. <a href="mailto:trade@viewframe.co.uk" style="color:var(--accent);font-weight:600;">Email trade@viewframe.co.uk</a> to apply.</div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section style="background:var(--paper-2);border-top:1px solid var(--rule);padding:100px 80px;" id="contact">
+  <div class="section-inner" style="max-width:640px;">
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-h2">Talk to us</h2>
+    <p class="section-sub" style="margin-bottom:48px;">Homeowner with a question, or installer wanting to apply for your area — send us a message and we'll reply within one working day.</p>
+    <form id="contact-form" onsubmit="submitContact(event)" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <label for="cf-name" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Name</label>
+          <input id="cf-name" type="text" placeholder="Your name" autocomplete="name"
+            style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+        </div>
+        <div>
+          <label for="cf-email" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email <span style="color:var(--accent)">*</span></label>
+          <input id="cf-email" type="email" placeholder="you@example.com" autocomplete="email" required
+            style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label for="cf-role" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">I am a…</label>
+        <select id="cf-role"
+          style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;appearance:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+          <option value="">Select…</option>
+          <option value="homeowner">Homeowner</option>
+          <option value="installer">Window installer</option>
+          <option value="investor">Investor</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label for="cf-message" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Message <span style="color:var(--accent)">*</span></label>
+        <textarea id="cf-message" rows="5" placeholder="Your message…" required
+          style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;resize:vertical;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'"></textarea>
+      </div>
+      <div id="cf-error" style="display:none;color:var(--danger);font-size:13px;margin-bottom:16px;padding:10px 14px;background:var(--danger-lt);border-radius:var(--r);"></div>
+      <div id="cf-success" style="display:none;color:var(--teal);font-size:15px;font-weight:600;padding:16px;background:var(--teal-lt);border-radius:var(--r-lg);">Message sent — we'll reply within one working day.</div>
+      <button type="submit" id="cf-submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send message</button>
+    </form>
   </div>
 </section>
 
@@ -2375,6 +2421,40 @@ function toast(msg){
 }
 
 /* ── FAQ ── */
+async function submitContact(e) {
+  e.preventDefault();
+  const email = document.getElementById('cf-email').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+  const name = document.getElementById('cf-name').value.trim();
+  const role = document.getElementById('cf-role').value;
+  const err = document.getElementById('cf-error');
+  const ok = document.getElementById('cf-success');
+  const btn = document.getElementById('cf-submit');
+  err.style.display = 'none';
+  if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email address.'; err.style.display = 'block'; return; }
+  if (!message) { err.textContent = 'Please enter a message.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const r = await fetch('/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, role, message })
+    });
+    if (r.ok) {
+      document.getElementById('contact-form').style.display = 'none';
+      ok.style.display = 'block';
+    } else {
+      const d = await r.json().catch(() => ({}));
+      err.textContent = d.error || 'Something went wrong — please try again.';
+      err.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Send message';
+    }
+  } catch(_) {
+    err.textContent = 'Could not send — please email hello@viewframe.co.uk directly.';
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Send message';
+  }
+}
+
 function toggleFaq(btn){
   const item=btn.closest('.faq-item');
   const isOpen=item.classList.contains('open');
