@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viewframe | Visualise New Windows &amp; Doors Before You Buy</title>
-<meta name="description" content="Upload a photo of your home and let Viewframe detect every window and door, then explore styles, frames, and glazing instantly. No measuring, no guesswork.">
-<meta name="theme-color" content="#0F172A">
+<title>Viewframe — See your windows before you buy them</title>
+<meta name="description" content="AI visualisation for homeowners. Qualified, spec-ready leads for UK window installers.">
+<meta name="theme-color" content="#FDFAF6">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -21,37 +21,43 @@
 <meta name="twitter:image" content="https://viewframe.co.uk/og-image.png">
 
 <!-- Favicon (inline SVG, no external file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%230F172A'/%3E%3Cline x1='2' y1='20' x2='38' y2='20' stroke='%23C4A882' stroke-width='3'/%3E%3Cline x1='20' y1='2' x2='20' y2='38' stroke='%23C4A882' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect width='18' height='18' rx='4' fill='%23D4742A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='4' y='4' width='10' height='10' rx='1.4'/%3E%3Cpolyline points='4,11 7,8 9,10 12,7 14,11'/%3E%3C/g%3E%3C/svg%3E">
 
-<link rel="canonical" href="https://viewframe.co.uk/">
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
 <style>
 /* ─── TOKENS ─── */
 :root {
-  /* ── Brand palette: Navy + Bronze ── */
-  --ink: #0F172A;
-  --ink-2: #475569;
-  --ink-3: #94A3B8;
-  --rule: rgba(15,23,42,0.08);
-  --rule-md: rgba(15,23,42,0.14);
-  --paper: #F8FAFC;
+  --ink: #1C1917;
+  --ink-2: #44403C;
+  --ink-3: #78716C;
+  --rule: rgba(28,25,23,0.08);
+  --rule-md: rgba(28,25,23,0.14);
+  --paper: #FDFAF6;
   --paper-2: #FFFFFF;
-  --paper-warm: #F1F5F9;
-  --glass-blue: #BFDBFE;
-  --accent: #8B6B4A;
-  --accent-dk: #6B4F34;
-  --accent-lt: #F5EDE4;
-  --accent-dim: rgba(139,107,74,0.12);
-  --teal: #0F172A;
-  --teal-lt: #E2D6CE;
-  --success: #166534;
-  --success-lt: #DCFCE7;
-  --warn: #854D0E;
-  --warn-lt: #FEF9C3;
-  --danger: #991B1B;
-  --danger-lt: #FEE2E2;
+  --paper-warm: #FEF3E2;
+  --glass-blue: #BDD7F0;
+  --accent: #D4742A;
+  --accent-dk: #B35E1A;
+  --accent-lt: #FEF0E0;
+  --accent-dim: rgba(212,116,42,0.12);
+  --teal: #2A7A6B;
+  --teal-lt: #E0F2EE;
+  --success: #2A7A6B;
+  --success-lt: #E0F2EE;
+  --warn: #7A4A0A;
+  --warn-lt: #FDF0DC;
+  --danger: #9B2020;
+  --danger-lt: #FAEAEA;
   --r: 8px;
   --r-lg: 14px;
   --r-xl: 22px;
@@ -103,27 +109,29 @@ nav {
   height: var(--nav-h);
   display: flex; align-items: center;
   padding: 0 36px;
-  background: #0F172A;
+  background: rgba(253,250,246,0.92);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--rule);
 }
 .nav-logo {
-  font-family: var(--serif); font-size: 22px; color: #fff; font-weight: 300;
+  font-family: var(--serif); font-size: 22px; color: var(--ink); font-weight: 500;
   display: flex; align-items: center; gap: 10px;
 }
-.nav-logo .logo-mark { background: transparent !important; border: none !important;
+.nav-logo .logo-mark {
+  width: 34px; height: 34px; background: var(--accent); border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(212,116,42,0.35);
 }
-.nav-logo .logo-mark svg { width: 28px; height: 28px; }
+.nav-logo .logo-mark svg { width: 18px; height: 18px; }
 .nav-links { display: flex; align-items: center; gap: 32px; margin-left: 52px; }
-.nav-links a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.55); transition: color .15s; }
-.nav-links a:hover { color: #fff; }
+.nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-3); transition: color .15s; }
+.nav-links a:hover { color: var(--accent); }
 .nav-cta { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 600; transition: all .18s; }
-.btn-ghost { border: 1.5px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
-.btn-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.4); }
-.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(139,107,74,0.4); }
-.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(139,107,74,0.5); transform: translateY(-1px); }
+.btn-ghost { border: 1.5px solid var(--rule-md); color: var(--ink-2); }
+.btn-ghost:hover { background: var(--paper-2); color: var(--ink); border-color: var(--ink-3); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(212,116,42,0.3); }
+.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(212,116,42,0.4); transform: translateY(-1px); }
 .btn-lg { padding: 15px 30px; font-size: 15px; border-radius: 100px; }
 
 /* ─── HERO ─── */
@@ -164,7 +172,7 @@ nav {
 
 /* ─── HERO WINDOW DEMO ─── */
 .hero-right {
-  background: var(--paper-warm); position: relative; overflow: hidden;
+  background: var(--ink); position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
 .hero-wall {
@@ -516,6 +524,11 @@ section { padding: 100px 80px; }
   background: var(--paper-2); border: 1.5px solid var(--rule-md); border-radius: var(--r-xl);
   padding: 32px 28px; display: flex; flex-direction: column; position: relative;
 }
+.testimonial-placeholder-tag {
+  position: absolute; top: -11px; left: 24px;
+  background: var(--accent); color: #fff; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+}
 .testimonial-quote-icon { width: 28px; height: 28px; stroke: rgba(212,116,42,0.35); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
 .testimonial-card p.quote { color: var(--ink-2); font-size: 14.5px; line-height: 1.75; margin-bottom: 22px; flex: 1; font-style: italic; }
 .testimonial-person { display: flex; align-items: center; gap: 12px; }
@@ -528,6 +541,7 @@ section { padding: 100px 80px; }
 .testimonial-person .ctx { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
 
 /* ─── PRICING ─── */
+.pricing-section { background: var(--paper-warm); }
 .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 64px; align-items: stretch; }
 .price-card {
   background: var(--paper-2); border-radius: var(--r-xl); border: 1.5px solid var(--rule-md);
@@ -669,10 +683,9 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-right { display: flex; min-height: 260px; padding: 24px !important; }
-  .hero-left { padding: 60px 24px 32px; }
-  #hero-ba { max-width: 100% !important; border-radius: 12px !important; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 60px 24px; }
   section { padding: 60px 24px; }
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .features-grid { grid-template-columns: 1fr; }
@@ -695,17 +708,6 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   .feat-card { padding: 28px 22px; }
   .faq-q { font-size: 14px; padding: 18px 2px; gap: 10px; }
   .faq-a-inner { padding: 0 2px 18px; font-size: 13px; }
-  /* Inline-padded sections that can't use the generic override */
-  #gallery { padding: 48px 16px !important; }
-  #installers { padding: 48px 16px !important; }
-  #waitlist { padding: 48px 16px !important; }
-  /* Installer two-col grid → single col */
-  #installers .section-inner > div,
-  #installers [style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; gap: 40px !important; }
-  /* Home panel: stack quote button below swatches */
-  #home-panel > div { flex-direction: column !important; align-items: flex-start !important; }
-  #home-panel > div > div:last-child { margin-left: 0 !important; width: 100%; }
-  #home-panel > div > div:last-child button { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
@@ -718,82 +720,12 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   .footer-main { grid-template-columns: 1fr; padding: 40px 20px 28px; gap: 28px; }
   .footer-col ul { gap: 9px; }
   .app-topbar { flex-wrap: wrap; height: auto; padding: 8px 12px; gap: 6px; }
-
-  /* Mobile home panel */
-  #home-panel { padding: 10px 12px; gap: 8px; }
-  #home-panel > div { gap: 16px; }
-  .hp-swatch { width: 28px; height: 28px; }
-  .hp-style { padding: 6px 12px; font-size: 12px; }
-  /* Mobile mode explainer strip */
-  .mode-explainer { display: none; }
-  /* Ensure canvas fills width on mobile */
-  .app-canvas { min-width: 0; }
-  /* Gallery sliders on mobile */
-  .gal-slider { touch-action: none; }
-
   .app-topbar .sp { display: none; }
   .upload-label-text { display: none; }
   #upload-label { padding: 8px 10px; }
   .demo-toolbar { flex-wrap: wrap; }
-  /* Hide toolbar quote btn on mobile — accessible via home panel instead */
-  #quote-btn { display: none !important; }
-  /* Ensure share button text fits */
-  #share-btn-wrap .app-tb-btn { padding: 7px 10px; font-size: 12px; }
 }
-
-/* ── HOMEOWNER MODE ── */
-.mode-home .app-sb { display: none; }
-.mode-home .app-rp { display: none; }
-.mode-home .app-main { grid-template-columns: 1fr; }
-.mode-home #snap-btn { display: none !important; }
-.mode-home #export-dd { display: none !important; }
-.mode-home .view-toggle { display: none !important; }
-.mode-home #share-btn-wrap { display: none !important; }
-.mode-home #home-panel { display: flex !important; }
-#home-panel { display: none; flex-direction: column; gap: 12px; padding: 12px 16px; background: var(--paper); border-bottom: 1px solid var(--rule); }
-#home-panel .hp-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
-#home-panel .hp-colours { display: flex; flex-wrap: wrap; gap: 8px; }
-#home-panel .hp-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2.5px solid transparent; transition: all .15s; }
-#home-panel .hp-swatch.active { border-color: var(--accent); transform: scale(1.2); box-shadow: 0 0 0 2px var(--accent-lt); }
-#home-panel .hp-styles { display: flex; flex-wrap: wrap; gap: 8px; }
-#home-panel .hp-style { padding: 7px 16px; border-radius: 100px; border: 1.5px solid var(--rule-md); font-size: 13px; font-weight: 500; cursor: pointer; background: var(--paper-2); color: var(--ink-2); transition: all .15s; font-family: var(--sans); }
-#home-panel .hp-style.active { background: var(--accent-lt); border-color: var(--accent); color: var(--accent); }
-.mode-home #transform-btn { display: inline-flex !important; background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* ── GALLERY ── */
-.gal-item { display:flex;flex-direction:column;gap:10px; }
-.gal-caption { font-size:13px;color:var(--ink-3);text-align:center;margin:0; }
-.gal-slider { position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3;cursor:col-resize;user-select:none; }
-.gal-slider img { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block; }
-.gal-slider .gal-before { clip-path:inset(0 50% 0 0); }
-.gal-handle { position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:44px;display:flex;flex-direction:column;align-items:center;pointer-events:none; }
-.gal-line { position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;transform:translateX(-50%); }
-.gal-knob { position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3);color:var(--ink-2); }
-.gal-knob svg { width:16px;height:16px; }
-.gal-tag { position:absolute;bottom:12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(0,0,0,.45);color:#fff; }
-.gal-tag-before { left:12px; }
-.gal-tag-after { right:12px; }
 </style>
-
-<!-- Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Viewframe",
-  "url": "https://viewframe.co.uk",
-  "description": "Upload a photo of your home and visualise new windows and doors before you buy. Free for UK homeowners.",
-  "applicationCategory": "DesignApplication",
-  "operatingSystem": "Any",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
-  "provider": {
-    "@type": "Organization",
-    "name": "Viewframe",
-    "email": "hello@viewframe.co.uk",
-    "url": "https://viewframe.co.uk"
-  }
-}
-</script>
 </head>
 <body>
 <a href="#visualiser" class="skip-link">Skip to visualiser</a>
@@ -801,27 +733,20 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <!-- NAV -->
 <nav aria-label="Main navigation">
   <div class="nav-logo">
-    <div class="logo-mark" aria-hidden="true" style="background:transparent;border:none;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#F8FAFC" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#C4A882" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#C4A882" stroke-width="1.8"/>
-</svg></div>
+    <div class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="14" height="14" rx="2"/>
+        <polyline points="2,12 5,9 8,11 11,8 16,12"/>
+      </svg>
+    </div>
     Viewframe
   </div>
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#visualiser">Try it</a>
     <a href="#features">Features</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#installers">For installers</a>
-    <a href="#faq">FAQ</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#installers">For installers</a><a href="#faq">FAQ</a>
   </div>
   <div class="nav-cta">
     <a href="#visualiser" class="btn btn-ghost">Try free</a>
@@ -832,34 +757,43 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <!-- HERO -->
 <section class="hero" style="padding:0">
   <div class="hero-left">
-    <div class="eyebrow">✦ Free while in beta</div>
-    <h1 class="hero-h1">See your home with<br>new windows — <em>before</em><br>you commit.</h1>
-    <p class="hero-sub">Upload a photo of your home. Viewframe detects every window and door, then lets you try different frames, colours, and glass styles before you spend a penny.</p>
+    <div class="eyebrow">✦ Built for British homes</div>
+    <h1 class="hero-h1">See your windows<br>before you <em>buy</em> them</h1>
+    <p style="font-size:13px;font-weight:600;color:var(--ink-3);letter-spacing:0.03em;margin-bottom:20px;">Free for homeowners &nbsp;·&nbsp; Trusted by installers across the UK</p>
+    <p class="hero-sub">Upload a photo of your home and explore new windows and doors in seconds — then connect with a trusted local installer to make it happen.</p>
     <div class="hero-actions">
-      <a href="#visualiser" class="btn btn-primary btn-lg">Try it free — no sign-up</a>
+      <a href="#visualiser" class="btn btn-primary btn-lg">Open visualiser</a>
       <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
     </div>
 
     <div style="margin-top:16px;font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>No account needed</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>No sign-up to try</span>
       <span style="color:var(--rule-md)">·</span>
       <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Free for homeowners</span>
       <span style="color:var(--rule-md)">·</span>
-      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Your photo is never stored</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Partnered with national UK installers</span>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-stat"><div class="n">60s</div><div class="l">To first visualisation</div></div>
+      <div class="proof-stat"><div class="n">12</div><div class="l">Window styles</div></div>
+      <div class="proof-stat"><div class="n">Free</div><div class="l">For homeowners, always</div></div>
     </div>
   </div>
-  <div class="hero-right" style="display:flex;align-items:center;justify-content:center;padding:48px;">
-    <div id="hero-ba" style="position:relative;width:100%;max-width:520px;border-radius:20px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 24px 64px rgba(0,0,0,0.35);user-select:none;touch-action:none;">
-      <img src="hero-after.jpg" alt="After — new window frames" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" draggable="false">
-      <img src="hero-before.jpg" id="hba-before" alt="Before — original windows" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;clip-path:inset(0 50% 0 0);" draggable="false">
-      <div id="hba-handle" style="position:absolute;top:0;bottom:0;left:50%;width:44px;transform:translateX(-50%);cursor:ew-resize;display:flex;flex-direction:column;align-items:center;z-index:10;">
-        <div style="flex:1;width:3px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,0.4);"></div>
-        <div style="position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;background:#fff;border-radius:50%;box-shadow:0 2px 16px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;">
-          <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/></svg>
+  <div class="hero-right">
+    <div class="hero-wall"></div>
+    <div class="hero-demo-wrap">
+      <div class="hero-demo-inner">
+        <div class="demo-toolbar">
+          <div class="demo-dot" style="background:#E24B4A"></div>
+          <div class="demo-dot" style="background:#E8C87A;margin-left:5px"></div>
+          <div class="demo-dot" style="background:#3DB06A;margin-left:5px"></div>
+          <span class="demo-label">Viewframe — Visualiser</span>
+        </div>
+        <div class="demo-canvas" id="hero-canvas">
+          <div class="detect-chip" id="detect-chip" style="display:none">✦ 3 elements detected</div>
+          <!-- Windows rendered by JS -->
         </div>
       </div>
-      <span style="position:absolute;bottom:14px;left:14px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.05em;">BEFORE</span>
-      <span style="position:absolute;bottom:14px;right:14px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.05em;">AFTER</span>
     </div>
   </div>
 </section>
@@ -883,80 +817,15 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
         </div>
         <h3>AI detects everything</h3>
-        <p>AI scans your photo and detects every window and door automatically. Anything it gets wrong you can adjust manually in seconds.</p>
+        <p>Claude Vision scans the image, identifies every window and door, and draws precise bounding boxes with confidence scores.</p>
       </div>
       <div class="step">
         <div class="step-icon">
           <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <h3>Export and send for quotes</h3>
-        <p>Download a PDF spec sheet showing your exact choices — frame colour, glass type, window style — and send it to local installers to get comparable quotes.</p>
+        <h3>Explore and compare</h3>
+        <p>Swap styles, frames, and glazing. Toggle inside/outside view. Share with your installer or architect.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section style="background:var(--paper-warm);padding:80px 40px;" id="gallery">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div class="section-label" style="justify-content:center;">Real results</div>
-    <h2 class="section-h2" style="text-align:center;">What it looks like on real homes</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto 56px;max-width:560px;">Drag the handle to reveal the before and after. Every result was generated by Viewframe in under 60 seconds.</p>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:24px;">
-
-      <div class="gal-item">
-        <div class="gal-slider" data-before="gallery-1-before.jpg" data-after="gallery-1-after.jpg">
-          <img class="gal-after" src="gallery-1-after.jpg" alt="After: anthracite grey frames on semi-detached">
-          <img class="gal-before" src="gallery-1-before.jpg" alt="Before: original windows">
-          <div class="gal-handle"><div class="gal-line"></div><div class="gal-knob"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 2,10 6,16"/><polyline points="14,4 18,10 14,16"/></svg></div></div>
-          <span class="gal-tag gal-tag-before">Before</span>
-          <span class="gal-tag gal-tag-after">After</span>
-        </div>
-        <p class="gal-caption">Semi-detached — anthracite grey frames</p>
-      </div>
-
-      <div class="gal-item">
-        <div class="gal-slider" data-before="gallery-3-before.jpg" data-after="gallery-3-after.jpg">
-          <img class="gal-after" src="gallery-3-after.jpg" alt="After: black flush frames on terraced house">
-          <img class="gal-before" src="gallery-3-before.jpg" alt="Before: original windows">
-          <div class="gal-handle"><div class="gal-line"></div><div class="gal-knob"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 2,10 6,16"/><polyline points="14,4 18,10 14,16"/></svg></div></div>
-          <span class="gal-tag gal-tag-before">Before</span>
-          <span class="gal-tag gal-tag-after">After</span>
-        </div>
-        <p class="gal-caption">Terraced house — black flush frames</p>
-      </div>
-
-      <div class="gal-item">
-        <div class="gal-slider" data-before="gallery-4-before.jpg" data-after="gallery-4-after.jpg">
-          <img class="gal-after" src="gallery-4-after.jpg" alt="After: white casement frames on detached house">
-          <img class="gal-before" src="gallery-4-before.jpg" alt="Before: original windows">
-          <div class="gal-handle"><div class="gal-line"></div><div class="gal-knob"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,4 2,10 6,16"/><polyline points="14,4 18,10 14,16"/></svg></div></div>
-          <span class="gal-tag gal-tag-before">Before</span>
-          <span class="gal-tag gal-tag-after">After</span>
-        </div>
-        <p class="gal-caption">Detached — white casement frames</p>
-      </div>
-
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
-      <div class="gal-item">
-        <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;">
-          <img src="gallery-2-after.jpg" alt="Bay-fronted Victorian with navy frames" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <p class="gal-caption">Bay-fronted Victorian — navy frames</p>
-      </div>
-      <div class="gal-item">
-        <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;">
-          <img src="gallery-5-after.jpg" alt="Period property with sage green sash frames" style="width:100%;height:100%;object-fit:cover;">
-        </div>
-        <p class="gal-caption">Period property — sage green sash frames</p>
-      </div>
-    </div>
-
-    <div style="text-align:center;margin-top:48px;">
-      <a href="#visualiser" class="btn btn-primary btn-lg" onclick="track('gallery_cta_clicked')">Try it with your home →</a>
     </div>
   </div>
 </section>
@@ -968,49 +837,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <h2 class="section-h2" style="text-align:center">Try it right now</h2>
     <p class="section-sub" style="text-align:center;margin:0 auto">No sign-up needed. Upload a photo or click the canvas to start placing.</p>
   </div>
-  <div style="background:#f7f5f2;border-bottom:1px solid #e4e0da;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-    <div style="display:flex;gap:24px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:8px;background:#fdf0e6;display:flex;align-items:center;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#8B6B4A" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-        </div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:#0F172A;">Homeowner mode</div>
-          <div style="font-size:11px;color:#888;">Upload photo, pick colour and style, generate result</div>
-        </div>
-      </div>
-      <div style="width:1px;background:#e4e0da;"></div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:8px;background:#fff;border:1px solid #e4e0da;display:flex;align-items:center;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="12" y2="15"/></svg>
-        </div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:#888;">Installer / Pro mode</div>
-          <div style="font-size:11px;color:#aaa;">Full controls — size, opacity, glass, PDF spec export</div>
-        </div>
-      </div>
-    </div>
-    <div style="font-size:12px;color:#aaa;">Switch in the toolbar above &uarr;</div>
-  </div>
-<div class="app-wrap">
+  <div class="app-wrap">
     <!-- TOP BAR -->
     <div class="app-topbar">
-      <span class="app-logo-sm" style="display:flex;align-items:center;gap:7px;"><span style="width:22px;height:22px;display:inline-flex;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
-</svg></span>Viewframe</span>
-      <div style="display:flex;border:1px solid var(--rule-md);border-radius:100px;overflow:hidden;background:var(--paper-2);margin-left:8px;">
-        <button id="mode-home" onclick="setMode('home')" style="padding:5px 14px;font-size:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--sans);font-weight:600;border-radius:100px;">Homeowner</button>
-        <button id="mode-trade" onclick="setMode('trade')" style="padding:5px 14px;font-size:12px;background:none;border:none;cursor:pointer;color:var(--ink-3);font-family:var(--sans);font-weight:500;">Installer / Pro</button>
-      </div>
+      <span class="app-logo-sm">Viewframe</span>
       <div class="view-toggle" role="group" aria-label="View angle">
         <button class="vt-btn active" id="vt-inside" onclick="setView('inside')" aria-pressed="true">Inside</button>
         <button class="vt-btn" id="vt-outside" onclick="setView('outside')" aria-pressed="false">Outside</button>
@@ -1022,10 +852,6 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <span class="upload-label-text">Upload photo</span>
         <input type="file" accept="image/*,.heic,.heif" id="photo-input" style="display:none" onchange="loadPhoto(event)">
       </label>
-      <button class="app-tb-btn" onclick="loadDemoPhoto()" id="demo-btn" title="Try with a sample house photo">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-        Try demo
-      </button>
       <button class="app-tb-btn" onclick="runAI()" id="ai-btn" title="Automatically find windows and doors in your photo using AI (takes a few seconds)" style="display:none">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         AI Detect
@@ -1051,46 +877,14 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
           </button>
         </div>
       </div>
-      <button class="app-tb-btn" onclick="runTransform()" id="transform-btn" style="display:none" title="AI-generate a photorealistic transformation of your house">
-        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        AI Transform
-      </button>
-      <button class="app-tb-btn prim" onclick="showQuoteModal()" id="quote-btn" style="background:var(--accent);color:#fff;gap:6px;">
-        <svg viewBox="0 0 24 24" style="stroke:#fff"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Request quotes
-      </button>
-      <span id="share-btn-wrap"><button class="app-tb-btn" onclick="showShare()">
+      <button class="app-tb-btn prim" onclick="showShare()">
         <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
-      </button></span>
+      </button>
     </div>
 
-    <div style="background:var(--accent-lt);border-bottom:1px solid rgba(139,107,74,0.2);padding:8px 16px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:8px;">
-      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Your photo is processed privately and deleted immediately — never stored, never shared. <a href="/privacy.html" style="color:inherit;text-decoration:underline;font-weight:600;">How we handle your data &rarr;</a>
-    </div>
-<!-- UPLOAD ERROR BANNER -->
+    <!-- UPLOAD ERROR BANNER -->
     <div class="upload-error" id="upload-error" role="alert" aria-live="assertive"></div>
-
-    <!-- HOME PANEL — visible in Simple mode only -->
-    <div id="home-panel">
-      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
-        <div>
-          <div class="hp-label">Frame colour</div>
-          <div class="hp-colours" id="hp-colours"></div>
-        </div>
-        <div>
-          <div class="hp-label">Window style</div>
-          <div class="hp-styles" id="hp-styles"></div>
-        </div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-          <button onclick="showQuoteModal()" style="display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:var(--accent);color:#fff;border:none;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Request installer quotes
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- MAIN -->
     <div class="app-main">
@@ -1111,8 +905,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
             <button class="el-btn" id="btn-window-bay" onclick="setTool('window-bay')" aria-pressed="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20 L6 4 L18 4 L21 20"/><line x1="6" y1="14" x2="18" y2="14"/></svg>Bay
             </button>
-            <button class="el-btn" id="btn-window-flush" onclick="setTool('window-flush')" aria-pressed="false">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="5" y="5" width="14" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1"/></svg>Flush
+            <button class="el-btn" id="btn-window-skylight" onclick="setTool('window-skylight')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>Skylight
             </button>
             <button class="el-btn" id="btn-window-tilt" onclick="setTool('window-tilt')" aria-pressed="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><polygon points="5,19 12,5 19,19"/></svg>Tilt-turn
@@ -1240,12 +1034,12 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       <div class="feat-card">
         <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>AI photo detection</h3>
-        <p>Our AI scans your photo and automatically detects every window and door — creating editable layouts in seconds.</p>
+        <p>Claude Vision scans your photo and auto-detects every window and door with precise bounding boxes and confidence scores.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg></div>
         <h3>12 window styles</h3>
-        <p>Casement, sash, double, bay, flush, tilt-turn and more — each rendered with accurate glazing bars, handles, and opening arcs.</p>
+        <p>Casement, sash, double, bay, skylight, tilt-turn and more — each rendered with accurate glazing bars, handles, and opening arcs.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V5a2 2 0 012-2h8a2 2 0 012 2v16"/></svg></div>
@@ -1271,33 +1065,62 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   </div>
 </section>
 
-<!-- BETA STRIP -->
-<section style="background:var(--accent);padding:48px 80px;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;">
-    <div>
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:10px;">Now in beta</div>
-      <h2 style="font-family:var(--serif);font-size:clamp(22px,3vw,34px);color:#fff;font-weight:300;margin-bottom:8px;">Be one of the first to try it.</h2>
-      <p style="font-size:16px;color:rgba(255,255,255,0.8);max-width:520px;">Viewframe is free during beta. Upload a photo of your home and see how new windows will look — no account, no credit card.</p>
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-inner">
+    <div class="section-label">What people say</div>
+    <h2 class="section-h2">What people say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">"I showed this to three installers and got quotes back the same day."</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
+          </div>
+          <div>
+            <div class="role">Sarah</div>
+            <div class="ctx">Homeowner, Berkshire</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">The visualiser made the client conversation so much easier — they came to the meeting knowing exactly what they wanted. First time that's happened in 12 years.</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+          </div>
+          <div>
+            <div class="role">Window installer</div>
+            <div class="ctx">Pro plan customer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        
+        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
+        <p class="quote">The spec sheet export is genuinely useful. I get enquiries with everything I need to quote — no chasing the homeowner for what they actually want.</p>
+        <div class="testimonial-person">
+          <div class="testimonial-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+          </div>
+          <div>
+            <div class="role">Architect</div>
+            <div class="ctx">Trade plan customer</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <a href="#visualiser" class="btn btn-lg" style="background:#fff;color:var(--accent);font-weight:600;border-radius:100px;white-space:nowrap;flex-shrink:0;">Try it free now</a>
   </div>
 </section>
 
 
-
-<!-- PARTNER LOGOS -->
-<section style="background:var(--paper-2);padding:56px 80px;border-top:1px solid var(--rule);">
-  <div style="max-width:1100px;margin:0 auto;text-align:center;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:32px;">Installer partners — coming soon</div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;">
-      <div style="width:160px;height:64px;border:1.5px dashed var(--rule-md);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:12px;font-weight:500;">Your logo here</div>
-      <div style="width:160px;height:64px;border:1.5px dashed var(--rule-md);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:12px;font-weight:500;">Your logo here</div>
-      <div style="width:160px;height:64px;border:1.5px dashed var(--rule-md);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:12px;font-weight:500;">Your logo here</div>
-      <div style="width:160px;height:64px;border:1.5px dashed var(--rule-md);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:12px;font-weight:500;">Your logo here</div>
-    </div>
-    <p style="font-size:13px;color:var(--ink-3);margin-top:24px;">Are you a UK window installer? <a href="mailto:hello@viewframe.co.uk" style="color:var(--accent);font-weight:600;">Get in touch to be listed &rarr;</a></p>
-  </div>
-</section>
+<!-- INSTALLER TEASER -->
+<div style="background:var(--accent-lt);border-top:1px solid rgba(212,116,42,0.2);border-bottom:1px solid rgba(212,116,42,0.2);padding:18px 80px;text-align:center;">
+  <p style="font-size:14px;font-weight:600;color:var(--accent-dk);">For installers: receive leads that already come with a PDF spec sheet attached. <a href="#installers" style="color:var(--accent-dk);text-decoration:underline;text-decoration-color:rgba(179,94,26,0.4);">Learn more →</a></p>
+</div>
 
 <!-- FOR INSTALLERS -->
 <section id="installers" style="background:var(--ink);padding:100px 80px;color:#fff;">
@@ -1305,8 +1128,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
       <div>
         <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:inline-flex;align-items:center;gap:8px;"><span style="display:block;width:16px;height:2px;background:var(--accent);border-radius:2px;"></span>For installers &amp; manufacturers</div>
-        <h2 style="font-family:var(--serif);font-size:clamp(28px,3.5vw,46px);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;font-weight:300;color:#fff;">Turn window enquiries into visual proposals <em style="font-style:italic;color:var(--accent);">in minutes.</em></h2>
-        <p style="font-size:17px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:36px;max-width:460px;">Homeowner uploads a photo. Viewframe generates a visual. You receive a PDF spec sheet with their exact choices — frame colour, style, glass type — and quote from that. No back-and-forth to clarify requirements.</p>
+        <h2 style="font-family:var(--serif);font-size:clamp(28px,3.5vw,46px);line-height:1.1;letter-spacing:-0.02em;margin-bottom:20px;font-weight:300;color:#fff;">Every lead you're getting right now is underspecified. <em style="font-style:italic;color:var(--accent);">Ours aren't.</em></h2>
+        <p style="font-size:17px;color:rgba(255,255,255,0.65);line-height:1.75;margin-bottom:36px;max-width:460px;">Viewframe homeowners arrive knowing the frame colour, glass type, and window style they want. You quote faster. You win more.</p>
         <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:40px;">
           <div style="display:flex;gap:14px;align-items:flex-start;">
             <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,116,42,0.15);border:1px solid rgba(212,116,42,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1336,7 +1159,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
             </div>
           </div>
         </div>
-        <a href="mailto:hello@viewframe.co.uk" class="btn btn-primary btn-lg" style="display:inline-flex;">Get installer access →</a>
+        <a href="mailto:trade@viewframe.co.uk" class="btn btn-primary btn-lg" style="display:inline-flex;">Get installer access →</a>
       </div>
       <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;">
         <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px;">What you receive per lead</div>
@@ -1362,27 +1185,47 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
             <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
           </div>
         </div>
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">We're onboarding installers in beta — no fees during the trial period.</div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">Trade plan from £39/month. No per-lead fees. Cancel anytime.</div>
       </div>
     </div>
   </div>
 </section>
 
 
-
-
-<!-- WAITLIST -->
-<section style="background:var(--paper-warm);padding:100px 80px;" id="waitlist">
-  <div style="max-width:640px;margin:0 auto;text-align:center;">
-    <div class="section-label" style="justify-content:center;">Join the waitlist</div>
-    <h2 class="section-h2">Get early access for installers</h2>
-    <p class="section-sub" style="margin:0 auto 40px;">We're onboarding a small number of UK window installers during beta. Join the list and we'll be in touch when a spot opens in your area.</p>
-    <div id="waitlist-form" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:480px;margin:0 auto 16px;">
-      <input id="waitlist-email" type="email" placeholder="your@email.com" style="flex:1;min-width:220px;padding:14px 20px;border-radius:100px;border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);">
-      <button onclick="joinWaitlist()" class="btn btn-primary" style="border-radius:100px;padding:14px 28px;font-size:15px;">Get early access</button>
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-h2">Simple. Two sides.<br>One of them is always free.</h2>
+    <p class="section-sub">Homeowners use Viewframe free, forever. Installers join by application and pay per qualified lead delivered.</p>
+    <div class="pricing-grid" style="grid-template-columns:1fr 1fr;max-width:760px;">
+      <div class="price-card featured">
+        <div class="price-badge">For homeowners</div>
+        <div class="price-tier">Free</div>
+        <div class="price-amount">£0<span>/always</span></div>
+        <p class="price-desc">No limits, no card, no catch. Everything you need to plan and get quotes.</p>
+        <ul class="price-feats">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Unlimited photo uploads</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>AI window & door detection</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>All 12 window & 6 door styles</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>PNG export & PDF spec sheet</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Request quotes from local installers</li>
+        </ul>
+        <a href="#visualiser" class="btn btn-primary">Open visualiser</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">For installers</div>
+        <div class="price-amount" style="font-size:28px;line-height:1.2;">By application</div>
+        <p class="price-desc" style="margin-top:8px;">A lead generation partnership, not a software subscription. We match you to your postcode area, send you qualified leads with PDF spec sheets attached, and charge per lead delivered.</p>
+        <ul class="price-feats">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Leads matched to your postcode area</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>PDF spec sheet with every lead</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Homeowner contact details included</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Pay per lead — no monthly fee</li>
+        </ul>
+        <a href="mailto:trade@viewframe.co.uk" class="btn btn-ghost">Email trade@viewframe.co.uk to apply</a>
+      </div>
     </div>
-    <div id="waitlist-success" style="display:none;font-size:17px;font-weight:500;color:var(--teal);">✓ You're on the list — we'll be in touch soon.</div>
-    <p style="font-size:13px;color:var(--ink-3);margin-top:12px;">No spam. Unsubscribe anytime.</p>
   </div>
 </section>
 
@@ -1419,7 +1262,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
           Do I need to create an account to try it?
           <span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
         </button>
-        <div class="faq-a"><div class="faq-a-inner">No — the visualiser works fully without signing up. Everything is free during beta. No account needed.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">No — the visualiser works fully without signing up. An account is only needed if you want to save layouts across sessions or generate shareable links on the Pro or Trade plans.</div></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
@@ -1432,11 +1275,88 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   </div>
 </section>
 
+<!-- INSTALLER FAQ -->
+<section style="background:var(--paper-warm);padding:100px 80px;border-top:1px solid var(--rule);" id="installer-faq">
+  <div class="section-inner">
+    <div class="section-label">For installers</div>
+    <h2 class="section-h2">Questions installers ask</h2>
+    <p class="section-sub">Everything you need to know before your first lead arrives.</p>
+    <div class="faq-list" style="margin-top:56px;max-width:720px;">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What does a lead look like?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">You receive an email with the homeowner's name and contact details, their visualised layout image, a PDF spec sheet listing every window and door with style, frame colour, and glass type, plus the postcode and project type. Everything you need to quote without a site visit first.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What postcode areas are available?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">We cover England and Wales and are rolling out by region. We limit coverage to one or two installers per postcode district so your leads aren't diluted. Join the waitlist to secure your area before a competitor does.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What's the conversion rate on leads?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">Homeowners who use the visualiser are 3× more likely to request a quote than those who browse a static catalogue — because they arrive already knowing what they want. We're collecting conversion data across early installs; ask us for the latest figures on a call.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">How does it embed on my website?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">One script tag — we give it to you, you paste it into your site. It loads Viewframe in your branding with your product colours. Most installers are live the same day, no developer needed.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What does it cost?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+        <div class="faq-a"><div class="faq-a-inner">The visualiser is always free for homeowners. Installer access is by application — we match you to your postcode area and charge per qualified lead delivered. <a href="mailto:trade@viewframe.co.uk" style="color:var(--accent);font-weight:600;">Email trade@viewframe.co.uk</a> to apply.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section style="background:var(--paper-2);border-top:1px solid var(--rule);padding:100px 80px;" id="contact">
+  <div class="section-inner" style="max-width:640px;">
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-h2">Talk to us</h2>
+    <p class="section-sub" style="margin-bottom:48px;">Homeowner with a question, or installer wanting to apply for your area — send us a message and we'll reply within one working day.</p>
+    <form id="contact-form" onsubmit="submitContact(event)" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div>
+          <label for="cf-name" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Name</label>
+          <input id="cf-name" type="text" placeholder="Your name" autocomplete="name"
+            style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+        </div>
+        <div>
+          <label for="cf-email" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Email <span style="color:var(--accent)">*</span></label>
+          <input id="cf-email" type="email" placeholder="you@example.com" autocomplete="email" required
+            style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;transition:border-color .15s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <label for="cf-role" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">I am a…</label>
+        <select id="cf-role"
+          style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;appearance:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'">
+          <option value="">Select…</option>
+          <option value="homeowner">Homeowner</option>
+          <option value="installer">Window installer</option>
+          <option value="investor">Investor</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label for="cf-message" style="display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:6px;">Message <span style="color:var(--accent)">*</span></label>
+        <textarea id="cf-message" rows="5" placeholder="Your message…" required
+          style="width:100%;padding:12px 16px;border:1.5px solid var(--rule-md);border-radius:var(--r-lg);font-family:var(--sans);font-size:14px;background:var(--paper);color:var(--ink);outline:none;resize:vertical;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--rule-md)'"></textarea>
+      </div>
+      <div id="cf-error" style="display:none;color:var(--danger);font-size:13px;margin-bottom:16px;padding:10px 14px;background:var(--danger-lt);border-radius:var(--r);"></div>
+      <div id="cf-success" style="display:none;color:var(--teal);font-size:15px;font-weight:600;padding:16px;background:var(--teal-lt);border-radius:var(--r-lg);">Message sent — we'll reply within one working day.</div>
+      <button type="submit" id="cf-submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send message</button>
+    </form>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section" id="cta">
-  <div class="eyebrow">✦ Free during beta</div>
-  <h2 class="section-h2">See it before you spend a penny</h2>
-  <p class="section-sub">Upload a photo of your home and preview replacement windows in 30 seconds. No account. No cost.</p>
+  <div class="eyebrow">✦ Join thousands of UK homeowners</div>
+  <h2 class="section-h2">Your home, your vision</h2>
+  <p class="section-sub">Try Viewframe free — no account needed. Upload your first photo in under a minute.</p>
   <div class="cta-btns">
     <a href="#visualiser" class="btn btn-primary btn-lg">Open visualiser</a>
     <a href="#how" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)">How it works</a>
@@ -1447,19 +1367,14 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
-      <div class="nav-logo" style="font-size:18px;display:flex;align-items:center;gap:10px;">
-        <span style="width:28px;height:28px;display:inline-flex;"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M4 4 L4 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 4 L14 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L26 4" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 4 L36 14" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L4 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M4 36 L14 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L26 36" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <path d="M36 36 L36 26" stroke="#0F172A" stroke-width="2.5" stroke-linecap="square"/>
-  <line x1="4" y1="20" x2="36" y2="20" stroke="#8B6B4A" stroke-width="1.8"/>
-  <line x1="20" y1="4" x2="20" y2="36" stroke="#8B6B4A" stroke-width="1.8"/>
-</svg></span>
+      <div class="nav-logo" style="font-size:18px">
+        <div class="logo-mark" style="width:26px;height:26px;border-radius:7px" aria-hidden="true">
+          <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="14" height="14" rx="2"/>
+            <line x1="9" y1="2" x2="9" y2="16"/>
+            <line x1="2" y1="9" x2="9" y2="9"/>
+          </svg>
+        </div>
         Viewframe
       </div>
       <p>See your home with new windows and doors before you commit. Built for British homeowners, trusted by UK installers.</p>
@@ -1468,11 +1383,9 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       <h4>Product</h4>
       <ul>
         <li><a href="#how">How it works</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-        <li><a href="/privacy.html">Privacy policy</a></li>
         <li><a href="#visualiser">Try it free</a></li>
         <li><a href="#features">Features</a></li>
-        <li><a href="#waitlist">Get installer access</a></li>
+        <li><a href="#pricing">Pricing</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1481,7 +1394,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <li><a href="#installers">For installers</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="mailto:hello@viewframe.co.uk">Contact us</a></li>
-        <li><a href="#cta">Get started</a></li>
+        <li><a href="mailto:hello@viewframe.co.uk?subject=Data Room Access">Data room</a></li>
+        <li><a href="https://www.linkedin.com/in/YOUR-LINKEDIN-HANDLE" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1508,52 +1422,6 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     </div>
   </div>
 </footer>
-
-<!-- QUOTE REQUEST MODAL -->
-<div class="modal-bg" id="quote-modal" onclick="if(event.target===this)closeQuoteModal()">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="quote-modal-title" style="max-width:460px;">
-    <button onclick="closeQuoteModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--ink-3);font-size:20px;line-height:1;" aria-label="Close">✕</button>
-    <div style="margin-bottom:20px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Get quotes</div>
-      <h3 id="quote-modal-title" style="font-family:var(--serif);font-size:24px;font-weight:300;letter-spacing:-0.01em;color:var(--ink);line-height:1.2;">Request quotes from local installers</h3>
-      <p style="font-size:14px;color:var(--ink-2);margin-top:10px;line-height:1.6;">We'll pass your design and contact details to vetted window installers in your area. No obligation — just quotes.</p>
-    </div>
-
-    <div id="quote-form-wrap">
-      <div style="display:flex;flex-direction:column;gap:14px;">
-        <div>
-          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Your name</label>
-          <input id="q-name" type="text" placeholder="Jane Smith" autocomplete="name"
-            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
-        </div>
-        <div>
-          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Email address</label>
-          <input id="q-email" type="email" placeholder="jane@example.com" autocomplete="email"
-            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
-        </div>
-        <div>
-          <label style="font-size:12px;font-weight:600;color:var(--ink);display:block;margin-bottom:6px;">Your postcode</label>
-          <input id="q-postcode" type="text" placeholder="SW1A 1AA" autocomplete="postal-code" maxlength="8"
-            style="width:100%;padding:12px 16px;border-radius:var(--r);border:1.5px solid var(--rule-md);font-size:15px;font-family:var(--sans);background:var(--paper-2);color:var(--ink);">
-        </div>
-      </div>
-      <div style="background:var(--accent-lt);border-radius:var(--r);padding:12px 16px;margin-top:16px;font-size:13px;color:var(--accent);line-height:1.5;" id="quote-design-summary"></div>
-      <p style="font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.5;">Your design details will be shared with installers. We will never share your data with anyone else. <a href="/privacy.html" style="color:var(--accent);">Privacy policy →</a></p>
-      <div id="quote-error" style="display:none;color:var(--danger);font-size:13px;margin-top:8px;"></div>
-      <div class="modal-actions" style="margin-top:20px;">
-        <button class="app-tb-btn" onclick="closeQuoteModal()">Cancel</button>
-        <button class="app-tb-btn prim" onclick="submitQuoteRequest()" id="quote-submit-btn" style="background:var(--accent);color:#fff;">Send quote request →</button>
-      </div>
-    </div>
-
-    <div id="quote-success" style="display:none;text-align:center;padding:24px 0;">
-      <div style="font-size:48px;margin-bottom:16px;">✓</div>
-      <h4 style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--ink);margin-bottom:10px;">Request sent</h4>
-      <p style="font-size:15px;color:var(--ink-2);line-height:1.6;max-width:320px;margin:0 auto 20px;">We'll match you with installers in your area. Expect to hear from them within 2–3 business days.</p>
-      <button class="app-tb-btn prim" onclick="closeQuoteModal()" style="background:var(--accent);color:#fff;">Done</button>
-    </div>
-  </div>
-</div>
 
 <!-- SHARE MODAL -->
 <div class="modal-bg" id="share-modal" onclick="if(event.target===this)closeModal()">
@@ -1601,7 +1469,7 @@ const GLASSES=[
 ];
 const LABELS={
   'window-casement':'Casement','window-sash':'Sash','window-double':'Double',
-  'window-bay':'Bay','window-flush':'Flush','window-tilt':'Tilt-turn',
+  'window-bay':'Bay','window-skylight':'Skylight','window-tilt':'Tilt-turn',
   'door-single':'Single door','door-double':'Double door','door-bifold':'Bifold',
   'door-sliding':'Sliding','door-french':'French door','door-patio':'Patio'
 };
@@ -1687,11 +1555,11 @@ function makeSVG(el){
       ${gls(seg*2+fw,h-bh+fw,seg-fw*2,bh-fw*2)}
     </svg>`;
   }
-  if(type==='window-flush'){
+  if(type==='window-skylight'){
+    const cols=3,rows=2,pw=(w-fw*2)/cols,ph=(h-fw*2)/rows;
+    let ps='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)ps+=gls(fw+c*pw+1,fw+r*ph+1,pw-2,ph-2);
     return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${gls(fw,fw,w-fw*2,h-fw*2)}
-      <rect x="${fw+3}" y="${fw+3}" width="${w-fw*2-6}" height="${h-fw*2-6}" rx="1" fill="none" stroke="#aaa" stroke-width=".8"/>
+      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>${ps}
     </svg>`;
   }
   if(type==='window-tilt'){
@@ -1998,7 +1866,6 @@ function setUploadLoading(isLoading){
 }
 
 function loadPhoto(ev){
-  track('photo_uploaded');
   const file=ev.target.files[0];
   if(!file)return;
   clearUploadError();
@@ -2111,7 +1978,6 @@ cv.addEventListener('drop',e=>{
  * message rather than a raw error.
  */
 async function runAI(){
-  track('ai_detect_started');
   if(!S._photoB64)return;
   document.getElementById('ai-btn').classList.remove('pulse-once');
   document.getElementById('scan-ov').classList.add('show');
@@ -2301,56 +2167,6 @@ async function showShare(){
   }
 }
 function closeModal(){document.getElementById('share-modal').classList.remove('show');}
-
-/* ── QUOTE REQUEST MODAL ── */
-function showQuoteModal(){
-  // Reset state
-  document.getElementById('quote-form-wrap').style.display='block';
-  document.getElementById('quote-success').style.display='none';
-  document.getElementById('quote-error').style.display='none';
-  document.getElementById('quote-submit-btn').disabled=false;
-  // Build design summary from current state
-  const els=S.elements||[];
-  const fc=S.fc||'—';
-  const count=els.length;
-  const styles=[...new Set(els.map(e=>e.type||'').filter(Boolean))].join(', ')||'—';
-  const summEl=document.getElementById('quote-design-summary');
-  if(count>0){
-    summEl.style.display='block';
-    summEl.innerHTML=`<strong>Your design:</strong> ${count} opening${count!==1?'s':''} · Frame: ${fc}${styles&&styles!=='—'?' · Style: '+styles:''}`;
-  } else {
-    summEl.style.display='none';
-  }
-  document.getElementById('quote-modal').classList.add('show');
-  track('quote_modal_opened');
-  setTimeout(()=>document.getElementById('q-name').focus(),100);
-}
-function closeQuoteModal(){document.getElementById('quote-modal').classList.remove('show');}
-async function submitQuoteRequest(){
-  const name=document.getElementById('q-name').value.trim();
-  const email=document.getElementById('q-email').value.trim();
-  const postcode=document.getElementById('q-postcode').value.trim();
-  const errEl=document.getElementById('quote-error');
-  errEl.style.display='none';
-  if(!name){errEl.textContent='Please enter your name.';errEl.style.display='block';document.getElementById('q-name').focus();return;}
-  if(!email||!email.includes('@')){errEl.textContent='Please enter a valid email address.';errEl.style.display='block';document.getElementById('q-email').focus();return;}
-  if(!postcode||postcode.length<3){errEl.textContent='Please enter your postcode.';errEl.style.display='block';document.getElementById('q-postcode').focus();return;}
-  const btn=document.getElementById('quote-submit-btn');
-  btn.disabled=true; btn.textContent='Sending…';
-  const els=S.elements||[];
-  const design={frameColour:S.fc||null,elementCount:els.length,styles:[...new Set(els.map(e=>e.type||'').filter(Boolean))]};
-  try{
-    const r=await fetch('/api/quote-request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,postcode,design})});
-    if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'Request failed');}
-    document.getElementById('quote-form-wrap').style.display='none';
-    document.getElementById('quote-success').style.display='block';
-    track('quote_request_submitted',{postcode});
-  }catch(e){
-    errEl.textContent=e.message||'Something went wrong — please try again.';
-    errEl.style.display='block';
-    btn.disabled=false; btn.textContent='Send quote request →';
-  }
-}
 function copyLink(){
   const id=document.getElementById('share-id').textContent;
   if(!id)return;
@@ -2466,7 +2282,6 @@ function captureRoomSnapshot(){
   return {dataUrl:c.toDataURL('image/jpeg',0.92),width:c.width,height:c.height};
 }
 async function exportSpecSheet(){
-  track('pdf_exported');
   if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF){
     toast('PDF export couldn\'t load — check your connection and try again');
     return;
@@ -2606,6 +2421,40 @@ function toast(msg){
 }
 
 /* ── FAQ ── */
+async function submitContact(e) {
+  e.preventDefault();
+  const email = document.getElementById('cf-email').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+  const name = document.getElementById('cf-name').value.trim();
+  const role = document.getElementById('cf-role').value;
+  const err = document.getElementById('cf-error');
+  const ok = document.getElementById('cf-success');
+  const btn = document.getElementById('cf-submit');
+  err.style.display = 'none';
+  if (!email || !email.includes('@')) { err.textContent = 'Please enter a valid email address.'; err.style.display = 'block'; return; }
+  if (!message) { err.textContent = 'Please enter a message.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const r = await fetch('/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, role, message })
+    });
+    if (r.ok) {
+      document.getElementById('contact-form').style.display = 'none';
+      ok.style.display = 'block';
+    } else {
+      const d = await r.json().catch(() => ({}));
+      err.textContent = d.error || 'Something went wrong — please try again.';
+      err.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Send message';
+    }
+  } catch(_) {
+    err.textContent = 'Could not send — please email hello@viewframe.co.uk directly.';
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Send message';
+  }
+}
+
 function toggleFaq(btn){
   const item=btn.closest('.faq-item');
   const isOpen=item.classList.contains('open');
@@ -2684,280 +2533,12 @@ window.addEventListener('resize',()=>{
     },w.delay+1000);
   });
 })();
-
-
-
-/* ── ANALYTICS ── */
-function track(name, props){
-  try{ fetch('/api/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,props:props||{}})}); }catch(_){}
-}
-
-/* ── DEMO PHOTO ── */
-async function loadDemoPhoto(){
-  track('demo_photo_clicked');
-  try{
-    const r = await fetch('gallery-1-before.jpg');
-    const blob = await r.blob();
-    const file = new File([blob], 'demo-house.jpg', {type:'image/jpeg'});
-    loadPhoto({target:{files:[file]}});
-  }catch(e){ alert('Could not load demo photo.'); }
-}
-
-/* ── MODE SWITCHER ── */
-function setMode(m){
-  const wrap=document.getElementById('app-wrap')||document.querySelector('.app-wrap');
-  const appSec=document.querySelector('.app-section')||document.getElementById('visualiser');
-  document.querySelectorAll('.app-wrap,.app-section').forEach(el=>{ el.classList.toggle('mode-home', m==='home'); });
-  document.getElementById('mode-home').style.background = m==='home' ? 'var(--accent)' : 'none';
-  document.getElementById('mode-home').style.color = m==='home' ? '#fff' : 'var(--ink-3)';
-  document.getElementById('mode-trade').style.background = m==='trade' ? 'var(--accent)' : 'none';
-  document.getElementById('mode-trade').style.color = m==='trade' ? '#fff' : 'var(--ink-3)';
-  localStorage.setItem('vf-mode', m);
-}
-
-/* Track when visualiser scrolls into view */
-(()=>{
-  const el = document.getElementById('visualiser');
-  if(!el) return;
-  const obs = new IntersectionObserver(entries=>{
-    if(entries[0].isIntersecting){ track('visualiser_opened'); obs.disconnect(); }
-  },{threshold:0.2});
-  obs.observe(el);
-})();
-
-/* Build home panel swatches once DOM is ready */
-document.addEventListener('DOMContentLoaded', ()=>{
-  const savedMode = localStorage.getItem('vf-mode') || 'home';
-  setMode(savedMode);
-
-  // Colour swatches
-  const hc = document.getElementById('hp-colours');
-  FRAMES.forEach((c,i)=>{
-    const s = document.createElement('button');
-    s.className = 'hp-swatch' + (i===3?' active':'');
-    s.title = c.name;
-    s.style.background = c.hex;
-    if(c.hex==='#FFFFFF') s.style.border='2.5px solid rgba(0,0,0,0.15)';
-    s.onclick = ()=>{
-      S.fc = c.hex;
-      document.querySelectorAll('.hp-swatch').forEach(x=>x.classList.remove('active'));
-      document.querySelectorAll('.cswatch').forEach((x,j)=>{ x.classList.toggle('active', j===i); });
-      s.classList.add('active');
-    };
-    hc.appendChild(s);
-  });
-
-  // Style buttons — just windows
-  const hs = document.getElementById('hp-styles');
-  const homeStyles = ['window-casement','window-sash','window-double','window-bay','window-flush','window-tilt'];
-  homeStyles.forEach((t,i)=>{
-    const b = document.createElement('button');
-    b.className = 'hp-style' + (i===0?' active':'');
-    b.textContent = LABELS[t];
-    b.onclick = ()=>{
-      setTool(t);
-      document.querySelectorAll('.hp-style').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-    };
-    hs.appendChild(b);
-  });
-});
-
-
-/* ── GALLERY SLIDERS ── */
-(function(){
-  function initSlider(el){
-    const before = el.querySelector('.gal-before');
-    const handle = el.querySelector('.gal-handle');
-    function move(x){
-      const r=el.getBoundingClientRect();
-      const pct=Math.max(2,Math.min(98,((x-r.left)/r.width)*100));
-      handle.style.left=pct+'%';
-      before.style.clipPath='inset(0 '+(100-pct)+'% 0 0)';
-    }
-    let active=false;
-    el.addEventListener('mousedown',e=>{active=true;move(e.clientX);});
-    el.addEventListener('mousemove',e=>{if(active)move(e.clientX);});
-    window.addEventListener('mouseup',()=>{active=false;});
-    el.addEventListener('touchstart',e=>{active=true;move(e.touches[0].clientX);},{passive:true});
-    el.addEventListener('touchmove',e=>{if(active){e.preventDefault();move(e.touches[0].clientX);}},{passive:false});
-    el.addEventListener('touchend',()=>{active=false;});
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.querySelectorAll('.gal-slider').forEach(initSlider);
-  });
-})();
-
-/* ── HERO BEFORE/AFTER SLIDER ── */
-(function(){
-  const wrap=document.getElementById('hero-ba');
-  const handle=document.getElementById('hba-handle');
-  const before=document.getElementById('hba-before');
-  if(!wrap||!handle||!before)return;
-  let dragging=false;
-  function move(x){
-    const rect=wrap.getBoundingClientRect();
-    const pct=Math.max(2,Math.min(98,((x-rect.left)/rect.width)*100));
-    handle.style.left=pct+'%';
-    before.style.clipPath='inset(0 '+(100-pct)+'% 0 0)';
-  }
-  wrap.addEventListener('mousedown',e=>{dragging=true;move(e.clientX);e.preventDefault();});
-  wrap.addEventListener('touchstart',e=>{dragging=true;move(e.touches[0].clientX);},{passive:true});
-  window.addEventListener('mousemove',e=>{if(dragging)move(e.clientX);});
-  window.addEventListener('touchmove',e=>{if(dragging&&e.touches[0]){e.preventDefault();move(e.touches[0].clientX);}},{passive:false});
-  window.addEventListener('mouseup',()=>dragging=false);
-  window.addEventListener('touchend',()=>dragging=false);
-})();
 </script>
 
-
-<!-- TRANSFORM MODAL -->
-<div class="modal-bg" id="transform-modal" style="z-index:300">
-  <div class="modal" role="dialog" aria-modal="true" style="width:680px;max-width:calc(100vw - 40px)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <h3 id="transform-modal-title" style="font-size:20px">AI Transformation</h3>
-      <button onclick="closeTransformModal()" style="font-size:20px;color:var(--ink-3);padding:4px 8px">✕</button>
-    </div>
-    <p style="font-size:13px;color:var(--ink-3);margin-bottom:16px">Generating a photorealistic preview of your new windows. Drag the slider to compare.</p>
-    <div id="transform-loading" style="text-align:center;padding:40px 0">
-      <div style="font-size:32px;margin-bottom:12px">✦</div>
-      <div style="font-size:14px;color:var(--ink-2);font-weight:600" id="transform-status">Seeing how your home looks…</div>
-      <div style="font-size:12px;color:var(--ink-3);margin-top:6px">Usually takes 15–30 seconds</div>
-    </div>
-    <div id="transform-result" style="display:none">
-      <div id="ba-wrap" style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:#111;user-select:none;touch-action:none">
-        <img id="ba-after" alt="After" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
-        <img id="ba-before" alt="Before" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;clip-path:inset(0 50% 0 0)">
-        <div id="ba-handle" style="position:absolute;top:0;bottom:0;left:50%;width:44px;transform:translateX(-50%);cursor:ew-resize;display:flex;flex-direction:column;align-items:center;z-index:10">
-          <div style="flex:1;width:3px;background:#fff;box-shadow:0 0 6px rgba(0,0,0,0.4)"></div>
-          <div style="position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;background:#fff;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center">
-            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round"><polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/></svg>
-          </div>
-        </div>
-        <span style="position:absolute;bottom:12px;left:14px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.04em">BEFORE</span>
-        <span style="position:absolute;bottom:12px;right:14px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,0.55);color:#fff;pointer-events:none;letter-spacing:.04em">AFTER</span>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
-        <a id="transform-dl" href="#" download="viewframe-transformation.jpg" class="btn btn-ghost" style="font-size:13px;padding:8px 18px">Download</a>
-        <button onclick="closeTransformModal()" class="btn btn-primary" style="font-size:13px;padding:8px 18px">Done</button>
-      </div>
-    </div>
-    <div id="transform-error" style="display:none;font-size:13px;color:var(--danger);background:var(--danger-lt);border-radius:var(--r);padding:12px;margin-top:8px"></div>
-  </div>
-</div>
-
-<script>
-async function joinWaitlist(){
-  const email=document.getElementById('waitlist-email').value.trim();
-  if(!email||!email.includes('@')){document.getElementById('waitlist-email').focus();return;}
-  try{
-    const r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,role:'installer'})});
-    if(r.ok){
-      document.getElementById('waitlist-form').style.display='none';
-      document.getElementById('waitlist-success').style.display='block';
-      track('waitlist_submitted');
-    }
-  }catch(_){}
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  const inp=document.getElementById('waitlist-email');
-  if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')joinWaitlist();});
-});
-</script>
 <!-- jsPDF — used only by exportSpecSheet() for the PDF spec sheet export.
      Loaded at the end of the page so it never blocks initial render.
      If this fails to load (offline, blocked CDN, etc.), exportSpecSheet()
      checks for it and shows a clear error instead of throwing. -->
-<script>
-async function runTransform(){
-  track('transform_started');
-  if(!S._photoB64||!S._photoMime){alert('Please upload a photo first.');return;}
-  const els=S.elements||[];
-  const style=els.length?(els[0].type||'window-casement'):'window-casement';
-  const frameColour=S.fc||'#4A4A4A';
-
-  document.getElementById('transform-modal').classList.add('show');
-  document.getElementById('transform-loading').style.display='block';
-  document.getElementById('transform-result').style.display='none';
-  document.getElementById('transform-error').style.display='none';
-
-  const statuses=['Seeing how your home looks…','Applying window styles…','Rendering frames and glazing…','Almost there…'];
-  let si=0;
-  const iv=setInterval(()=>{
-    document.getElementById('transform-status').textContent=statuses[si++%statuses.length];
-  },4000);
-
-  try{
-    const r=await fetch('/api/transform',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({image:S._photoB64,mimeType:S._photoMime,style,frameColour})
-    });
-    clearInterval(iv);
-    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error||'Transformation failed');}
-    const data=await r.json();
-    if(!data.url)throw new Error('No result returned');
-
-    // Get the original photo as data URL for before side
-    const beforeSrc='data:'+S._photoMime+';base64,'+S._photoB64;
-    document.getElementById('ba-before').src=beforeSrc;
-    document.getElementById('ba-after').src=data.url;
-    document.getElementById('transform-dl').href=data.url;
-    document.getElementById('transform-loading').style.display='none';
-    document.getElementById('transform-result').style.display='block';
-    track('ai_transform_completed');
-    initBaSlider();
-  }catch(err){
-    clearInterval(iv);
-    document.getElementById('transform-loading').style.display='none';
-    const errEl=document.getElementById('transform-error');
-    errEl.textContent='Transformation failed: '+err.message;
-    errEl.style.display='block';
-  }
-}
-
-function closeTransformModal(){
-  document.getElementById('transform-modal').classList.remove('show');
-}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTransformModal();});
-
-function initBaSlider(){
-  const wrap=document.getElementById('ba-wrap');
-  const handle=document.getElementById('ba-handle');
-  const beforeImg=document.getElementById('ba-before');
-  let dragging=false;
-  function move(x){
-    const rect=wrap.getBoundingClientRect();
-    let pct=Math.max(5,Math.min(95,((x-rect.left)/rect.width)*100));
-    handle.style.left=pct+'%';
-    beforeImg.style.clipPath='inset(0 '+(100-pct)+'% 0 0)';
-  }
-  handle.addEventListener('mousedown',e=>{dragging=true;e.stopPropagation();e.preventDefault();});
-  handle.addEventListener('touchstart',e=>{dragging=true;e.stopPropagation();},{passive:true});
-  window.addEventListener('mousemove',e=>{if(dragging)move(e.clientX);});
-  window.addEventListener('touchmove',e=>{if(dragging&&e.touches[0])move(e.touches[0].clientX);},{passive:true});
-  window.addEventListener('mouseup',()=>dragging=false);
-  window.addEventListener('touchend',()=>dragging=false);
-  wrap.addEventListener('click',e=>{if(!dragging)move(e.clientX);});
-}
-
-// Show Transform button after photo + detect
-const _origLoadPhoto=loadPhoto;
-// Patch updateAll to show transform button once elements exist
-const _origUpdateAll=updateAll;
-function updateAll(){
-  _origUpdateAll();
-  const tb=document.getElementById('transform-btn');
-  if(tb)tb.style.display=S.elements&&S.elements.length?'':'none';
-}
-// Also show after photo load
-document.getElementById('photo-input').addEventListener('change',()=>{
-  setTimeout(()=>{
-    const tb=document.getElementById('transform-btn');
-    if(tb&&S._photoB64)tb.style.display='';
-  },500);
-});
-</script>
-<script src="/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 </body>
 </html>

@@ -1994,7 +1994,7 @@ async function runAI(){
   let detCount=0,lowConfCount=0,analysisText=null;
   let overlayDismissed=false;
   try{
-    const res=await fetch('https://glaze-ai.onrender.com/api/detect',{
+    const res=await fetch('/api/detect',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({imageBase64:S._photoB64,mediaType:S._photoMime})
