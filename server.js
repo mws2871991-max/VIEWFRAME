@@ -4,6 +4,23 @@ const rateLimit = require('express-rate-limit');
 const { randomUUID } = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const NOTIFY = process.env.NOTIFY_EMAIL || 'mws2871991@gmail.com';
+
+async function sendNotification(subject, html) {
+  try {
+    await resend.emails.send({
+      from: 'Viewframe <onboarding@resend.dev>',
+      to: NOTIFY,
+      subject,
+      html
+    });
+  } catch(e) {
+    console.error('Email error:', e.message);
+  }
+}
 
 const app = express();
 app.use(express.json({ limit: '20mb' }));
@@ -211,6 +228,10 @@ app.post('/api/waitlist', (req, res) => {
     return res.status(400).json({ error: 'Valid email required.' });
   }
   appendLog('waitlist.jsonl', { ts: new Date().toISOString(), email, role: (role || '').slice(0, 100) });
+  sendNotification(
+    `New Viewframe signup — ${email}`,
+    `<p><strong>Email:</strong> ${email}<br><strong>Role:</strong> ${role || 'not specified'}</p>`
+  );
   res.json({ ok: true });
 });
 
@@ -250,6 +271,14 @@ app.post('/api/contact', (req, res) => {
     role: (role || '').slice(0, 50),
     message: message.trim().slice(0, 2000)
   });
+  sendNotification(
+    `New Viewframe message from ${name || email}`,
+    `<p><strong>Name:</strong> ${name || '—'}<br>
+     <strong>Email:</strong> ${email}<br>
+     <strong>Role:</strong> ${role || '—'}<br>
+     <strong>Message:</strong></p>
+     <p>${message.trim().replace(/\n/g, '<br>')}</p>`
+  );
   res.json({ ok: true });
 });
 
