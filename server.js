@@ -14,7 +14,7 @@ async function sendNotification(subject, html) {
   try {
     const resend = new Resend(key);
     await resend.emails.send({
-      from: 'Viewframe <hello@viewframe.co.uk>',
+      from: 'Viewframe <onboarding@resend.dev>',
       to: NOTIFY,
       subject,
       html
