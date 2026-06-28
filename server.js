@@ -6,11 +6,13 @@ const fs = require('fs');
 const path = require('path');
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const NOTIFY = process.env.NOTIFY_EMAIL || 'mws2871991@gmail.com';
 
 async function sendNotification(subject, html) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) { console.log('No RESEND_API_KEY — skipping email:', subject); return; }
   try {
+    const resend = new Resend(key);
     await resend.emails.send({
       from: 'Viewframe <hello@viewframe.co.uk>',
       to: NOTIFY,
