@@ -12,7 +12,7 @@ const NOTIFY = process.env.NOTIFY_EMAIL || 'mws2871991@gmail.com';
 async function sendNotification(subject, html) {
   try {
     await resend.emails.send({
-      from: 'Viewframe <onboarding@resend.dev>',
+      from: 'Viewframe <hello@viewframe.co.uk>',
       to: NOTIFY,
       subject,
       html
