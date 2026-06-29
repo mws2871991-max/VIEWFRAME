@@ -1,9 +1,9 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { randomUUID } = require('crypto');
 const fs = require('fs');
-const path = require('path');
 const { Resend } = require('resend');
 
 const NOTIFY = process.env.NOTIFY_EMAIL || 'mws2871991@gmail.com';
