@@ -243,6 +243,20 @@ nav {
 @media(max-width:900px){ .gallery-grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:600px){ .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; } .gallery-section { padding: 64px 0; } }
 
+/* Video section */
+.video-section { padding: 100px 0; background: var(--paper); }
+.video-wrap { max-width: 860px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(28,25,23,0.13); border: 1px solid var(--rule); background: var(--ink); }
+.video-wrap video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.video-placeholder { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a1a 0%, #2a2520 100%); }
+.vp-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.vp-icon svg { width: 64px; height: 64px; color: rgba(255,255,255,0.25); }
+.vp-steps { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.vp-steps span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); }
+.vp-steps svg { color: rgba(255,255,255,0.25); flex-shrink: 0; }
+.vp-note { font-size: 13px; color: rgba(255,255,255,0.35); }
+.vp-note a { color: var(--accent); text-decoration: none; }
+@media(max-width:600px){ .video-section { padding: 64px 0; } .video-wrap { border-radius: 12px; } .vp-icon svg { width: 48px; height: 48px; } }
+
 /* ─── HERO WINDOW DEMO ─── */
 .hero-right {
   background: var(--ink); position: relative; overflow: hidden;
@@ -960,6 +974,40 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     </div>
   </div>
 </div>
+
+<!-- EXPLAINER VIDEO -->
+<section class="video-section" id="video">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-label">See it in action</div>
+    <h2 class="section-h2">30 seconds.<br>That's all it takes.</h2>
+    <p class="section-sub" style="margin:0 auto 40px;">Upload a photo, detect your windows, pick a style and colour. Watch the whole thing here.</p>
+    <div class="video-wrap" id="video-wrap">
+      <!-- PLACEHOLDER — replace with real video once recorded -->
+      <div class="video-placeholder" id="video-placeholder">
+        <div class="vp-inner">
+          <div class="vp-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="vp-steps">
+            <span>Upload photo</span>
+            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>AI detects</span>
+            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>Pick colour</span>
+            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+            <span>See result</span>
+          </div>
+          <p class="vp-note">Video coming soon — <a href="#visualiser">try it live instead →</a></p>
+        </div>
+      </div>
+      <!-- When you have a video, replace the placeholder div above with:
+           <video autoplay muted loop playsinline poster="video-poster.jpg">
+             <source src="explainer.mp4" type="video/mp4">
+           </video>
+      -->
+    </div>
+  </div>
+</section>
 
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how">
