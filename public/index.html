@@ -730,9 +730,9 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero-right { display: none; }
-  .hero-left { padding: 60px 24px; }
+  .hero { grid-template-columns: 1fr; grid-template-rows: auto 280px; }
+  .hero-right { display: flex; height: 280px; }
+  .hero-left { padding: 60px 24px 40px; }
   section { padding: 60px 24px; }
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .features-grid { grid-template-columns: 1fr; }
