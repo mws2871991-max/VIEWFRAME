@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://viewframe.co.uk/og-image.png">
 
 <!-- Favicon (inline SVG, no external file needed) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect width='18' height='18' rx='4' fill='%23D4742A'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='4' y='4' width='10' height='10' rx='1.4'/%3E%3Cpolyline points='4,11 7,8 9,10 12,7 14,11'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='5' fill='%231C1917'/%3E%3Crect x='4' y='4' width='12' height='12' rx='2' fill='none' stroke='%23fff' stroke-width='1.4'/%3E%3Cline x1='10' y1='4' x2='10' y2='16' stroke='%23fff' stroke-width='1.3'/%3E%3Cline x1='4' y1='10' x2='16' y2='10' stroke='%23fff' stroke-width='1.3'/%3E%3Ccircle cx='13.5' cy='10' r='1.3' fill='%23D4742A'/%3E%3C/svg%3E">
 
 <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -119,11 +119,13 @@ nav {
   display: flex; align-items: center; gap: 10px;
 }
 .nav-logo .logo-mark {
-  width: 34px; height: 34px; background: var(--accent); border-radius: 10px;
+  width: 36px; height: 36px; background: var(--ink); border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(212,116,42,0.35);
+  box-shadow: 0 2px 12px rgba(28,25,23,0.2), 0 1px 3px rgba(28,25,23,0.12);
+  transition: transform .2s, box-shadow .2s;
 }
-.nav-logo .logo-mark svg { width: 18px; height: 18px; }
+.nav-logo:hover .logo-mark { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(28,25,23,0.25); }
+.nav-logo .logo-mark svg { width: 20px; height: 20px; }
 .nav-links { display: flex; align-items: center; gap: 32px; margin-left: 52px; }
 .nav-links a { font-size: 14px; font-weight: 500; color: var(--ink-3); transition: color .15s; }
 .nav-links a:hover { color: var(--accent); }
@@ -131,8 +133,8 @@ nav {
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 600; transition: all .18s; }
 .btn-ghost { border: 1.5px solid var(--rule-md); color: var(--ink-2); }
 .btn-ghost:hover { background: var(--paper-2); color: var(--ink); border-color: var(--ink-3); }
-.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(212,116,42,0.3); }
-.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 4px 16px rgba(212,116,42,0.4); transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 2px 12px rgba(212,116,42,0.35), 0 1px 3px rgba(212,116,42,0.2); }
+.btn-primary:hover { background: var(--accent-dk); box-shadow: 0 6px 20px rgba(212,116,42,0.45), 0 2px 6px rgba(212,116,42,0.25); transform: translateY(-2px); }
 .btn-lg { padding: 15px 30px; font-size: 15px; border-radius: 100px; }
 
 /* ─── HERO ─── */
@@ -164,8 +166,39 @@ nav {
   max-width: 480px; margin-bottom: 40px; font-weight: 400;
 }
 .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* Journey cards */
+.journey-card {
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 18px 20px; border-radius: 16px;
+  border: 1.5px solid var(--rule-md);
+  background: var(--paper-2);
+  transition: all .2s cubic-bezier(.34,1.56,.64,1);
+  cursor: pointer; text-decoration: none; color: var(--ink);
+  box-shadow: 0 1px 4px rgba(28,25,23,0.06);
+}
+.journey-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-lt);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212,116,42,0.15);
+}
+.journey-home:hover { border-color: var(--accent); }
+.journey-trade:hover { border-color: var(--ink); background: #F7F4F0; box-shadow: 0 8px 24px rgba(28,25,23,0.1); }
+.jc-icon { font-size: 22px; margin-bottom: 6px; line-height: 1; }
+.jc-label { font-size: 14px; font-weight: 700; color: var(--ink); }
+.jc-sub { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+
+/* Trust chips */
+.trust-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 500; color: var(--ink-2);
+  background: var(--paper-2); border: 1px solid var(--rule);
+  padding: 4px 10px; border-radius: 100px;
+}
+
 .hero-proof {
-  margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--rule);
+  margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--rule);
   display: flex; gap: 40px;
 }
 .proof-stat .n { font-family: var(--serif); font-size: 34px; color: var(--ink); font-weight: 500; }
@@ -781,9 +814,15 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <nav aria-label="Main navigation">
   <div class="nav-logo">
     <div class="logo-mark" aria-hidden="true">
-      <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="2" width="14" height="14" rx="2"/>
-        <polyline points="2,12 5,9 8,11 11,8 16,12"/>
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer frame -->
+        <rect x="3" y="3" width="14" height="14" rx="2.5" stroke="#fff" stroke-width="1.6"/>
+        <!-- inner crossbar vertical -->
+        <line x1="10" y1="3" x2="10" y2="17" stroke="#fff" stroke-width="1.4"/>
+        <!-- inner crossbar horizontal -->
+        <line x1="3" y1="10" x2="17" y2="10" stroke="#fff" stroke-width="1.4"/>
+        <!-- accent dot — handle -->
+        <circle cx="13.5" cy="10" r="1.2" fill="var(--accent)"/>
       </svg>
     </div>
     Viewframe
@@ -808,27 +847,25 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <h1 class="hero-h1">See your home with<br>new windows before<br>you <em>spend a penny</em></h1>
     <p class="hero-sub">Stop guessing how it'll look. Upload a photo, explore every style and colour, then connect with a trusted local installer — all in under a minute.</p>
 
-    <!-- Split journey CTAs -->
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-      <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;">Who are you?</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <a href="#visualiser" class="btn btn-primary btn-lg" style="flex:1;min-width:180px;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          I'm a Homeowner
-        </a>
-        <a href="#installers" class="btn btn-ghost btn-lg" style="flex:1;min-width:180px;justify-content:center;">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          I'm an Installer
-        </a>
-      </div>
+    <!-- Journey cards -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">
+      <a href="#visualiser" class="journey-card journey-home">
+        <div class="jc-icon">🏠</div>
+        <div class="jc-label">I'm a Homeowner</div>
+        <div class="jc-sub">Visualise my new windows</div>
+      </a>
+      <a href="#installers" class="journey-card journey-trade">
+        <div class="jc-icon">🔧</div>
+        <div class="jc-label">I'm an Installer</div>
+        <div class="jc-sub">Generate qualified leads</div>
+      </a>
     </div>
 
-    <div style="font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>No sign-up needed</span>
-      <span style="color:var(--rule-md)">·</span>
-      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Always free for homeowners</span>
-      <span style="color:var(--rule-md)">·</span>
-      <span style="display:inline-flex;align-items:center;gap:4px;"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>UK installers only</span>
+    <!-- Trust signals -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Trusted by UK installers</span>
+      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Used across England</span>
+      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Free for homeowners, always</span>
     </div>
     <div class="hero-proof">
       <div class="proof-stat"><div class="n">60s</div><div class="l">To first visualisation</div></div>
