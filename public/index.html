@@ -217,6 +217,32 @@ nav {
 .proof-stat .n { font-family: var(--serif); font-size: 34px; color: var(--ink); font-weight: 500; }
 .proof-stat .l { font-size: 13px; color: var(--ink-3); margin-top: 2px; font-weight: 500; }
 
+/* Gallery section */
+.gallery-section { padding: 100px 0; background: var(--paper); }
+.gallery-section .section-eyebrow { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.gallery-section h2 { text-align: center; font-family: var(--serif); font-size: clamp(30px,4vw,46px); font-weight: 300; color: var(--ink); margin-bottom: 12px; }
+.gallery-section .gallery-sub { text-align: center; font-size: 17px; color: var(--ink-3); margin-bottom: 56px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1140px; margin: 0 auto; padding: 0 40px; }
+.gallery-card { border-radius: 16px; overflow: hidden; background: var(--paper-2); border: 1px solid var(--rule); }
+.gallery-card-slider { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; cursor: col-resize; user-select: none; }
+.gallery-card-slider img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gallery-card-slider .gc-before { clip-path: inset(0 50% 0 0); transition: none; }
+.gallery-card-slider .gc-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #fff; transform: translateX(-50%); pointer-events: none; }
+.gallery-card-slider .gc-handle::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:28px; height:28px; background:#fff; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+.gallery-card-slider .gc-lbl { position: absolute; bottom: 10px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: #fff; background: rgba(0,0,0,.45); padding: 3px 8px; border-radius: 4px; }
+.gallery-card-slider .gc-lbl-before { left: 10px; }
+.gallery-card-slider .gc-lbl-after { right: 10px; }
+.gallery-card-info { padding: 14px 16px; }
+.gallery-card-info .gc-style { font-size: 13px; font-weight: 700; color: var(--ink); }
+.gallery-card-info .gc-house { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.gallery-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; background: var(--paper-2); }
+.gallery-placeholder svg { width: 32px; height: 32px; opacity: .25; }
+.gallery-placeholder span { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+.gallery-cta { text-align: center; margin-top: 48px; }
+.gallery-cta p { font-size: 15px; color: var(--ink-3); margin-bottom: 16px; }
+@media(max-width:900px){ .gallery-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:600px){ .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; } .gallery-section { padding: 64px 0; } }
+
 /* ─── HERO WINDOW DEMO ─── */
 .hero-right {
   background: var(--ink); position: relative; overflow: hidden;
@@ -958,6 +984,134 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <p>Swap styles, frames, and glazing until it's right. Share the result with your installer — they arrive knowing exactly what you want.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <p class="section-eyebrow">Real transformations</p>
+  <h2>People buy what they can <em>see</em></h2>
+  <p class="gallery-sub">Every image below was created with Viewframe — upload your own photo and see the same.</p>
+  <div class="gallery-grid">
+
+    <!-- Card 1 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-1-after.jpg" alt="After — anthracite casement windows on semi-detached">
+        <img class="gc-before" src="gallery-1-before.jpg" alt="Before — original windows on semi-detached">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Anthracite Grey Casement</div>
+        <div class="gc-house">Semi-detached · South East England</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-2-after.jpg" alt="After — white bifold doors on detached">
+        <img class="gc-before" src="gallery-2-before.jpg" alt="Before — original doors on detached">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">White Bifold Doors</div>
+        <div class="gc-house">Detached · West Midlands</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-3-after.jpg" alt="After — black sash windows on Victorian terrace">
+        <img class="gc-before" src="gallery-3-before.jpg" alt="Before — original windows on Victorian terrace">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Black Sash Windows</div>
+        <div class="gc-house">Victorian terrace · North West</div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-4-after.jpg" alt="After — French doors on new build">
+        <img class="gc-before" src="gallery-4-before.jpg" alt="Before — original doors on new build">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Anthracite French Doors</div>
+        <div class="gc-house">New build · Yorkshire</div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-5-after.jpg" alt="After — flush windows on bungalow">
+        <img class="gc-before" src="gallery-5-before.jpg" alt="Before — original windows on bungalow">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Cream Flush Casement</div>
+        <div class="gc-house">Bungalow · East Midlands</div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-6-after.jpg" alt="After — sliding patio doors on detached">
+        <img class="gc-before" src="gallery-6-before.jpg" alt="Before — original doors on detached">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Grey Sliding Patio Doors</div>
+        <div class="gc-house">Detached · Home Counties</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="gallery-cta">
+    <p>Want to see your home here? It takes under a minute.</p>
+    <a href="#visualiser" class="btn btn-primary">Try it free →</a>
   </div>
 </section>
 
@@ -2387,6 +2541,38 @@ function loadSharedLayout(){
   }
 }
 document.addEventListener('DOMContentLoaded',loadSharedLayout);
+
+// Gallery before/after sliders
+document.querySelectorAll('[data-gc]').forEach(slider=>{
+  const before=slider.querySelector('.gc-before');
+  const handle=slider.querySelector('.gc-handle');
+  if(!before||!handle)return;
+  let dragging=false;
+  function setPos(x){
+    const r=slider.getBoundingClientRect();
+    const pct=Math.min(100,Math.max(0,((x-r.left)/r.width)*100));
+    before.style.clipPath=`inset(0 ${100-pct}% 0 0)`;
+    handle.style.left=pct+'%';
+  }
+  slider.addEventListener('mousedown',e=>{dragging=true;setPos(e.clientX);});
+  window.addEventListener('mousemove',e=>{if(dragging)setPos(e.clientX);});
+  window.addEventListener('mouseup',()=>dragging=false);
+  slider.addEventListener('touchstart',e=>{dragging=true;setPos(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('touchmove',e=>{if(dragging)setPos(e.touches[0].clientX);},{passive:true});
+  window.addEventListener('touchend',()=>dragging=false);
+  // Hide placeholder if both images load
+  const imgs=slider.querySelectorAll('img');
+  let loaded=0;
+  imgs.forEach(img=>{
+    if(img.complete&&img.naturalWidth>0){loaded++;if(loaded===2)hidePlaceholder();}
+    else img.addEventListener('load',()=>{loaded++;if(loaded===2)hidePlaceholder();});
+    img.addEventListener('error',()=>{/* keep placeholder */});
+  });
+  function hidePlaceholder(){
+    const ph=slider.querySelector('.gallery-placeholder');
+    if(ph)ph.style.display='none';
+  }
+});
 
 async function exportPNG(){
   try{
