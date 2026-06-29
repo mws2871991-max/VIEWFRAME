@@ -2320,21 +2320,18 @@ async function loadSharedLayout(){
 }
 document.addEventListener('DOMContentLoaded',loadSharedLayout);
 
-function exportPNG(){
+async function exportPNG(){
   try{
+    const snap=await captureRoomSnapshot();
     const c=document.createElement('canvas');
-    const r=document.getElementById('app-canvas').getBoundingClientRect();
-    c.width=r.width;c.height=r.height;
+    c.width=snap.width;c.height=snap.height;
     const ctx=c.getContext('2d');
-    const bg=document.getElementById('photo-bg');
-    if(bg.classList.contains('show')&&bg.src){
-      ctx.drawImage(bg,0,0,c.width,c.height);
-    }else{
-      ctx.fillStyle='#D6D0C4';ctx.fillRect(0,0,c.width,c.height);
-    }
+    const img=new Image();
+    await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=snap.dataUrl;});
+    ctx.drawImage(img,0,0);
     ctx.font='12px sans-serif';ctx.fillStyle='rgba(0,0,0,0.4)';
     ctx.fillText(`Viewframe · ${S.elements.length} elements · ${new Date().toLocaleDateString()}`,12,c.height-12);
-    const url=c.toDataURL(); // can throw SecurityError on a tainted/cross-origin canvas
+    const url=c.toDataURL('image/png');
     const a=document.createElement('a');a.download='viewframe-layout.png';a.href=url;a.click();
     toast('Layout exported as PNG');
   }catch(err){
@@ -2359,9 +2356,29 @@ function frameNameFor(hex){
   const match=FRAMES.find(f=>f.hex.toLowerCase()===String(hex||'').toLowerCase());
   return match?match.name:(hex||'—');
 }
-function captureRoomSnapshot(){
+async function captureRoomSnapshot(){
+  const canvasEl=document.getElementById('app-canvas');
+  if(window.html2canvas){
+    try{
+      // Temporarily hide the canvas hint and selection handles so they
+      // don't appear in the exported image.
+      const hint=document.getElementById('canvas-hint');
+      const prevHint=hint&&hint.style.display;
+      if(hint)hint.style.display='none';
+      document.querySelectorAll('.el-wrap.sel').forEach(el=>el.classList.remove('sel'));
+      const rendered=await window.html2canvas(canvasEl,{
+        useCORS:true,logging:false,scale:2,
+        backgroundColor:'#E8E0D4'
+      });
+      if(hint)hint.style.display=prevHint||'';
+      return{dataUrl:rendered.toDataURL('image/jpeg',0.92),width:rendered.width/2,height:rendered.height/2};
+    }catch(e){
+      console.warn('html2canvas failed, falling back:',e);
+    }
+  }
+  // Fallback: photo only (no overlays)
   const c=document.createElement('canvas');
-  const r=document.getElementById('app-canvas').getBoundingClientRect();
+  const r=canvasEl.getBoundingClientRect();
   c.width=r.width;c.height=r.height;
   const ctx=c.getContext('2d');
   const bg=document.getElementById('photo-bg');
@@ -2370,7 +2387,7 @@ function captureRoomSnapshot(){
   }else{
     ctx.fillStyle='#E8E0D4';ctx.fillRect(0,0,c.width,c.height);
   }
-  return {dataUrl:c.toDataURL('image/jpeg',0.92),width:c.width,height:c.height};
+  return{dataUrl:c.toDataURL('image/jpeg',0.92),width:c.width,height:c.height};
 }
 async function exportSpecSheet(){
   if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF){
@@ -2402,7 +2419,7 @@ async function exportSpecSheet(){
     y+=24;
 
     // ── Room snapshot ──
-    const snap=captureRoomSnapshot();
+    const snap=await captureRoomSnapshot();
     const imgMaxW=pageW-margin*2;
     const imgMaxH=240;
     let imgW=imgMaxW,imgH=imgMaxW*(snap.height/snap.width);
@@ -2673,6 +2690,7 @@ window.addEventListener('resize',()=>{
      If this fails to load (offline, blocked CDN, etc.), exportSpecSheet()
      checks for it and shows a clear error instead of throwing. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
 <script>
 (function(){
   const wrap=document.getElementById('ba-wrap');
