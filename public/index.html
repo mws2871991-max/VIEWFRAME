@@ -954,6 +954,9 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
             <button class="el-btn" id="btn-window-tilt" onclick="setTool('window-tilt')" aria-pressed="false">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><polygon points="5,19 12,5 19,19"/></svg>Tilt-turn
             </button>
+            <button class="el-btn" id="btn-window-flush" onclick="setTool('window-flush')" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="6" width="12" height="12" rx="1"/></svg>Flush
+            </button>
           </div>
         </div>
         <div class="sb-sec">
@@ -1555,7 +1558,7 @@ const GLASSES=[
 ];
 const LABELS={
   'window-casement':'Casement','window-sash':'Sash','window-double':'Double',
-  'window-bay':'Bay','window-skylight':'Skylight','window-tilt':'Tilt-turn',
+  'window-bay':'Bay','window-skylight':'Skylight','window-tilt':'Tilt-turn','window-flush':'Flush',
   'door-single':'Single door','door-double':'Double door','door-bifold':'Bifold',
   'door-sliding':'Sliding','door-french':'French door','door-patio':'Patio'
 };
@@ -1658,6 +1661,13 @@ function makeSVG(el){
       holes.push({x:hx,y:hy,w:hw2,h:hh});ps+=gls(hx,hy,hw2,hh);
     }
     return svg(`${winFrame(holes)}${ps}`);
+  }
+  if(type==='window-flush'){
+    const gw=w-fw*2,gh=h-fw*2,rb=3; // rb = rebate inset
+    return svg(`${winFrame([{x:fw,y:fw,w:gw,h:gh}])}
+      ${gls(fw,fw,gw,gh)}
+      <rect x="${fw+rb}" y="${fw+rb}" width="${gw-rb*2}" height="${gh-rb*2}" fill="none" stroke="${fc}" stroke-width="1.5" rx="1"/>
+      <circle cx="${view==='outside'?w*.75:w*.25}" cy="${h/2}" r="2.5" fill="#bbb" stroke="#888" stroke-width=".5"/>`);
   }
   if(type==='window-tilt'){
     const gw=w-fw*2,gh=h-fw*2;
