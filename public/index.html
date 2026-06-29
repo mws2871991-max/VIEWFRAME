@@ -2245,9 +2245,15 @@ function loadPhoto(ev){
         showUploadError(`That image is too small (${probe.naturalWidth}×${probe.naturalHeight}px) to work with — try a higher-resolution photo.`);
         return;
       }
+      // Always convert to JPEG via canvas — handles HEIC, BMP, TIFF, and any
+      // format the browser can display but the API won't accept.
+      const cvt=document.createElement('canvas');
+      cvt.width=probe.naturalWidth;cvt.height=probe.naturalHeight;
+      cvt.getContext('2d').drawImage(probe,0,0);
+      const jpegDataUrl=cvt.toDataURL('image/jpeg',0.92);
       const bg=document.getElementById('photo-bg');
-      bg.src=e.target.result;bg.classList.add('show');
-      S.photoLoaded=true;S._photoB64=e.target.result.split(',')[1];S._photoMime=file.type||'image/jpeg';
+      bg.src=jpegDataUrl;bg.classList.add('show');
+      S.photoLoaded=true;S._photoB64=jpegDataUrl.split(',')[1];S._photoMime='image/jpeg';
       document.getElementById('canvas-hint').classList.add('hidden');
       const aiBtn=document.getElementById('ai-btn');
       aiBtn.style.display='flex';
