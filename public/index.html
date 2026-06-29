@@ -1598,131 +1598,132 @@ let _id=0;
 
 /* ── SVG FACTORY ── */
 function makeSVG(el){
-  const{w,h,fc,glass:g,type,view}=el;
-  const fw=3;
+  const{w,h,fc,glass:g,type,view,id='x'}=el;
+  const fw=5; // frame border width
+  const mid=`fm${id}`; // unique mask id per element
+
+  // For windows: use an SVG mask so only the frame border is filled with fc
+  // and the glass area is transparent — the DOM photo shows through.
+  function winFrame(holes){
+    // holes = array of {x,y,w,h} rects to cut out of the frame fill
+    const cuts=holes.map(r=>`<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="black"/>`).join('');
+    return`<defs><mask id="${mid}"><rect width="${w}" height="${h}" fill="white"/>${cuts}</mask></defs>
+      <rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" mask="url(#${mid})"/>`;
+  }
+
+  // Glass pane: semi-transparent over the photo showing through
   const gls=(x,y,gw,gh)=>`<rect x="${x}" y="${y}" width="${gw}" height="${gh}" fill="${g.fill}"/>
-    <rect x="${x+2}" y="${y+2}" width="${Math.max(6,gw*0.3)}" height="3" rx="1.5" fill="${g.shine}" opacity="0.8"/>
-    <rect x="${x}" y="${y}" width="${gw}" height="${gh}" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>`;
+    <rect x="${x+2}" y="${y+2}" width="${Math.max(6,gw*0.3)}" height="3" rx="1.5" fill="${g.shine}" opacity="0.8"/>`;
+
+  const svg=(body)=>`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
 
   if(type==='window-casement'){
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${gls(fw,fw,w-fw*2,h-fw*2)}
-      <line x1="${fw}" y1="${h/2}" x2="${w-fw}" y2="${h/2}" stroke="#aaa" stroke-width=".7"/>
-      <line x1="${w/2}" y1="${fw}" x2="${w/2}" y2="${h-fw}" stroke="#aaa" stroke-width=".7"/>
-      <circle cx="${view==='outside'?w*.7:w-fw-6}" cy="${h/2}" r="3" fill="#bbb" stroke="#888" stroke-width=".5"/>
-    </svg>`;
+    const gw=w-fw*2,gh=h-fw*2;
+    return svg(`${winFrame([{x:fw,y:fw,w:gw,h:gh}])}
+      ${gls(fw,fw,gw,gh)}
+      <line x1="${fw}" y1="${h/2}" x2="${w-fw}" y2="${h/2}" stroke="${fc}" stroke-width="2"/>
+      <line x1="${w/2}" y1="${fw}" x2="${w/2}" y2="${h-fw}" stroke="${fc}" stroke-width="2"/>
+      <circle cx="${view==='outside'?w*.7:w-fw-6}" cy="${h/2}" r="3" fill="#bbb" stroke="#888" stroke-width=".5"/>`);
   }
   if(type==='window-sash'){
-    const hw=h/2-fw;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${gls(fw,fw,w-fw*2,hw)}
-      ${gls(fw,h/2+fw/2,w-fw*2,hw-fw)}
-      <rect x="${fw}" y="${h/2-3}" width="${w-fw*2}" height="6" fill="${fc}" opacity=".8"/>
-    </svg>`;
+    const gw=w-fw*2,hw=h/2-fw;
+    return svg(`${winFrame([{x:fw,y:fw,w:gw,h:hw},{x:fw,y:h/2+fw/2,w:gw,h:hw-fw}])}
+      ${gls(fw,fw,gw,hw)}
+      ${gls(fw,h/2+fw/2,gw,hw-fw)}
+      <rect x="${fw}" y="${h/2-2}" width="${gw}" height="4" fill="${fc}"/>`);
   }
   if(type==='window-double'){
     const hw=(w-fw*3)/2;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+    return svg(`${winFrame([{x:fw,y:fw,w:hw,h:h-fw*2},{x:fw*2+hw,y:fw,w:hw,h:h-fw*2}])}
       ${gls(fw,fw,hw,h-fw*2)}
       ${gls(fw*2+hw,fw,hw,h-fw*2)}
-    </svg>`;
+      <line x1="${fw+hw+fw/2}" y1="${fw}" x2="${fw+hw+fw/2}" y2="${h-fw}" stroke="${fc}" stroke-width="${fw}"/>`);
   }
   if(type==='window-bay'){
     const seg=w/3,bh=Math.round(h*.75);
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x="0" y="${h-bh}" width="${seg+1}" height="${bh}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
+    return svg(`${winFrame([
+      {x:fw,y:h-bh+fw,w:seg-fw*2,h:bh-fw*2},
+      {x:seg+fw,y:fw,w:seg-fw*2,h:h-fw*2},
+      {x:seg*2+fw,y:h-bh+fw,w:seg-fw*2,h:bh-fw*2}
+    ])}
       ${gls(fw,h-bh+fw,seg-fw*2,bh-fw*2)}
-      <rect class="frame" x="${seg}" y="0" width="${seg}" height="${h}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
       ${gls(seg+fw,fw,seg-fw*2,h-fw*2)}
-      <rect class="frame" x="${seg*2-1}" y="${h-bh}" width="${seg+1}" height="${bh}" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${gls(seg*2+fw,h-bh+fw,seg-fw*2,bh-fw*2)}
-    </svg>`;
+      ${gls(seg*2+fw,h-bh+fw,seg-fw*2,bh-fw*2)}`);
   }
   if(type==='window-skylight'){
     const cols=3,rows=2,pw=(w-fw*2)/cols,ph=(h-fw*2)/rows;
-    let ps='';for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)ps+=gls(fw+c*pw+1,fw+r*ph+1,pw-2,ph-2);
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>${ps}
-    </svg>`;
+    const holes=[];let ps='';
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      const hx=fw+c*pw+1,hy=fw+r*ph+1,hw2=pw-2,hh=ph-2;
+      holes.push({x:hx,y:hy,w:hw2,h:hh});ps+=gls(hx,hy,hw2,hh);
+    }
+    return svg(`${winFrame(holes)}${ps}`);
   }
   if(type==='window-tilt'){
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${gls(fw,fw,w-fw*2,h-fw*2)}
-      <polygon points="${fw+4},${h-fw-4} ${w/2},${fw+8} ${w-fw-4},${h-fw-4}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="3 2"/>
-      <circle cx="${w/2}" cy="${h-fw-6}" r="3" fill="#bbb"/>
-    </svg>`;
+    const gw=w-fw*2,gh=h-fw*2;
+    return svg(`${winFrame([{x:fw,y:fw,w:gw,h:gh}])}
+      ${gls(fw,fw,gw,gh)}
+      <polygon points="${fw+4},${h-fw-4} ${w/2},${fw+8} ${w-fw-4},${h-fw-4}" fill="none" stroke="${fc}" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="${w/2}" cy="${h-fw-6}" r="3" fill="#bbb"/>`);
   }
+
+  // ── DOORS — solid panels, frame fill is correct ──
   if(type==='door-single'){
-    const sw=h*.82;const arc=view==='inside'
-      ?`<path d="M ${fw} ${h-fw} Q ${fw} ${h-fw-sw} ${fw+sw} ${h-fw-sw}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4 3"/>`
-      :`<path d="M ${w-fw} ${h-fw} Q ${w-fw} ${h-fw-sw} ${w-fw-sw} ${h-fw-sw}" fill="none" stroke="#aaa" stroke-width="1" stroke-dasharray="4 3"/>`;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      <rect x="${fw}" y="${fw}" width="${w-fw*2}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
-      <rect x="${fw+6}" y="${fw+8}" width="${w-fw*2-12}" height="${h*.28}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
+    const sw=h*.82;
+    const arc=view==='inside'
+      ?`<path d="M ${fw} ${h-fw} Q ${fw} ${h-fw-sw} ${fw+sw} ${h-fw-sw}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="4 3"/>`
+      :`<path d="M ${w-fw} ${h-fw} Q ${w-fw} ${h-fw-sw} ${w-fw-sw} ${h-fw-sw}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1" stroke-dasharray="4 3"/>`;
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      <rect x="${fw}" y="${fw}" width="${w-fw*2}" height="${h-fw}" fill="${fc}" stroke="rgba(0,0,0,0.15)" stroke-width="1" rx="1"/>
+      <rect x="${fw+6}" y="${fw+8}" width="${w-fw*2-12}" height="${h*.28}" rx="1" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
       ${arc}
-      <circle cx="${view==='inside'?w-fw-8:fw+8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
-    </svg>`;
+      <circle cx="${view==='inside'?w-fw-8:fw+8}" cy="${h*.55}" r="4" fill="rgba(255,255,255,0.5)" stroke="rgba(0,0,0,0.2)" stroke-width=".8"/>`);
   }
   if(type==='door-double'){
     const hw=(w-fw*3)/2;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
-      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="#999" stroke-width="1" rx="1"/>
-      <rect x="${fw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
-      <rect x="${fw*2+hw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="#ccc" stroke-width=".8"/>
-      <circle cx="${fw+hw-8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
-      <circle cx="${fw*2+hw+8}" cy="${h*.55}" r="4" fill="#bbb" stroke="#999" stroke-width=".8"/>
-    </svg>`;
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="rgba(0,0,0,0.15)" stroke-width="1" rx="1"/>
+      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw}" fill="${fc}" stroke="rgba(0,0,0,0.15)" stroke-width="1" rx="1"/>
+      <rect x="${fw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <rect x="${fw*2+hw+5}" y="${fw+8}" width="${hw-10}" height="${h*.26}" rx="1" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <circle cx="${fw+hw-8}" cy="${h*.55}" r="4" fill="rgba(255,255,255,0.5)" stroke="rgba(0,0,0,0.2)" stroke-width=".8"/>
+      <circle cx="${fw*2+hw+8}" cy="${h*.55}" r="4" fill="rgba(255,255,255,0.5)" stroke="rgba(0,0,0,0.2)" stroke-width=".8"/>`);
   }
   if(type==='door-bifold'){
     const qw=(w-fw*2)/4;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      ${[0,1,2,3].map(i=>`<rect x="${fw+i*qw+1}" y="${fw}" width="${qw-2}" height="${h-fw*2}" fill="${fc}" stroke="#aaa" stroke-width=".8" rx="1"/>`).join('')}
-      <line x1="${fw+qw}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="#bbb" stroke-width=".5" stroke-dasharray="3 2"/>
-      <line x1="${fw+qw*3}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="#bbb" stroke-width=".5" stroke-dasharray="3 2"/>
-    </svg>`;
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      ${[0,1,2,3].map(i=>`<rect x="${fw+i*qw+1}" y="${fw}" width="${qw-2}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.12)" stroke-width=".8" rx="1"/>`).join('')}
+      <line x1="${fw+qw}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="rgba(255,255,255,0.35)" stroke-width=".5" stroke-dasharray="3 2"/>
+      <line x1="${fw+qw*3}" y1="${fw}" x2="${fw+qw*2}" y2="${h-fw}" stroke="rgba(255,255,255,0.35)" stroke-width=".5" stroke-dasharray="3 2"/>`);
   }
   if(type==='door-sliding'){
     const hw=(w-fw*2)/2;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      <rect x="${fw}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1" opacity=".6"/>
-      <rect x="${fw+hw-4}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="#999" stroke-width="1.5" rx="1"/>
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      <rect x="${fw}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.1)" rx="1" opacity=".7"/>
+      <rect x="${fw+hw-4}" y="${fw}" width="${hw+4}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1.5" rx="1"/>
       ${gls(fw+hw,fw+4,hw-4,h-fw*2-8)}
-      <circle cx="${fw+hw-8}" cy="${h*.5}" r="3.5" fill="#bbb"/>
-    </svg>`;
+      <circle cx="${fw+hw-8}" cy="${h*.5}" r="3.5" fill="rgba(255,255,255,0.5)"/>`);
   }
   if(type==='door-french'){
     const hw=(w-fw*3)/2;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1"/>
-      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1"/>
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.15)" rx="1"/>
+      <rect x="${fw*2+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.15)" rx="1"/>
       ${gls(fw+4,fw+8,hw-8,h-fw*2-16)}
       ${gls(fw*2+hw+4,fw+8,hw-8,h-fw*2-16)}
-      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
-      <circle cx="${fw*2+hw+6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
-    </svg>`;
+      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="rgba(255,255,255,0.5)"/>
+      <circle cx="${fw*2+hw+6}" cy="${h*.5}" r="3.5" fill="rgba(255,255,255,0.5)"/>`);
   }
   if(type==='door-patio'){
     const hw=(w-fw*2)/2;
-    return`<svg class="el-svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-      <rect class="frame" x=".5" y=".5" width="${w-1}" height="${h-1}" rx="2" fill="${fc}" stroke="#888" stroke-width="1.5"/>
-      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" stroke-width="1.5" rx="1"/>
-      <rect x="${fw+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="#999" rx="1" opacity=".5"/>
+    return svg(`<rect class="frame" x="0" y="0" width="${w}" height="${h}" rx="2" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1"/>
+      <rect x="${fw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1.5" rx="1"/>
+      <rect x="${fw+hw}" y="${fw}" width="${hw}" height="${h-fw*2}" fill="${fc}" stroke="rgba(0,0,0,0.1)" rx="1" opacity=".6"/>
       ${gls(fw+4,fw+4,hw-8,h-fw*2-8)}
       ${gls(fw+hw+4,fw+4,hw-8,h-fw*2-8)}
-      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="#bbb"/>
-    </svg>`;
+      <circle cx="${fw+hw-6}" cy="${h*.5}" r="3.5" fill="rgba(255,255,255,0.5)"/>`);
   }
-  return`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect class="frame" width="${w}" height="${h}" fill="${fc}" stroke="#888" stroke-width="1.5" rx="2"/></svg>`;
+  return svg(`<rect class="frame" width="${w}" height="${h}" fill="${fc}" stroke="rgba(0,0,0,0.2)" stroke-width="1" rx="2"/>`);
 }
 
 /* ── TOOL ── */
