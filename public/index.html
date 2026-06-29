@@ -1228,7 +1228,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
             <span style="font-size:11px;background:rgba(42,122,107,0.25);color:#4DB898;padding:3px 10px;border-radius:100px;font-weight:600;">Included</span>
           </div>
         </div>
-        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">Trade plan from £39/month. No per-lead fees. Cancel anytime.</div>
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6;">Pay per qualified lead. No monthly fees. No contracts.</div>
       </div>
     </div>
   </div>
@@ -1438,7 +1438,6 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <li><a href="#faq">FAQ</a></li>
         <li><a href="mailto:hello@viewframe.co.uk">Contact us</a></li>
         <li><a href="mailto:hello@viewframe.co.uk?subject=Data Room Access">Data room</a></li>
-        <li><a href="https://www.linkedin.com/in/YOUR-LINKEDIN-HANDLE" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1451,7 +1450,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Viewframe · Founded by <a href="https://www.linkedin.com/in/YOUR-LINKEDIN-HANDLE" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(28,25,23,0.3);">Michael Stephenson</a> · viewframe.co.uk</span>
+    <span>© 2026 Viewframe · viewframe.co.uk</span>
     <div class="footer-social">
       <a href="https://instagram.com" aria-label="Viewframe on Instagram" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
@@ -2003,7 +2002,12 @@ function loadPhoto(ev){
     };
     probe.onerror=()=>{
       setUploadLoading(false);
-      showUploadError(`"${file.name}" couldn't be read as an image — it may be corrupted. Please try a different file.`);
+      const isHeic=/\.(heic|heif)$/i.test(file.name)||['image/heic','image/heif'].includes(file.type);
+      if(isHeic){
+        showUploadError('HEIC files aren\'t supported in this browser. On iPhone, share the photo → tap "Options" → choose "Most Compatible" to get a JPG instead.');
+      }else{
+        showUploadError(`"${file.name}" couldn't be read as an image — it may be corrupted. Please try a different file.`);
+      }
     };
     probe.src=e.target.result;
   };

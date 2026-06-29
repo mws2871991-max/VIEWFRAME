@@ -31,6 +31,10 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 // Serve index.html at root
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+// Legal pages (extensionless URLs)
+app.get('/privacy', (req, res) => res.sendFile(path.join(__dirname, 'public', 'privacy.html')));
+app.get('/terms',   (req, res) => res.sendFile(path.join(__dirname, 'public', 'terms.html')));
+app.get('/cookies', (req, res) => res.sendFile(path.join(__dirname, 'public', 'cookies.html')));
 
 // ── RATE LIMITS ───────────────────────────────────────────────────────────────
 const detectLimit = rateLimit({ windowMs: 60_000, max: 10, standardHeaders: true, legacyHeaders: false });
