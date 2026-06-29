@@ -479,6 +479,13 @@ section { padding: 100px 80px; }
 }
 .app-canvas img.photo-bg.show { display: block; }
 .app-canvas { touch-action: none; }
+/* Transform overlay */
+#transform-overlay { position:absolute; inset:0; z-index:20; display:none; flex-direction:column; align-items:center; justify-content:center; background:rgba(28,25,23,0.55); gap:12px; }
+#transform-overlay.show { display:flex; }
+#transform-overlay img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+#transform-overlay .tr-spinner { width:36px; height:36px; border:3px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:upload-spin 0.8s linear infinite; z-index:1; }
+#transform-overlay .tr-msg { font-size:13px; color:#fff; font-weight:600; z-index:1; text-shadow:0 1px 4px rgba(0,0,0,0.5); }
+#transform-overlay .tr-close { position:absolute; top:10px; right:10px; z-index:2; background:rgba(0,0,0,0.5); border:none; color:#fff; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
 .canvas-hint {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 10px; pointer-events: none;
@@ -1141,6 +1148,10 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         AI Detect
       </button>
+      <button class="app-tb-btn" onclick="runTransform()" id="transform-btn" title="AI-render your house with the selected window style and colour (takes ~20 seconds)" style="display:none">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        <span id="transform-label">Transform</span>
+      </button>
       <button class="app-tb-btn" onclick="toggleSnap()" id="snap-btn" aria-pressed="false">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         Snap
@@ -1259,6 +1270,12 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       <!-- CANVAS -->
       <div class="app-canvas" id="app-canvas" onclick="placeEl(event)" role="img" aria-label="Room canvas. This is a visual drawing surface — click anywhere to place the selected window or door. Use the Elements list in the right panel to review and select placed items by keyboard.">
         <img class="photo-bg" id="photo-bg" alt="Room background">
+        <div id="transform-overlay">
+          <div class="tr-spinner" id="tr-spinner"></div>
+          <div class="tr-msg" id="tr-msg">Rendering your transformation…</div>
+          <img id="tr-result" style="display:none" alt="AI transformed result">
+          <button class="tr-close" onclick="closeTransform()" title="Close">✕</button>
+        </div>
         <div class="drop-ov" id="drop-ov">
           <div class="drop-ov-inner">
             <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -2258,6 +2275,7 @@ function loadPhoto(ev){
       const aiBtn=document.getElementById('ai-btn');
       aiBtn.style.display='flex';
       aiBtn.classList.add('pulse-once');
+      document.getElementById('transform-btn').style.display='flex';
       toast('Photo loaded — click "AI Detect" above to find windows and doors automatically');
     };
     probe.onerror=()=>{
@@ -2579,6 +2597,45 @@ document.querySelectorAll('[data-gc]').forEach(slider=>{
     if(ph)ph.style.display='none';
   }
 });
+
+/* ── AI TRANSFORM ── */
+async function runTransform(){
+  if(!S.photoLoaded){toast('Upload a photo first');return;}
+  const btn=document.getElementById('transform-btn');
+  const lbl=document.getElementById('transform-label');
+  const ov=document.getElementById('transform-overlay');
+  const spinner=document.getElementById('tr-spinner');
+  const msg=document.getElementById('tr-msg');
+  const result=document.getElementById('tr-result');
+  btn.disabled=true;lbl.textContent='Transforming…';
+  ov.classList.add('show');
+  spinner.style.display='block';result.style.display='none';
+  msg.style.display='block';msg.textContent='Rendering your transformation… (~20 seconds)';
+  try{
+    const res=await fetch('/api/transform',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({image:S._photoB64,mimeType:'image/jpeg',style:S.tool,frameColour:S.fc})
+    });
+    const data=await res.json();
+    if(!res.ok||data.error)throw new Error(data.error||'Transform failed');
+    result.onload=()=>{spinner.style.display='none';msg.style.display='none';};
+    result.src=data.url;
+    result.style.display='block';
+    toast('Transformation ready — click ✕ to go back to editing');
+  }catch(err){
+    ov.classList.remove('show');
+    toast('Transform failed: '+err.message);
+  }finally{
+    btn.disabled=false;lbl.textContent='Transform';
+  }
+}
+function closeTransform(){
+  const ov=document.getElementById('transform-overlay');
+  const result=document.getElementById('tr-result');
+  ov.classList.remove('show');
+  result.src='';result.style.display='none';
+}
 
 async function exportPNG(){
   try{
