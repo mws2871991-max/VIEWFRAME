@@ -167,6 +167,19 @@ nav {
 }
 .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
+/* Hero trust bar */
+.hero-trust-bar {
+  display: flex; align-items: center; gap: 0;
+  background: var(--paper-2); border: 1px solid var(--rule);
+  border-radius: 14px; padding: 14px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 4px rgba(28,25,23,0.05);
+}
+.htb-stat { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.htb-n { font-family: var(--serif); font-size: 18px; font-weight: 500; color: var(--ink); line-height: 1.2; }
+.htb-l { font-size: 11px; color: var(--ink-3); font-weight: 500; }
+.htb-divider { width: 1px; height: 32px; background: var(--rule); margin: 0 16px; flex-shrink: 0; }
+
 /* Journey cards */
 .journey-card {
   display: flex; flex-direction: column; gap: 3px;
@@ -843,12 +856,30 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <!-- HERO -->
 <section class="hero" style="padding:0">
   <div class="hero-left">
-    <div class="eyebrow">✦ Buying windows shouldn't require imagination</div>
+    <div class="eyebrow">✦ Built for homeowners · trusted by UK installers</div>
     <h1 class="hero-h1">See your home with<br>new windows before<br>you <em>spend a penny</em></h1>
     <p class="hero-sub">Stop guessing how it'll look. Upload a photo, explore every style and colour, then connect with a trusted local installer — all in under a minute.</p>
 
+    <!-- Trust bar — update numbers as you grow -->
+    <div class="hero-trust-bar">
+      <div class="htb-stat">
+        <span class="htb-n">1,000+</span>
+        <span class="htb-l">Visualisations created</span>
+      </div>
+      <div class="htb-divider"></div>
+      <div class="htb-stat">
+        <span class="htb-n">England-wide</span>
+        <span class="htb-l">Installer coverage</span>
+      </div>
+      <div class="htb-divider"></div>
+      <div class="htb-stat">
+        <span class="htb-n">Free</span>
+        <span class="htb-l">For every homeowner</span>
+      </div>
+    </div>
+
     <!-- Journey cards -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
       <a href="#visualiser" class="journey-card journey-home">
         <div class="jc-icon">🏠</div>
         <div class="jc-label">I'm a Homeowner</div>
@@ -859,18 +890,6 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
         <div class="jc-label">I'm an Installer</div>
         <div class="jc-sub">Generate qualified leads</div>
       </a>
-    </div>
-
-    <!-- Trust signals -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Trusted by UK installers</span>
-      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Used across England</span>
-      <span class="trust-chip"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polyline points="2 8 6 12 14 4"/></svg>Free for homeowners, always</span>
-    </div>
-    <div class="hero-proof">
-      <div class="proof-stat"><div class="n">60s</div><div class="l">To first visualisation</div></div>
-      <div class="proof-stat"><div class="n">13</div><div class="l">Window & door styles</div></div>
-      <div class="proof-stat"><div class="n">£0</div><div class="l">For homeowners, always</div></div>
     </div>
   </div>
   <div class="hero-right">
