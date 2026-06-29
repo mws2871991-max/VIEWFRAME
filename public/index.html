@@ -243,6 +243,53 @@ nav {
 @media(max-width:900px){ .gallery-grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:600px){ .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; } .gallery-section { padding: 64px 0; } }
 
+/* ── ONBOARDING ── */
+#ob { position:fixed; inset:0; z-index:999; display:none; flex-direction:column; align-items:center; justify-content:center; background:rgba(20,18,16,0.92); backdrop-filter:blur(6px); }
+#ob.ob-show { display:flex; }
+#ob.ob-panel { background:transparent; pointer-events:none; justify-content:flex-end; backdrop-filter:none; }
+#ob-card { background:var(--paper); border-radius:24px; padding:48px 44px; max-width:500px; width:calc(100% - 40px); box-shadow:0 40px 100px rgba(0,0,0,0.45); position:relative; }
+#ob.ob-panel #ob-card { border-radius:24px 24px 0 0; max-width:100%; width:100%; pointer-events:all; padding:28px 40px 24px; box-shadow:0 -8px 40px rgba(0,0,0,0.15); border-top:1px solid var(--rule); }
+.ob-step { display:none; }
+.ob-step.ob-active { display:block; }
+/* Progress bar */
+.ob-prog { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+.ob-prog-track { flex:1; height:3px; background:var(--rule); border-radius:2px; overflow:hidden; }
+.ob-prog-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .4s ease; }
+.ob-prog-txt { font-size:12px; color:var(--ink-3); font-weight:600; white-space:nowrap; }
+/* Step 1 */
+.ob-upload-zone { display:flex; flex-direction:column; align-items:center; text-align:center; gap:16px; padding:16px 0; }
+.ob-upload-zone h2 { font-family:var(--serif); font-size:28px; font-weight:300; color:var(--ink); line-height:1.3; margin:0; }
+.ob-upload-zone p { font-size:15px; color:var(--ink-3); margin:0; line-height:1.6; }
+.ob-upload-icon { width:64px; height:64px; background:var(--paper-2); border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid var(--rule); }
+.ob-upload-icon svg { width:28px; height:28px; stroke:var(--ink-3); fill:none; stroke-width:1.5; stroke-linecap:round; }
+.ob-skip { display:block; text-align:center; margin-top:20px; font-size:12px; color:var(--ink-3); text-decoration:none; }
+.ob-skip:hover { color:var(--accent); }
+/* Step 2 */
+.ob-detect-wrap { display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px 0; text-align:center; }
+.ob-ring { width:72px; height:72px; border:3px solid var(--rule); border-top-color:var(--accent); border-radius:50%; animation:upload-spin 0.9s linear infinite; }
+.ob-detect-msg { font-size:18px; font-weight:600; color:var(--ink); min-height:28px; }
+.ob-detect-sub { font-size:13px; color:var(--ink-3); }
+/* Step 3 & 4 panel */
+#ob.ob-panel .ob-prog { margin-bottom:16px; }
+.ob-panel-q { font-family:var(--serif); font-size:20px; font-weight:300; color:var(--ink); margin:0 0 14px; }
+.ob-colour-row { display:flex; gap:10px; flex-wrap:wrap; }
+.ob-colour-tile { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; padding:6px 8px; border-radius:10px; border:2px solid transparent; transition:all .15s; }
+.ob-colour-tile:hover { background:var(--paper-2); }
+.ob-colour-tile.ob-sel { border-color:var(--accent); background:var(--accent-lt); }
+.ob-colour-swatch { width:36px; height:36px; border-radius:50%; border:1.5px solid rgba(0,0,0,0.12); flex-shrink:0; }
+.ob-colour-tile span { font-size:10px; color:var(--ink-3); font-weight:600; white-space:nowrap; }
+.ob-style-row { display:flex; gap:8px; flex-wrap:wrap; }
+.ob-style-card { display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 10px; border:1.5px solid var(--rule); border-radius:10px; cursor:pointer; background:var(--paper-2); transition:all .15s; min-width:70px; }
+.ob-style-card:hover { border-color:var(--accent); background:var(--accent-lt); }
+.ob-style-card.ob-sel { border-color:var(--accent); background:var(--accent-lt); }
+.ob-style-card svg { width:24px; height:24px; stroke:var(--ink-3); fill:none; stroke-width:1.5; stroke-linecap:round; }
+.ob-style-card.ob-sel svg { stroke:var(--accent); }
+.ob-style-card span { font-size:10px; font-weight:600; color:var(--ink-3); }
+.ob-style-card.ob-sel span { color:var(--accent); }
+.ob-done { margin-top:16px; text-align:center; animation:fadeInUp .4s ease; }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@media(max-width:600px){ #ob-card { padding:32px 20px; } #ob.ob-panel #ob-card { padding:20px 16px 16px; } .ob-panel-q { font-size:17px; } .ob-colour-swatch{width:30px;height:30px;} }
+
 /* Video section */
 .video-section { padding: 100px 0; background: var(--paper); }
 .video-wrap { max-width: 860px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(28,25,23,0.13); border: 1px solid var(--rule); background: var(--ink); }
@@ -2311,6 +2358,7 @@ function loadPhoto(ev){
       aiBtn.classList.add('pulse-once');
       document.getElementById('transform-btn').style.display='flex';
       toast('Photo loaded — click "AI Detect" above to find windows and doors automatically');
+      if(window._obPhotoCallback){window._obPhotoCallback();window._obPhotoCallback=null;}
     };
     probe.onerror=()=>{
       setUploadLoading(false);
@@ -3034,6 +3082,145 @@ window.addEventListener('resize',()=>{
     },w.delay+1000);
   });
 })();
+
+/* ── ONBOARDING ── */
+(()=>{
+  const OB_KEY='vf_ob2';
+  const DETECT_MSGS=['🧠 Finding windows...','Detecting frames...','Measuring openings...','Almost there...'];
+  let _obMsgTimer=null;
+
+  function obShow(){
+    const el=document.getElementById('ob');
+    el.classList.add('ob-show');
+    // Scroll page so visualiser is behind the panel for steps 3-4
+    document.getElementById('visualiser').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function obGoStep(n){
+    [1,2,3,4].forEach(i=>{
+      const s=document.getElementById('ob-s'+i);
+      if(s){s.classList.remove('ob-active');s.style.display='';}
+    });
+    const s=document.getElementById('ob-s'+n);
+    if(s){s.classList.add('ob-active');s.style.display='block';}
+    const ob=document.getElementById('ob');
+    if(n<=2){ob.classList.remove('ob-panel');}
+    else{ob.classList.add('ob-panel');}
+  }
+
+  window.obHandleFile=function(file){
+    if(!file)return;
+    // Feed the file into the existing loadPhoto pipeline
+    const dt=new DataTransfer();dt.items.add(file);
+    const inp=document.getElementById('photo-input');
+    inp.files=dt.files;
+    // Register callback for when photo finishes loading
+    window._obPhotoCallback=()=>{
+      obGoStep(2);
+      obStartDetectAnim();
+      runAI().then(()=>{
+        clearInterval(_obMsgTimer);
+        obBuildColours();
+        obGoStep(3);
+      }).catch(()=>{
+        clearInterval(_obMsgTimer);
+        obBuildColours();
+        obGoStep(3);
+      });
+    };
+    // Trigger the existing loadPhoto handler
+    inp.dispatchEvent(new Event('change'));
+  };
+
+  function obStartDetectAnim(){
+    let i=0;
+    const el=document.getElementById('ob-detect-msg');
+    if(el)el.textContent=DETECT_MSGS[0];
+    _obMsgTimer=setInterval(()=>{
+      i=(i+1)%DETECT_MSGS.length;
+      if(el)el.textContent=DETECT_MSGS[i];
+    },1800);
+  }
+
+  function obBuildColours(){
+    const row=document.getElementById('ob-colour-row');
+    if(!row||row.children.length)return;
+    FRAMES.forEach(c=>{
+      const t=document.createElement('div');
+      t.className='ob-colour-tile';
+      t.innerHTML=`<div class="ob-colour-swatch" style="background:${c.hex}${c.hex==='#FFFFFF'?';border-color:rgba(0,0,0,0.2)':''}"></div><span>${c.name}</span>`;
+      t.onclick=()=>{
+        document.querySelectorAll('.ob-colour-tile').forEach(x=>x.classList.remove('ob-sel'));
+        t.classList.add('ob-sel');
+        obSetColour(c.hex);
+        setTimeout(()=>{ obBuildStyles(); obGoStep(4); },500);
+      };
+      row.appendChild(t);
+    });
+  }
+
+  function obBuildStyles(){
+    const row=document.getElementById('ob-style-row');
+    if(!row||row.children.length)return;
+    const styles=[
+      {type:'window-casement',label:'Casement',svg:'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/>'},
+      {type:'window-sash',label:'Sash',svg:'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/>'},
+      {type:'window-flush',label:'Flush',svg:'<rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="6" width="12" height="12" rx="1"/>'},
+      {type:'window-double',label:'Double',svg:'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/>'},
+      {type:'window-bay',label:'Bay',svg:'<path d="M3 20 L6 4 L18 4 L21 20"/><line x1="6" y1="14" x2="18" y2="14"/>'},
+      {type:'window-tilt',label:'Tilt-turn',svg:'<rect x="3" y="3" width="18" height="18" rx="2"/><polygon points="5,19 12,5 19,19"/>'},
+    ];
+    styles.forEach(s=>{
+      const t=document.createElement('div');
+      t.className='ob-style-card';
+      t.innerHTML=`<svg viewBox="0 0 24 24">${s.svg}</svg><span>${s.label}</span>`;
+      t.onclick=()=>{
+        document.querySelectorAll('.ob-style-card').forEach(x=>x.classList.remove('ob-sel'));
+        t.classList.add('ob-sel');
+        obSetStyle(s.type);
+        document.getElementById('ob-done').style.display='block';
+      };
+      row.appendChild(t);
+    });
+  }
+
+  function obSetColour(hex){
+    S.fc=hex;
+    S.elements.forEach(el=>{el.fc=hex;});
+    updateAll();
+    // Sync sidebar swatch
+    document.querySelectorAll('.cswatch').forEach(sw=>{
+      const match=sw.style.background===hex||sw.title===FRAMES.find(f=>f.hex===hex)?.name;
+      sw.classList.toggle('active',!!match);
+    });
+  }
+
+  function obSetStyle(type){
+    S.tool=type;
+    S.elements.forEach(el=>{if(el.type.startsWith('window'))el.type=type;});
+    updateAll();
+    const btn=document.getElementById('btn-'+type);
+    if(btn){document.querySelectorAll('.el-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+  }
+
+  window.obSkip=function(e){if(e)e.preventDefault();obComplete();};
+
+  window.obComplete=function(){
+    localStorage.setItem(OB_KEY,'1');
+    const ob=document.getElementById('ob');
+    ob.style.transition='opacity .4s';ob.style.opacity='0';
+    setTimeout(()=>{ob.classList.remove('ob-show');ob.style.opacity='';ob.style.transition='';},400);
+    toast('Welcome to Viewframe — your design is ready to fine-tune');
+  };
+
+  // Init — show for new visitors only
+  document.addEventListener('DOMContentLoaded',()=>{
+    if(localStorage.getItem(OB_KEY))return;
+    obBuildColours(); // pre-build so colours are ready
+    obShow();
+    obGoStep(1);
+  });
+})();
 </script>
 
 <!-- jsPDF — used only by exportSpecSheet() for the PDF spec sheet export.
@@ -3084,5 +3271,54 @@ window.addEventListener('resize',()=>{
   window.addEventListener('touchend',()=>dragging=false);
 })();
 </script>
+<!-- ONBOARDING OVERLAY -->
+<div id="ob">
+  <div id="ob-card">
+
+    <!-- Step 1: Upload -->
+    <div id="ob-s1" class="ob-step ob-active">
+      <div class="ob-upload-zone">
+        <div class="ob-upload-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h2>Upload a photo of your home</h2>
+        <p>Exterior photo works best — we'll find the windows and doors automatically.</p>
+        <label class="btn btn-primary" style="cursor:pointer;font-size:15px;padding:13px 32px;margin-top:4px">
+          Choose a photo
+          <input type="file" id="ob-file" accept="image/*,.heic,.heif" style="display:none" onchange="obHandleFile(this.files[0])">
+        </label>
+      </div>
+      <a href="#" class="ob-skip" onclick="obSkip(event)">Advanced editor</a>
+    </div>
+
+    <!-- Step 2: Detecting -->
+    <div id="ob-s2" class="ob-step">
+      <div class="ob-detect-wrap">
+        <div class="ob-ring"></div>
+        <div class="ob-detect-msg" id="ob-detect-msg">🧠 Finding windows...</div>
+        <div class="ob-detect-sub">This takes a few seconds</div>
+      </div>
+    </div>
+
+    <!-- Step 3: Colour -->
+    <div id="ob-s3" class="ob-step">
+      <div class="ob-prog"><div class="ob-prog-track"><div class="ob-prog-fill" style="width:75%"></div></div><span class="ob-prog-txt">Step 3 of 4</span></div>
+      <p class="ob-panel-q">What colour are you thinking?</p>
+      <div class="ob-colour-row" id="ob-colour-row"></div>
+    </div>
+
+    <!-- Step 4: Style -->
+    <div id="ob-s4" class="ob-step">
+      <div class="ob-prog"><div class="ob-prog-track"><div class="ob-prog-fill" style="width:100%"></div></div><span class="ob-prog-txt">Step 4 of 4</span></div>
+      <p class="ob-panel-q">Which style suits your home?</p>
+      <div class="ob-style-row" id="ob-style-row"></div>
+      <div class="ob-done" id="ob-done" style="display:none">
+        <button class="btn btn-primary" onclick="obComplete()" style="font-size:15px;padding:13px 28px">Your design is ready — fine-tune it →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </body>
 </html>
