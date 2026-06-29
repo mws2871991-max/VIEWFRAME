@@ -25,6 +25,7 @@ async function sendNotification(subject, html) {
 }
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '20mb' }));
 
 // ── STATIC FILES ─────────────────────────────────────────────────────────────
