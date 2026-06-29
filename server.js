@@ -202,7 +202,9 @@ app.post('/api/transform', transformLimit, async (req, res) => {
     });
     if (!predRes.ok) {
       const err = await predRes.json().catch(() => ({}));
-      return res.status(502).json({ error: `Transformation failed (${predRes.status}).` });
+      const detail = err?.detail || err?.error || JSON.stringify(err);
+      console.error(`Replicate ${predRes.status}:`, detail);
+      return res.status(502).json({ error: `Transformation failed (${predRes.status}): ${detail}` });
     }
     const pred = await predRes.json();
     if (pred.status === 'succeeded' && pred.output) {
