@@ -2219,81 +2219,53 @@ function updateStats(){
 function updateAll(){updateDetector();updateElList();updateStats();}
 
 /* ── SHARE / EXPORT ──
- * showShare() POSTs the current layout to /api/share, which persists it
- * server-side (Vercel KV / Netlify Blobs / Cloudflare KV — see
- * /proxy-deploy for ready-to-use implementations of each) and returns a
- * short id. The resulting link is /?s=<id>, and loadSharedLayout() below
- * restores that layout for anyone who opens it. Until that endpoint is
- * deployed, this fails gracefully with a clear message rather than
- * fabricating a link that goes nowhere.
+ * Layout is encoded as base64 JSON directly in the URL (?s=BASE64).
+ * No backend required — links never expire and survive redeploys.
  */
-async function showShare(){
+function showShare(){
   document.getElementById('share-modal').classList.add('show');
   const codeRow=document.getElementById('share-code-row');
   const loadingRow=document.getElementById('share-loading');
   const errorRow=document.getElementById('share-error');
   const copyBtn=document.getElementById('copy-link-btn');
-  codeRow.style.display='none';errorRow.style.display='none';copyBtn.disabled=true;
+  codeRow.style.display='none';errorRow.style.display='none';loadingRow.style.display='none';copyBtn.disabled=true;
 
   if(!S.elements.length){
-    loadingRow.style.display='none';
     errorRow.textContent='Place at least one window or door before sharing.';
     errorRow.style.display='block';
     return;
   }
 
-  loadingRow.style.display='flex';
   try{
-    const res=await fetch('/api/share',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({elements:S.elements,view:S.view})
-    });
-    if(!res.ok){
-      let serverMsg='';
-      try{const e=await res.json();serverMsg=e.error||'';}catch{}
-      throw new Error('http_'+res.status+(serverMsg?(': '+serverMsg):''));
-    }
-    const data=await res.json();
-    loadingRow.style.display='none';
-    document.getElementById('share-id').textContent=data.id;
+    const payload=JSON.stringify({elements:S.elements,view:S.view});
+    const token=btoa(unescape(encodeURIComponent(payload)));
+    document.getElementById('share-id').textContent=token;
     codeRow.style.display='block';
     copyBtn.disabled=false;
   }catch(err){
-    loadingRow.style.display='none';
-    const isMissingBackend=err instanceof TypeError||/Failed to fetch|NetworkError|http_404/i.test(err.message||'');
-    errorRow.textContent=isMissingBackend
-      ? 'Shareable links need a backend deployed at /api/share — see /proxy-deploy for ready-to-use Vercel, Netlify, and Cloudflare versions. You can still download a PNG below.'
-      : 'Couldn\'t create a link right now — please try again, or download a PNG below.';
+    errorRow.textContent='Couldn\'t generate a link — please try again.';
     errorRow.style.display='block';
   }
 }
 function closeModal(){document.getElementById('share-modal').classList.remove('show');}
 function copyLink(){
-  const id=document.getElementById('share-id').textContent;
-  if(!id)return;
-  const txt=`${location.origin}/?s=${id}`;
+  const token=document.getElementById('share-id').textContent;
+  if(!token)return;
+  const txt=`${location.origin}/?s=${token}`;
   navigator.clipboard?.writeText(txt).catch(()=>{});
   toast('Link copied to clipboard');closeModal();
 }
 
 /* ── LOAD SHARED LAYOUT ──
- * If the page is opened with ?s=<id>, fetch that layout from /api/share
- * and rebuild the canvas from it instead of starting blank.
+ * ?s= token is base64-encoded JSON — decoded entirely client-side,
+ * no network request needed, links never expire.
  */
-async function loadSharedLayout(){
+function loadSharedLayout(){
   const params=new URLSearchParams(location.search);
-  const id=params.get('s');
-  if(!id)return;
-  toast('Loading shared layout…');
+  const token=params.get('s');
+  if(!token)return;
   try{
-    const res=await fetch('/api/share?id='+encodeURIComponent(id));
-    if(!res.ok){
-      let serverMsg='';
-      try{const e=await res.json();serverMsg=e.error||'';}catch{}
-      throw new Error(serverMsg||'Could not load this layout');
-    }
-    const data=await res.json();
+    const data=JSON.parse(decodeURIComponent(escape(atob(token))));
     if(!Array.isArray(data.elements)||!data.elements.length){
       toast('This shared layout has no elements to show');
       return;
@@ -2301,9 +2273,6 @@ async function loadSharedLayout(){
     S.elements=[];
     document.getElementById('el-layer').innerHTML='';
     data.elements.forEach(raw=>{
-      // re-assign fresh local ids to avoid collisions with anything already placed,
-      // and fall back to sane defaults for any missing/malformed fields so a
-      // corrupted shared record can't crash the page.
       const copy={
         id:++_id,
         type:LABELS[raw.type]?raw.type:'window-casement',
@@ -2319,14 +2288,13 @@ async function loadSharedLayout(){
       S.elements.push(copy);
       renderEl(copy);
     });
-    if(data.view){setView(data.view);}
+    if(data.view)setView(data.view);
     document.getElementById('canvas-hint').classList.add('hidden');
     updateAll();
     toast(`Loaded shared layout — ${data.elements.length} element${data.elements.length!==1?'s':''}`);
   }catch(err){
     console.error('Failed to load shared layout',err);
-    const isMissingBackend=err instanceof TypeError||/Failed to fetch|NetworkError/i.test(err.message||'');
-    toast(isMissingBackend?'Shared links need a backend — see /proxy-deploy':'Could not load this shared layout');
+    toast('Could not load this shared layout — the link may be invalid');
   }
 }
 document.addEventListener('DOMContentLoaded',loadSharedLayout);

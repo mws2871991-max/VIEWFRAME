@@ -90,7 +90,7 @@ app.post('/api/detect', detectLimit, async (req, res) => {
         model: 'claude-sonnet-4-6', max_tokens: 1024,
         messages: [{ role: 'user', content: [
           { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
-          { type: 'text', text: `Detect all windows and doors. Return ONLY a JSON array, no markdown. Each item: {"type":"window-casement"|"window-sash"|"window-double"|"window-bay"|"window-flush"|"window-tilt"|"door-single"|"door-double"|"door-bifold"|"door-sliding"|"door-french"|"door-patio","confidence":0.0-1.0,"x_pct":0-100,"y_pct":0-100,"w_pct":1-100,"h_pct":1-100}. Add a final item {"type":"analysis","summary":"2-3 sentence overview"}.` }
+          { type: 'text', text: `Detect all windows and doors. Return ONLY a JSON array, no markdown. Each item: {"type":"window-casement"|"window-sash"|"window-double"|"window-bay"|"window-skylight"|"window-flush"|"window-tilt"|"door-single"|"door-double"|"door-bifold"|"door-sliding"|"door-french"|"door-patio","confidence":0.0-1.0,"x_pct":0-100,"y_pct":0-100,"w_pct":1-100,"h_pct":1-100}. Use window-flush for modern flush-frame casements. Use window-skylight for roof/overhead glazing. Add a final item {"type":"analysis","summary":"2-3 sentence overview"}.` }
         ]}]
       })
     });
