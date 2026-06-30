@@ -243,6 +243,21 @@ nav {
 @media(max-width:900px){ .gallery-grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:600px){ .gallery-grid { grid-template-columns: 1fr; padding: 0 20px; } .gallery-section { padding: 64px 0; } }
 
+/* ── WHO SCREEN ── */
+#who { position:fixed; inset:0; z-index:1001; display:none; flex-direction:column; align-items:center; justify-content:center; background:rgba(20,18,16,0.97); backdrop-filter:blur(10px); padding:24px; }
+#who.who-show { display:flex; }
+.who-heading { font-family:var(--serif); font-size:clamp(26px,4vw,44px); font-weight:300; color:#fff; text-align:center; margin-bottom:10px; line-height:1.2; }
+.who-sub { font-size:16px; color:rgba(255,255,255,0.45); text-align:center; margin-bottom:52px; }
+.who-cards { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.who-card { display:flex; flex-direction:column; align-items:center; gap:14px; padding:40px 48px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.14); border-radius:24px; cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1); text-align:center; min-width:210px; }
+.who-card:hover { transform:translateY(-6px); box-shadow:0 24px 60px rgba(0,0,0,0.5); }
+.who-card.wc-home:hover { border-color:var(--accent); background:rgba(212,116,42,0.15); }
+.who-card.wc-trade:hover { border-color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.12); }
+.wc-icon { font-size:48px; line-height:1; }
+.wc-label { font-size:19px; font-weight:700; color:#fff; }
+.wc-sub { font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6; max-width:180px; }
+@media(max-width:520px){ .who-card { padding:28px 32px; min-width:140px; } .wc-icon { font-size:36px; } .wc-label { font-size:16px; } }
+
 /* ── ONBOARDING ── */
 #ob { position:fixed; inset:0; z-index:999; display:none; flex-direction:column; align-items:center; justify-content:center; background:rgba(20,18,16,0.92); backdrop-filter:blur(6px); }
 #ob.ob-show { display:flex; }
@@ -948,41 +963,15 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <!-- HERO -->
 <section class="hero" style="padding:0">
   <div class="hero-left">
-    <div class="eyebrow">✦ Built for homeowners · trusted by UK installers</div>
-    <h1 class="hero-h1">See your new windows<br>and doors before<br>you <em>spend a penny</em></h1>
-    <p class="hero-sub">Stop guessing how it'll look. Upload a photo, explore every style and colour, then connect with a trusted local installer — all in under a minute.</p>
-
-    <!-- Trust bar — update numbers as you grow -->
-    <div class="hero-trust-bar">
-      <div class="htb-stat">
-        <span class="htb-n">1,000+</span>
-        <span class="htb-l">Visualisations created</span>
-      </div>
-      <div class="htb-divider"></div>
-      <div class="htb-stat">
-        <span class="htb-n">England-wide</span>
-        <span class="htb-l">Installer coverage</span>
-      </div>
-      <div class="htb-divider"></div>
-      <div class="htb-stat">
-        <span class="htb-n">Free</span>
-        <span class="htb-l">For every homeowner</span>
-      </div>
-    </div>
-
-    <!-- Journey cards -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-      <a href="#visualiser" class="journey-card journey-home">
-        <div class="jc-icon">🏠</div>
-        <div class="jc-label">I'm a Homeowner</div>
-        <div class="jc-sub">Visualise windows & doors</div>
-      </a>
-      <a href="#installers" class="journey-card journey-trade">
-        <div class="jc-icon">🔧</div>
-        <div class="jc-label">I'm an Installer</div>
-        <div class="jc-sub">Generate qualified leads</div>
-      </a>
-    </div>
+    <div class="eyebrow">✦ Free for every homeowner</div>
+    <h1 class="hero-h1">Never wonder <em>"What if we'd chosen black frames?"</em> ever again.</h1>
+    <p class="hero-sub">Certainty before £10,000–£20,000. See your home with new windows and doors in under a minute.</p>
+    <label class="btn btn-primary btn-lg" style="cursor:pointer;max-width:340px;justify-content:center;">
+      Upload a photo of your home →
+      <input type="file" id="hero-file" accept="image/*,.heic,.heif" style="display:none" onchange="startJourney(this.files[0])">
+    </label>
+    <p style="margin-top:14px;font-size:12px;color:var(--ink-3);">No account needed · Free forever for homeowners</p>
+    <a href="#installers" style="display:inline-block;margin-top:28px;font-size:13px;color:var(--ink-3);font-weight:500;">For installers ↓</a>
   </div>
   <div class="hero-right">
     <div class="hero-ba-wrap" id="hero-ba-wrap">
@@ -3213,12 +3202,37 @@ window.addEventListener('resize',()=>{
     toast('Welcome to Viewframe — your design is ready to fine-tune');
   };
 
-  // Init — show for new visitors only
+  function whoFade(cb){
+    const who=document.getElementById('who');
+    who.style.transition='opacity .3s';who.style.opacity='0';
+    setTimeout(()=>{who.classList.remove('who-show');who.style.opacity='';who.style.transition='';if(cb)cb();},320);
+  }
+
+  window.whoChoose=function(type){
+    if(type==='installer'){
+      whoFade(()=>document.getElementById('installers').scrollIntoView({behavior:'smooth'}));
+    } else {
+      whoFade(()=>{obShow();obGoStep(1);});
+    }
+  };
+
+  window.startJourney=function(file){
+    if(localStorage.getItem(OB_KEY)){
+      // Returning user — load photo directly
+      if(file){const dt=new DataTransfer();dt.items.add(file);const inp=document.getElementById('photo-input');inp.files=dt.files;inp.dispatchEvent(new Event('change'));}
+    } else {
+      // First time — show onboarding, then handle the file
+      const who=document.getElementById('who');
+      if(who.classList.contains('who-show')){whoFade(()=>{obShow();obGoStep(1);if(file)obHandleFile(file);});}
+      else{obShow();obGoStep(1);if(file)obHandleFile(file);}
+    }
+  };
+
+  // Init — show who screen for new visitors
   document.addEventListener('DOMContentLoaded',()=>{
-    if(localStorage.getItem(OB_KEY))return;
-    obBuildColours(); // pre-build so colours are ready
-    obShow();
-    obGoStep(1);
+    if(localStorage.getItem(OB_KEY))return; // returning user who completed onboarding
+    obBuildColours();
+    document.getElementById('who').classList.add('who-show');
   });
 })();
 </script>
@@ -3271,6 +3285,24 @@ window.addEventListener('resize',()=>{
   window.addEventListener('touchend',()=>dragging=false);
 })();
 </script>
+<!-- WHO SCREEN -->
+<div id="who">
+  <p class="who-heading">Who are you?</p>
+  <p class="who-sub">We'll tailor the experience for you</p>
+  <div class="who-cards">
+    <button class="who-card wc-home" onclick="whoChoose('homeowner')">
+      <div class="wc-icon">🏠</div>
+      <div class="wc-label">I'm a Homeowner</div>
+      <div class="wc-sub">See your windows and doors before you buy them</div>
+    </button>
+    <button class="who-card wc-trade" onclick="whoChoose('installer')">
+      <div class="wc-icon">🔧</div>
+      <div class="wc-label">I'm an Installer</div>
+      <div class="wc-sub">Generate qualified leads from homeowners near you</div>
+    </button>
+  </div>
+</div>
+
 <!-- ONBOARDING OVERLAY -->
 <div id="ob">
   <div id="ob-card">
