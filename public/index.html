@@ -141,14 +141,49 @@ nav {
 .hero {
   min-height: 100vh;
   padding-top: var(--nav-h);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 60px;
 }
 .hero-left {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 80px 60px 80px 80px;
+  display: flex; flex-direction: column; align-items: center;
+  max-width: 640px; width: 100%;
 }
+/* Upload drop zone */
+.hero-drop {
+  width: 100%; max-width: 520px;
+  border: 2px dashed var(--rule-md);
+  border-radius: 24px;
+  background: var(--paper-2);
+  padding: 52px 32px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+  margin: 32px 0 16px;
+}
+.hero-drop:hover, .hero-drop.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-lt);
+  box-shadow: 0 8px 40px rgba(212,116,42,0.12);
+}
+.hero-drop-icon { font-size: 40px; line-height: 1; }
+.hero-drop-label { font-size: 17px; font-weight: 600; color: var(--ink); }
+.hero-drop-sub { font-size: 13px; color: var(--ink-3); }
+.hero-drop .hero-choose {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--accent); color: #fff;
+  padding: 11px 28px; border-radius: 100px;
+  font-size: 14px; font-weight: 700;
+  box-shadow: 0 2px 12px rgba(212,116,42,0.35);
+  margin-top: 4px; transition: all .18s;
+}
+.hero-drop:hover .hero-choose { background: var(--accent-dk); }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
@@ -958,35 +993,28 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   </div>
   <div class="nav-cta">
     <a href="#installers" style="font-size:14px;font-weight:500;color:var(--ink-3);margin-right:8px;">For installers →</a>
-    <a href="#visualiser" class="btn btn-primary">Try free →</a>
+    <label class="btn btn-primary" style="cursor:pointer;">Upload a photo →<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="startJourney(this.files[0])"></label>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero" style="padding:0">
+<section class="hero" style="padding-top:var(--nav-h)">
   <div class="hero-left">
     <div class="eyebrow">✦ Free for every homeowner</div>
     <h1 class="hero-h1">Never wonder <em>"What if we'd chosen black frames?"</em> ever again.</h1>
-    <p class="hero-sub">Certainty before £10,000–£20,000. See your home with new windows and doors in under a minute.</p>
-    <label class="btn btn-primary btn-lg" style="cursor:pointer;max-width:340px;justify-content:center;">
-      Upload a photo of your home →
+    <p class="hero-sub" style="max-width:480px;">Certainty before £10,000–£20,000. See your home with new windows in under a minute.</p>
+
+    <!-- Upload drop zone — this IS the CTA -->
+    <label class="hero-drop" id="hero-drop">
       <input type="file" id="hero-file" accept="image/*,.heic,.heif" style="display:none" onchange="startJourney(this.files[0])">
+      <div class="hero-drop-icon">📷</div>
+      <div class="hero-drop-label">Upload a photo of your home</div>
+      <div class="hero-drop-sub">Drag it here, or</div>
+      <span class="hero-choose">Choose photo</span>
     </label>
-    <p style="margin-top:14px;font-size:12px;color:var(--ink-3);">No account needed · Free forever for homeowners</p>
-    <a href="#installers" style="display:inline-block;margin-top:28px;font-size:13px;color:var(--ink-3);font-weight:500;">For installers ↓</a>
+    <p style="font-size:12px;color:var(--ink-3);">No account needed · Free forever for homeowners</p>
   </div>
-  <div class="hero-right">
-    <div class="hero-ba-wrap" id="hero-ba-wrap">
-      <img src="hero-after.jpg" alt="After — anthracite windows">
-      <img src="hero-before.jpg" class="hba-before" id="hba-before" alt="Before — original windows">
-      <div class="hero-ba-handle" id="hba-handle">
-        <div class="hero-ba-circle">
-          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/><polyline points="9 6 3 12 9 18" transform="translate(12,0)"/></svg>
-        </div>
-      </div>
-      <span class="hba-lbl" style="left:16px">BEFORE</span>
-      <span class="hba-lbl" style="right:16px">AFTER</span>
-    </div>
+  <div style="display:none" id="hero-right-hidden">
   </div>
 </section>
 
@@ -1199,7 +1227,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   </div>
   <div class="gallery-cta">
     <p>Want to see your home here? It takes under a minute.</p>
-    <a href="#visualiser" class="btn btn-primary">Try it free →</a>
+    <label class="btn btn-primary" style="cursor:pointer;">Upload your photo →<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="startJourney(this.files[0])"></label>
   </div>
 </section>
 
@@ -1730,7 +1758,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
   <h2 class="section-h2">See it. Decide with confidence.<br>Then buy.</h2>
   <p class="section-sub">Free for every homeowner. No account. No guesswork. Upload your first photo in under a minute.</p>
   <div class="cta-btns">
-    <a href="#visualiser" class="btn btn-primary btn-lg">Start visualising free</a>
+    <label class="btn btn-primary btn-lg" style="cursor:pointer;">Upload a photo of your home →<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="startJourney(this.files[0])"></label>
     <a href="#installers" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8)">For installers →</a>
   </div>
 </section>
@@ -3248,6 +3276,19 @@ window.addEventListener('resize',()=>{
       whoFade(()=>{obShow();obGoStep(1);});
     }
   };
+
+  // Drag-and-drop on hero zone
+  document.addEventListener('DOMContentLoaded',()=>{
+    const drop=document.getElementById('hero-drop');
+    if(!drop)return;
+    drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag-over');});
+    drop.addEventListener('dragleave',()=>drop.classList.remove('drag-over'));
+    drop.addEventListener('drop',e=>{
+      e.preventDefault();drop.classList.remove('drag-over');
+      const f=e.dataTransfer.files[0];
+      if(f&&f.type.startsWith('image/'))startJourney(f);
+    });
+  });
 
   window.startJourney=function(file){
     if(localStorage.getItem(OB_KEY)){
