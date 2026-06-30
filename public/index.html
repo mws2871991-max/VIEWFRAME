@@ -956,13 +956,8 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     </div>
     Viewframe
   </div>
-  <div class="nav-links">
-    <a href="#features">Homeowners</a>
-    <a href="#installers">Installers</a>
-    <a href="#features">Features</a>
-    <a href="#faq">FAQ</a>
-  </div>
   <div class="nav-cta">
+    <a href="#installers" style="font-size:14px;font-weight:500;color:var(--ink-3);margin-right:8px;">For installers →</a>
     <a href="#visualiser" class="btn btn-primary">Try free →</a>
   </div>
 </nav>
@@ -3266,11 +3261,9 @@ window.addEventListener('resize',()=>{
     }
   };
 
-  // Init — show who screen for new visitors
+  // Init — pre-build onboarding for when visitor uploads
   document.addEventListener('DOMContentLoaded',()=>{
-    if(localStorage.getItem(OB_KEY))return; // returning user who completed onboarding
     obBuildColours();
-    document.getElementById('who').classList.add('who-show');
   });
 })();
 </script>
