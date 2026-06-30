@@ -264,6 +264,41 @@ app.post('/api/quote-request', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── POST /api/lead ────────────────────────────────────────────────────────────
+// Rich lead from onboarding: includes chosen colour, style, and element count
+app.post('/api/lead', (req, res) => {
+  const { name, email, postcode, phone, colour, style, elements } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required.' });
+  }
+  if (!postcode || typeof postcode !== 'string' || postcode.trim().length < 3) {
+    return res.status(400).json({ error: 'Postcode required.' });
+  }
+  const pc = postcode.trim().toUpperCase().slice(0, 10);
+  appendLog('leads.jsonl', {
+    ts: new Date().toISOString(),
+    name: (name || '').slice(0, 100),
+    email,
+    postcode: pc,
+    phone: (phone || '').slice(0, 20),
+    colour: (colour || '').slice(0, 50),
+    style: (style || '').slice(0, 50),
+    elements: elements || 0
+  });
+  sendNotification(
+    `🏠 New lead — ${pc} — ${colour || '?'} ${style || '?'}`,
+    `<p><strong>Name:</strong> ${name || 'Not given'}<br>
+     <strong>Email:</strong> ${email}<br>
+     <strong>Postcode:</strong> ${pc}<br>
+     <strong>Phone:</strong> ${phone || 'Not given'}<br>
+     <strong>Frame colour:</strong> ${colour || 'Not set'}<br>
+     <strong>Window style:</strong> ${style || 'Not set'}<br>
+     <strong>Elements placed:</strong> ${elements || 0}</p>
+     <p>This homeowner designed their windows before requesting a quote.</p>`
+  );
+  res.json({ ok: true });
+});
+
 // ── POST /api/contact ─────────────────────────────────────────────────────────
 app.post('/api/contact', (req, res) => {
   const { name, email, role, message } = req.body || {};

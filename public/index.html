@@ -287,6 +287,13 @@ nav {
 /* Step 3 & 4 panel */
 #ob.ob-panel .ob-prog { margin-bottom:16px; }
 .ob-panel-q { font-family:var(--serif); font-size:20px; font-weight:300; color:var(--ink); margin:0 0 14px; }
+/* Step 5 lead form */
+.ob-input { width:100%; padding:11px 14px; border:1.5px solid var(--rule-md); border-radius:var(--r-lg); font-family:var(--sans); font-size:14px; background:var(--paper-2); color:var(--ink); outline:none; transition:border-color .15s; }
+.ob-input:focus { border-color:var(--accent); }
+.ob-s5-head { font-family:var(--serif); font-size:26px; font-weight:300; color:var(--ink); line-height:1.3; margin:0 0 8px; }
+.ob-s5-sub { font-size:14px; color:var(--ink-3); margin:0 0 20px; line-height:1.6; }
+.ob-s5-spec { display:inline-flex; align-items:center; gap:8px; background:var(--accent-lt); border:1px solid rgba(212,116,42,0.2); border-radius:100px; padding:5px 14px; font-size:12px; font-weight:700; color:var(--accent); margin-bottom:20px; }
+@media(max-width:520px){ .ob-s5-head { font-size:21px; } }
 .ob-colour-row { display:flex; gap:10px; flex-wrap:wrap; }
 .ob-colour-tile { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; padding:6px 8px; border-radius:10px; border:2px solid transparent; transition:all .15s; }
 .ob-colour-tile:hover { background:var(--paper-2); }
@@ -3082,15 +3089,24 @@ window.addEventListener('resize',()=>{
   }
 
   function obGoStep(n){
-    [1,2,3,4].forEach(i=>{
+    [1,2,3,4,5].forEach(i=>{
       const s=document.getElementById('ob-s'+i);
       if(s){s.classList.remove('ob-active');s.style.display='';}
     });
     const s=document.getElementById('ob-s'+n);
     if(s){s.classList.add('ob-active');s.style.display='block';}
     const ob=document.getElementById('ob');
-    if(n<=2){ob.classList.remove('ob-panel');}
+    if(n<=2||n===5){ob.classList.remove('ob-panel');}
     else{ob.classList.add('ob-panel');}
+    if(n===5){
+      // Update spec chip with chosen colour + style
+      const colourLabels={'#FFFFFF':'White','#F5F0E8':'Cream','#C8A97A':'Oak','#4A4A4A':'Anthracite','#8B6853':'Brown','#2C3E50':'Dark Blue','#1A1A1A':'Black','#7A9E7E':'Sage'};
+      const styleLabels={'window-casement':'Casement','window-sash':'Sash','window-double':'Double','window-bay':'Bay','window-flush':'Flush','window-tilt':'Tilt-turn','door-single':'Single Door','door-double':'Double Door','door-bifold':'Bifold','door-sliding':'Sliding','door-french':'French Doors','door-patio':'Patio'};
+      const col=colourLabels[S.fc]||'Anthracite';
+      const sty=styleLabels[S.tool]||'Casement';
+      const chip=document.getElementById('ob-s5-spec');
+      if(chip)chip.textContent=`${col} · ${sty}`;
+    }
   }
 
   window.obHandleFile=function(file){
@@ -3187,6 +3203,32 @@ window.addEventListener('resize',()=>{
     const btn=document.getElementById('btn-'+type);
     if(btn){document.querySelectorAll('.el-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
   }
+
+  window.obSubmitLead=async function(){
+    const email=document.getElementById('ob-email').value.trim();
+    const postcode=document.getElementById('ob-postcode').value.trim();
+    const name=document.getElementById('ob-name').value.trim();
+    const phone=document.getElementById('ob-phone').value.trim();
+    const err=document.getElementById('ob-lead-err');
+    err.style.display='none';
+    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='Please enter a valid email address.';err.style.display='block';return;}
+    if(!postcode){err.textContent='Please enter your postcode so we can match a local installer.';err.style.display='block';return;}
+    const btn=document.getElementById('ob-lead-btn');
+    btn.disabled=true;btn.textContent='Sending…';
+    const colourLabels={'#FFFFFF':'White','#F5F0E8':'Cream','#C8A97A':'Oak','#4A4A4A':'Anthracite','#8B6853':'Brown','#2C3E50':'Dark Blue','#1A1A1A':'Black','#7A9E7E':'Sage'};
+    const styleLabels={'window-casement':'Casement','window-sash':'Sash','window-double':'Double','window-bay':'Bay','window-flush':'Flush','window-tilt':'Tilt-turn','door-single':'Single Door','door-double':'Double Door','door-bifold':'Bifold','door-sliding':'Sliding','door-french':'French Doors','door-patio':'Patio'};
+    try{
+      const res=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name,email,postcode,phone,colour:colourLabels[S.fc]||S.fc,style:styleLabels[S.tool]||S.tool,elements:S.elements.length})});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error||'Failed');
+      document.getElementById('ob-lead-form').style.display='none';
+      document.getElementById('ob-lead-success').style.display='block';
+    }catch(e){
+      err.textContent='Something went wrong — please try again.';err.style.display='block';
+      btn.disabled=false;btn.textContent='Get my free quote →';
+    }
+  };
 
   window.obSkip=function(e){if(e)e.preventDefault();obComplete();};
 
@@ -3341,8 +3383,34 @@ window.addEventListener('resize',()=>{
       <p class="ob-panel-q">Which style suits your home?</p>
       <div class="ob-style-row" id="ob-style-row"></div>
       <div class="ob-done" id="ob-done" style="display:none">
-        <button class="btn btn-primary" onclick="obComplete()" style="font-size:15px;padding:13px 28px">Your design is ready — fine-tune it →</button>
+        <button class="btn btn-primary" onclick="obGoStep(5)" style="font-size:15px;padding:13px 28px">Love it? Get a free local quote →</button>
       </div>
+    </div>
+
+    <!-- Step 5: Lead capture -->
+    <div id="ob-s5" class="ob-step">
+      <h2 class="ob-s5-head">Get a quote from a trusted local installer.</h2>
+      <p class="ob-s5-sub">We'll email your design and match you with an installer in your area — free, no obligation.</p>
+      <div class="ob-s5-spec" id="ob-s5-spec">⬛ Anthracite · Casement</div>
+      <div id="ob-lead-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <input id="ob-name" type="text" placeholder="Your name" autocomplete="name" class="ob-input">
+          <input id="ob-email" type="email" placeholder="Email address *" autocomplete="email" class="ob-input">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+          <input id="ob-postcode" type="text" placeholder="Postcode *" autocomplete="postal-code" class="ob-input">
+          <input id="ob-phone" type="tel" placeholder="Phone (optional)" autocomplete="tel" class="ob-input">
+        </div>
+        <div id="ob-lead-err" style="display:none;font-size:12px;color:var(--danger);padding:8px 12px;background:var(--danger-lt);border-radius:var(--r);margin-bottom:10px;"></div>
+        <button onclick="obSubmitLead()" id="ob-lead-btn" class="btn btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:13px 28px;">Get my free quote →</button>
+      </div>
+      <div id="ob-lead-success" style="display:none;text-align:center;padding:8px 0 4px;">
+        <div style="font-size:44px;margin-bottom:12px;">✓</div>
+        <p style="font-weight:700;font-size:17px;margin-bottom:6px;">Request sent!</p>
+        <p style="font-size:13px;color:var(--ink-3);margin-bottom:20px;line-height:1.6;">A local installer will be in touch within one working day with a quote based on your design.</p>
+        <button class="btn btn-primary" onclick="obComplete()" style="font-size:15px;padding:13px 28px;">Fine-tune my design →</button>
+      </div>
+      <a href="#" class="ob-skip" onclick="obSkip(event)" style="margin-top:16px;">Skip — just take me to the editor</a>
     </div>
 
   </div>
