@@ -1047,31 +1047,120 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <div class="section-label">See it in action</div>
     <h2 class="section-h2">30 seconds.<br>That's all it takes.</h2>
     <p class="section-sub" style="margin:0 auto 40px;">Upload a photo, detect your windows, pick a style and colour. Watch the whole thing here.</p>
-    <div class="video-wrap" id="video-wrap">
-      <!-- PLACEHOLDER — replace with real video once recorded -->
-      <div class="video-placeholder" id="video-placeholder">
-        <div class="vp-inner">
-          <div class="vp-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg>
-          </div>
-          <div class="vp-steps">
-            <span>Upload photo</span>
-            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>AI detects</span>
-            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>Pick colour</span>
-            <svg viewBox="0 0 24 24" width="14" height="14"><polyline points="9 18 15 12 9 6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-            <span>See result</span>
-          </div>
-          <p class="vp-note">Video coming soon — <a href="#visualiser">try it live instead →</a></p>
+    <div class="video-wrap" id="video-wrap" style="background:transparent;box-shadow:none;border:none;border-radius:0;">
+      <div id="auto-demo" style="position:relative;width:100%;aspect-ratio:16/9;border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(28,25,23,0.13);border:1px solid var(--rule);">
+
+        <!-- Base: before image -->
+        <img id="ad-before" src="hero-before.jpg" alt="Before — original windows"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+
+        <!-- After image (revealed by clip-path) -->
+        <img id="ad-after" src="hero-after.jpg" alt="After — new windows"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;clip-path:inset(0 100% 0 0);transition:clip-path 1.2s ease-in-out;">
+
+        <!-- Scan overlay -->
+        <div id="ad-scan" style="position:absolute;inset:0;background:rgba(28,25,23,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;transition:opacity 0.4s;pointer-events:none;">
+          <div style="width:60%;height:2px;border-radius:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:ad-scanline 1.2s ease-in-out infinite;" id="ad-scanline"></div>
+          <p style="color:#fff;font-size:15px;font-weight:600;margin:0;">Detecting windows &amp; doors…</p>
+          <p style="color:rgba(255,255,255,0.5);font-size:12px;margin:0;">AI scanning your home</p>
         </div>
+
+        <!-- Detection boxes (positioned as % of container) -->
+        <div id="ad-boxes" style="position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 0.4s;">
+          <div style="position:absolute;top:18%;left:11%;width:17%;height:28%;border:2px solid var(--accent);border-radius:4px;background:rgba(212,116,42,0.12);">
+            <span style="position:absolute;top:-20px;left:0;font-size:10px;font-weight:700;color:#fff;background:var(--accent);padding:2px 8px;border-radius:4px 4px 0 0;">Window</span>
+          </div>
+          <div style="position:absolute;top:18%;left:33%;width:17%;height:28%;border:2px solid var(--accent);border-radius:4px;background:rgba(212,116,42,0.12);">
+            <span style="position:absolute;top:-20px;left:0;font-size:10px;font-weight:700;color:#fff;background:var(--accent);padding:2px 8px;border-radius:4px 4px 0 0;">Window</span>
+          </div>
+          <div style="position:absolute;top:18%;left:55%;width:17%;height:28%;border:2px solid var(--accent);border-radius:4px;background:rgba(212,116,42,0.12);">
+            <span style="position:absolute;top:-20px;left:0;font-size:10px;font-weight:700;color:#fff;background:var(--accent);padding:2px 8px;border-radius:4px 4px 0 0;">Window</span>
+          </div>
+          <div style="position:absolute;top:48%;left:38%;width:14%;height:35%;border:2px solid #2A7A6B;border-radius:4px;background:rgba(42,122,107,0.12);">
+            <span style="position:absolute;top:-20px;left:0;font-size:10px;font-weight:700;color:#fff;background:#2A7A6B;padding:2px 8px;border-radius:4px 4px 0 0;">Door</span>
+          </div>
+          <div style="position:absolute;top:8px;right:12px;background:rgba(212,116,42,0.9);color:#fff;font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px;">4 openings detected</div>
+        </div>
+
+        <!-- Colour selection overlay -->
+        <div id="ad-colour" style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:28px;opacity:0;transition:opacity 0.4s;pointer-events:none;">
+          <div style="background:rgba(28,25,23,0.82);backdrop-filter:blur(8px);border-radius:16px;padding:16px 24px;display:flex;align-items:center;gap:16px;">
+            <span style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);">Frame colour</span>
+            <div style="display:flex;gap:8px;">
+              <div style="width:26px;height:26px;border-radius:50%;background:#2C2C2C;border:2px solid var(--accent);box-shadow:0 0 0 2px rgba(212,116,42,0.4);"></div>
+              <div style="width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid rgba(255,255,255,0.2);"></div>
+              <div style="width:26px;height:26px;border-radius:50%;background:#8B7355;border:2px solid rgba(255,255,255,0.2);"></div>
+              <div style="width:26px;height:26px;border-radius:50%;background:#1a4a2e;border:2px solid rgba(255,255,255,0.2);"></div>
+            </div>
+            <span style="font-size:12px;color:var(--accent);font-weight:700;">Anthracite Grey ✓</span>
+          </div>
+        </div>
+
+        <!-- Before/after label strip -->
+        <div id="ad-labels" style="position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:space-between;padding:0 16px;opacity:0;transition:opacity 0.5s;pointer-events:none;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#fff;background:rgba(0,0,0,0.5);padding:4px 10px;border-radius:100px;">BEFORE</span>
+          <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;color:#fff;background:rgba(212,116,42,0.75);padding:4px 10px;border-radius:100px;">AFTER — ANTHRACITE GREY</span>
+        </div>
+
+        <!-- Step indicator -->
+        <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;" id="ad-steps">
+          <div class="ad-dot" style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:1;transition:opacity 0.3s;"></div>
+          <div class="ad-dot" style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:0.3;transition:opacity 0.3s;"></div>
+          <div class="ad-dot" style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:0.3;transition:opacity 0.3s;"></div>
+          <div class="ad-dot" style="width:6px;height:6px;border-radius:50%;background:#fff;opacity:0.3;transition:opacity 0.3s;"></div>
+        </div>
+
       </div>
-      <!-- When you have a video, replace the placeholder div above with:
-           <video autoplay muted loop playsinline poster="video-poster.jpg">
-             <source src="explainer.mp4" type="video/mp4">
-           </video>
-      -->
+      <p style="margin-top:16px;font-size:13px;color:var(--ink-3);">This is what every homeowner sees — in under 30 seconds. <a href="#visualiser" style="color:var(--accent);font-weight:600;">Try it on your own home →</a></p>
     </div>
+
+    <style>
+      @keyframes ad-scanline { 0%{transform:translateY(-50px)} 100%{transform:translateY(50px)} }
+    </style>
+
+    <script>
+    (function(){
+      const scan = document.getElementById('ad-scan');
+      const boxes = document.getElementById('ad-boxes');
+      const colour = document.getElementById('ad-colour');
+      const after = document.getElementById('ad-after');
+      const labels = document.getElementById('ad-labels');
+      const dots = document.querySelectorAll('.ad-dot');
+
+      function setDot(i){ dots.forEach((d,j)=>d.style.opacity=j===i?'1':'0.3'); }
+
+      function show(el){ el.style.opacity='1'; }
+      function hide(el){ el.style.opacity='0'; }
+
+      function runDemo(){
+        // Phase 1: show house photo (already visible)
+        setDot(0);
+        after.style.clipPath='inset(0 100% 0 0)';
+        hide(scan); hide(boxes); hide(colour); hide(labels);
+
+        // Phase 2: scan
+        setTimeout(()=>{ setDot(1); show(scan); }, 1800);
+
+        // Phase 3: detection boxes
+        setTimeout(()=>{ setDot(2); hide(scan); show(boxes); }, 4200);
+
+        // Phase 4: colour picker
+        setTimeout(()=>{ show(colour); }, 6000);
+
+        // Phase 5: reveal after
+        setTimeout(()=>{ setDot(3); hide(boxes); hide(colour); after.style.clipPath='inset(0 0% 0 0)'; show(labels); }, 7800);
+
+        // Loop
+        setTimeout(runDemo, 12000);
+      }
+
+      // Start when in viewport
+      const obs = new IntersectionObserver(entries=>{
+        if(entries[0].isIntersecting){ obs.disconnect(); setTimeout(runDemo, 600); }
+      }, {threshold:0.3});
+      obs.observe(document.getElementById('auto-demo'));
+    })();
+    </script>
   </div>
 </section>
 
@@ -1132,19 +1221,97 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
     <!-- Card 2 -->
     <div class="gallery-card">
       <div class="gallery-card-slider" data-gc>
-        <img src="gallery-2-after.jpg" alt="After — anthracite windows on mock-Tudor semi">
-        <img class="gc-before" src="gallery-2-before.jpg" alt="Before — white windows on mock-Tudor semi">
+        <img src="gallery-2-after.jpg" alt="After — white bifold doors on detached">
+        <img class="gc-before" src="gallery-2-before.jpg" alt="Before — original doors on detached">
         <div class="gc-handle"></div>
         <span class="gc-lbl gc-lbl-before">BEFORE</span>
         <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
       </div>
       <div class="gallery-card-info">
-        <div class="gc-style">Anthracite Bay &amp; Casement</div>
-        <div class="gc-house">Semi-detached · Midlands</div>
+        <div class="gc-style">White Bifold Doors</div>
+        <div class="gc-house">Detached · West Midlands</div>
       </div>
     </div>
 
-    <!-- Cards 3–6 hidden until real photos added -->
+    <!-- Card 3 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-3-after.jpg" alt="After — black sash windows on Victorian terrace">
+        <img class="gc-before" src="gallery-3-before.jpg" alt="Before — original windows on Victorian terrace">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Black Sash Windows</div>
+        <div class="gc-house">Victorian terrace · North West</div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-4-after.jpg" alt="After — French doors on new build">
+        <img class="gc-before" src="gallery-4-before.jpg" alt="Before — original doors on new build">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Anthracite French Doors</div>
+        <div class="gc-house">New build · Yorkshire</div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-5-after.jpg" alt="After — flush windows on bungalow">
+        <img class="gc-before" src="gallery-5-before.jpg" alt="Before — original windows on bungalow">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Cream Flush Casement</div>
+        <div class="gc-house">Bungalow · East Midlands</div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="gallery-card">
+      <div class="gallery-card-slider" data-gc>
+        <img src="gallery-6-after.jpg" alt="After — sliding patio doors on detached">
+        <img class="gc-before" src="gallery-6-before.jpg" alt="Before — original doors on detached">
+        <div class="gc-handle"></div>
+        <span class="gc-lbl gc-lbl-before">BEFORE</span>
+        <span class="gc-lbl gc-lbl-after">AFTER</span>
+        <div class="gallery-placeholder" id="gp6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          <span>Add your before photo</span>
+        </div>
+      </div>
+      <div class="gallery-card-info">
+        <div class="gc-style">Grey Sliding Patio Doors</div>
+        <div class="gc-house">Detached · Home Counties</div>
+      </div>
+    </div>
 
   </div>
   <div class="gallery-cta">
@@ -1404,50 +1571,23 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
 <!-- TESTIMONIALS -->
 <section class="testimonials-section" id="testimonials">
   <div class="section-inner">
-    <div class="section-label">Early feedback</div>
-    <h2 class="section-h2">What people are saying</h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
-        <p class="quote">"I showed this to three installers and got quotes back the same day. Before Viewframe I had no idea what I actually wanted — now I do."</p>
-        <div class="testimonial-person">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg>
-          </div>
-          <div>
-            <div class="role">Sarah M.</div>
-            <div class="ctx">Homeowner, Berkshire</div>
-          </div>
-        </div>
+    <div class="section-label">Early access feedback</div>
+    <h2 class="section-h2">Early access feedback</h2>
+    <p style="color:var(--ink-3);font-size:15px;margin-bottom:56px;max-width:520px;">From homeowners and installers who've used the tool during our early access period.</p>
+    <div class="testimonials-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div style="padding:0;">
+        <p style="font-size:15px;color:var(--ink-2);line-height:1.75;margin-bottom:14px;">"I showed this to three installers and got quotes back the same day. Before Viewframe I had no idea what I actually wanted — now I do."</p>
+        <p style="font-size:13px;color:var(--ink-3);">— early access user, Berkshire</p>
       </div>
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
-        <p class="quote">"The client came to the meeting knowing exactly what they wanted. That's never happened in 12 years. We closed the job the same day."</p>
-        <div class="testimonial-person">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <div>
-            <div class="role">D.P., Window & door installer</div>
-            <div class="ctx">South East England</div>
-          </div>
-        </div>
+      <div style="padding:0;">
+        <p style="font-size:15px;color:var(--ink-2);line-height:1.75;margin-bottom:14px;">"The client came to the meeting knowing exactly what they wanted. That's never happened in 12 years. We closed the job the same day."</p>
+        <p style="font-size:13px;color:var(--ink-3);">— early access installer, South East England</p>
       </div>
-      <div class="testimonial-card">
-        <svg class="testimonial-quote-icon" viewBox="0 0 24 24"><path d="M7 11h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a4 4 0 004 4"/><path d="M17 11h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v8a4 4 0 004 4"/></svg>
-        <p class="quote">"The spec sheet means I get every detail upfront — no chasing, no misunderstandings. I can quote in minutes instead of going back and forth for a week."</p>
-        <div class="testimonial-person">
-          <div class="testimonial-avatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
-          </div>
-          <div>
-            <div class="role">M.T., Window & door installer</div>
-            <div class="ctx">West Midlands</div>
-          </div>
-        </div>
+      <div style="padding:0;">
+        <p style="font-size:15px;color:var(--ink-2);line-height:1.75;margin-bottom:14px;">"The spec sheet means I get every detail upfront — no chasing, no misunderstandings. I can quote in minutes instead of going back and forth for a week."</p>
+        <p style="font-size:13px;color:var(--ink-3);">— early access installer, West Midlands</p>
       </div>
     </div>
-    <p style="text-align:center;margin-top:32px;font-size:13px;color:var(--ink-3);">We're collecting verified reviews as we grow. These reflect early user feedback.</p>
   </div>
 </section>
 
@@ -1614,7 +1754,7 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">What's the conversion rate on leads?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
-        <div class="faq-a"><div class="faq-a-inner">Homeowners who use the visualiser are 3× more likely to request a quote than those who browse a static catalogue — because they arrive already knowing what they want. <em style="font-size:12px;color:var(--ink-3);">Based on Viewframe early-access data, June 2026.</em> We're collecting conversion data across early installs; ask us for the latest figures on a call.</div></div>
+        <div class="faq-a"><div class="faq-a-inner">Homeowners arrive already knowing the style, frame colour, and glass type they want — which means faster, more confident quote conversations. We're tracking conversion data across early installs and will share figures on a call.</div></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">How does it embed on my website?<span class="faq-q-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
@@ -1671,6 +1811,22 @@ footer { background: var(--paper-warm); border-top: 1px solid var(--rule); }
       <div id="cf-success" style="display:none;color:var(--teal);font-size:15px;font-weight:600;padding:16px;background:var(--teal-lt);border-radius:var(--r-lg);">Message sent — we'll reply within one working day.</div>
       <button type="submit" id="cf-submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">Send message</button>
     </form>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section style="background:var(--paper-2);border-top:1px solid var(--rule);padding:80px 80px;">
+  <div class="section-inner" style="max-width:640px;">
+    <div class="section-label">About</div>
+    <p style="font-size:17px;color:var(--ink-2);line-height:1.75;">Built by someone who's sold windows for 20 years. Viewframe was founded by Michael Stephenson, who spent two decades in UK window and door sales before building the tool he wished every homeowner and installer had.</p>
+  </div>
+</section>
+
+<!-- INVESTOR -->
+<section style="background:var(--paper);border-top:1px solid var(--rule);padding:56px 80px;">
+  <div class="section-inner" style="max-width:640px;">
+    <div class="section-label">For investors</div>
+    <p style="font-size:15px;color:var(--ink-2);line-height:1.7;">Viewframe is an AI visualisation platform turning home improvement browsing into qualified, spec-ready leads. &nbsp;<a href="mailto:investors@viewframe.co.uk" style="color:var(--accent);font-weight:600;">investors@viewframe.co.uk</a> &nbsp;·&nbsp; <a href="https://drive.google.com/drive/folders/1ujhDfLOdNgcMNI6Hae5n5UdSpwpPEX81?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-weight:600;">Request data room access</a></p>
   </div>
 </section>
 
