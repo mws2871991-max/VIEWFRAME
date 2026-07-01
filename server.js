@@ -29,7 +29,7 @@ app.set('trust proxy', 1);
 app.use(express.json({ limit: '20mb' }));
 
 // ── STATIC FILES ─────────────────────────────────────────────────────────────
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 // Serve index.html at root
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 // Legal pages (extensionless URLs)
