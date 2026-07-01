@@ -13,15 +13,22 @@ async function sendNotification(subject, html) {
   if (!key) { console.log('No RESEND_API_KEY — skipping email:', subject); return; }
   try {
     const resend = new Resend(key);
+    await resend.emails.send({ from: 'Viewframe <onboarding@resend.dev>', to: NOTIFY, subject, html });
+  } catch(e) { console.error('Email error:', e.message); }
+}
+
+async function sendEmailTo(to, subject, html) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) { console.log('No RESEND_API_KEY — skipping user email:', subject); return; }
+  try {
+    const resend = new Resend(key);
     await resend.emails.send({
       from: 'Viewframe <onboarding@resend.dev>',
-      to: NOTIFY,
+      to,
       subject,
-      html
+      html: `<div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#0F172A">${html}</div>`
     });
-  } catch(e) {
-    console.error('Email error:', e.message);
-  }
+  } catch(e) { console.error('User email error:', e.message); }
 }
 
 const app = express();
@@ -254,13 +261,23 @@ app.post('/api/quote-request', (req, res) => {
   if (!postcode || typeof postcode !== 'string' || postcode.trim().length < 3) {
     return res.status(400).json({ error: 'Postcode required.' });
   }
-  appendLog('quote_requests.jsonl', {
-    ts: new Date().toISOString(),
-    name: (name || '').slice(0, 100),
-    email,
-    postcode: postcode.trim().toUpperCase().slice(0, 10),
-    design: design || {}
-  });
+  const pc = postcode.trim().toUpperCase().slice(0, 10);
+  const designItems = Object.keys(design || {}).filter(k => k !== 'estimatedTotal').join(', ');
+  const total = (design || {}).estimatedTotal || '—';
+  appendLog('quote_requests.jsonl', { ts: new Date().toISOString(), name: (name||'').slice(0,100), email, postcode: pc, design: design || {} });
+
+  // Notify owner
+  sendNotification(`New quote request — ${pc}`,
+    `<p><b>Email:</b> ${email}</p><p><b>Postcode:</b> ${pc}</p><p><b>Design:</b> ${designItems}</p><p><b>Estimated total:</b> ${total}</p>`
+  );
+  // Confirm to user
+  sendEmailTo(email, 'Your Viewframe design has been saved',
+    `<p>Thanks for using Viewframe.</p>
+    <p>Your design has been saved and a local FENSA-registered installer will be in touch within 24 hours with a fixed quote.</p>
+    <p><b>Your design:</b> ${designItems || 'See configurator'}<br><b>Estimated price:</b> ${total}</p>
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:hello@viewframe.co.uk">hello@viewframe.co.uk</a>.</p>
+    <p>— The Viewframe team</p>`
+  );
   res.json({ ok: true });
 });
 
@@ -273,16 +290,47 @@ app.post('/api/book-survey', (req, res) => {
   if (!name || typeof name !== 'string' || name.trim().length < 2) {
     return res.status(400).json({ error: 'Name required.' });
   }
+  const pc = (postcode || '').trim().toUpperCase().slice(0, 10);
   appendLog('survey_bookings.jsonl', {
-    ts: new Date().toISOString(),
-    name: name.trim().slice(0, 100),
-    email,
-    phone: (phone || '').slice(0, 30),
-    postcode: (postcode || '').trim().toUpperCase().slice(0, 10),
-    date: (date || '').slice(0, 20),
-    time: (time || '').slice(0, 20)
+    ts: new Date().toISOString(), name: name.trim().slice(0,100), email,
+    phone: (phone||'').slice(0,30), postcode: pc,
+    date: (date||'').slice(0,20), time: (time||'').slice(0,20)
   });
+
+  // Notify owner
+  sendNotification(`Survey booking — ${name.trim()} (${pc})`,
+    `<p><b>Name:</b> ${name.trim()}</p><p><b>Email:</b> ${email}</p><p><b>Phone:</b> ${phone||'—'}</p><p><b>Postcode:</b> ${pc}</p><p><b>Preferred date:</b> ${date||'Any'} ${time||''}</p>`
+  );
+  // Confirm to user
+  sendEmailTo(email, 'Your free home survey is booked — Viewframe',
+    `<p>Hi ${name.trim()},</p>
+    <p>Your free home survey request has been received. A local FENSA-registered installer will be in touch within 24 hours to confirm your appointment.</p>
+    ${date ? `<p><b>Requested date:</b> ${date}${time ? ', ' + time : ''}</p>` : ''}
+    <p>If you need to change anything, just reply to this email or contact us at <a href="mailto:hello@viewframe.co.uk">hello@viewframe.co.uk</a>.</p>
+    <p>— The Viewframe team</p>`
+  );
   res.json({ ok: true });
+});
+
+// ── GET /api/dashboard ────────────────────────────────────────────────────────
+app.get('/api/dashboard', (req, res) => {
+  const token = process.env.DASHBOARD_TOKEN;
+  if (token && req.query.token !== token) return res.status(401).json({ error: 'Unauthorised.' });
+  function readLog(file) {
+    const fp = path.join(__dirname, 'data', file);
+    if (!fs.existsSync(fp)) return [];
+    return fs.readFileSync(fp, 'utf8').trim().split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  }
+  const quotes = readLog('quote_requests.jsonl');
+  const surveys = readLog('survey_bookings.jsonl');
+  const leads = readLog('leads.jsonl');
+  const waitlist = readLog('waitlist.jsonl');
+  res.json({
+    totals: { quotes: quotes.length, surveys: surveys.length, leads: leads.length, waitlist: waitlist.length },
+    recentQuotes: quotes.slice(-20).reverse(),
+    recentSurveys: surveys.slice(-20).reverse(),
+    recentLeads: leads.slice(-10).reverse()
+  });
 });
 
 // ── POST /api/lead ────────────────────────────────────────────────────────────
