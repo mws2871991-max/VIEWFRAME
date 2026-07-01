@@ -29,6 +29,16 @@
   #vf-link-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;color:#2563eb;word-break:break-all;cursor:pointer;text-align:left}
   #vf-link-copy{margin-top:6px;font-size:11px;color:#94a3b8;text-align:center}
 
+  /* ── Design summary ── */
+  #vf-design-summary{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:20px}
+  #vf-design-summary .vf-ds-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:10px}
+  #vf-design-summary ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+  #vf-design-summary li{display:flex;align-items:center;gap:7px;font-size:13px;color:#334155}
+  #vf-design-summary li::before{content:'•';color:#0F172A;font-weight:700;flex-shrink:0}
+  #vf-design-summary .vf-ds-total{margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}
+  #vf-design-summary .vf-ds-total span{font-size:12px;color:#64748b}
+  #vf-design-summary .vf-ds-total strong{font-family:'Fraunces',serif;font-size:17px;color:#0F172A}
+
   /* ── Sticky CTA ── */
   #vf-cta{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
   .vf-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;box-shadow:0 4px 18px rgba(0,0,0,.15);transition:transform .15s,box-shadow .15s;white-space:nowrap}
@@ -127,6 +137,11 @@
     <button id="vf-close">✕</button>
     <div id="vf-form">
       <h2>Save your design</h2>
+      <div id="vf-design-summary">
+        <div class="vf-ds-title">Your Design</div>
+        <ul id="vf-ds-items"></ul>
+        <div class="vf-ds-total"><span>Estimated price</span><strong id="vf-ds-price">—</strong></div>
+      </div>
       <p class="vf-sub">We'll email you this configuration and connect you with a local FENSA-registered installer for a fixed quote.</p>
       <label>Full name</label>
       <input id="vf-name" type="text" placeholder="Jane Smith" autocomplete="name" />
@@ -206,9 +221,40 @@
     document.getElementById('vf-book-success').style.display='block';
   });
 
+  /* ── Populate design summary ── */
+  var CATEGORY_MAP=[
+    {label:'Product',keys:['Casement Window','Tilt & Turn Window','Bi-Fold Door']},
+    {label:'Frame Colour',keys:['White','Anthracite Grey','Black','Cream','Chartwell Green','Oak','Rosewood']},
+    {label:'Glass',keys:['Clear','Frosted','Satin','Privacy Glass','Triple Glazing']},
+    {label:'Glazing Bars',keys:['Plain (no bars)','Two Pane','Cottage Bar','Georgian Bar']},
+    {label:'Handle',keys:['Standard Handle','Premium Handle','Traditional Handle']},
+  ];
+  function populateSummary(){
+    var items=document.getElementById('vf-ds-items');
+    var priceEl=document.getElementById('vf-ds-price');
+    if(!items)return;
+    var active={};
+    document.querySelectorAll('button').forEach(function(b){
+      var bg=b.style.background||'';
+      if(bg.includes('var(--accent)')&&!bg.includes('dim')){
+        active[b.textContent.trim()]=true;
+      }
+    });
+    var html='';
+    CATEGORY_MAP.forEach(function(cat){
+      cat.keys.forEach(function(k){
+        if(active[k]) html+='<li>'+k+'</li>';
+      });
+    });
+    items.innerHTML=html||'<li>No selections yet</li>';
+    var total=document.querySelector('[class*="font-serif-brand"][class*="text-lg"]');
+    if(priceEl) priceEl.textContent=total?total.textContent.trim():'—';
+  }
+
   /* ── Open / close modal ── */
   var overlay=document.getElementById('vf-overlay');
   function openModal(){
+    populateSummary();
     overlay.classList.add('vf-vis');
     requestAnimationFrame(function(){overlay.classList.add('vf-in');});
   }
