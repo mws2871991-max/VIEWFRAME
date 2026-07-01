@@ -29,6 +29,47 @@
   #vf-link-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;color:#2563eb;word-break:break-all;cursor:pointer;text-align:left}
   #vf-link-copy{margin-top:6px;font-size:11px;color:#94a3b8;text-align:center}
 
+  /* ── Compare tray ── */
+  #vf-compare-tray{position:fixed;bottom:0;left:0;right:0;z-index:999;background:#fff;border-top:1.5px solid #e2e8f0;padding:14px 24px;display:none;align-items:center;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,.08)}
+  #vf-compare-tray.vf-show{display:flex}
+  .vf-saved-card{flex:1;max-width:200px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:11px 14px;position:relative}
+  .vf-saved-card .vf-sc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:5px}
+  .vf-saved-card .vf-sc-items{font-size:12px;color:#334155;line-height:1.55}
+  .vf-saved-card .vf-sc-price{font-family:'Fraunces',serif;font-size:15px;color:#0F172A;margin-top:5px}
+  .vf-saved-card .vf-sc-del{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:#cbd5e1;font-size:15px;line-height:1;padding:2px}
+  .vf-saved-card .vf-sc-del:hover{color:#0F172A}
+  #vf-compare-btn{background:#0F172A;color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
+  #vf-save-design-btn{background:#fff;color:#0F172A;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0;transition:background .15s}
+  #vf-save-design-btn:hover{background:#f8fafc}
+  .vf-tray-spacer{flex:1}
+
+  /* ── Compare modal ── */
+  #vf-cmp-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10001;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+  #vf-cmp-overlay.vf-vis{display:flex}
+  #vf-cmp-overlay.vf-in{opacity:1}
+  #vf-cmp-modal{background:#fff;border-radius:20px;padding:32px;width:680px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.22);position:relative;transform:translateY(18px);transition:transform .22s;max-height:90vh;overflow-y:auto}
+  #vf-cmp-overlay.vf-in #vf-cmp-modal{transform:translateY(0)}
+  #vf-cmp-modal h2{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:#0F172A;margin:0 0 20px}
+  #vf-cmp-cols{display:grid;gap:16px}
+  .vf-cmp-col{border:1.5px solid #e2e8f0;border-radius:14px;padding:18px 20px}
+  .vf-cmp-col h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin:0 0 12px}
+  .vf-cmp-col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+  .vf-cmp-col li{font-size:13px;color:#334155;display:flex;gap:7px}
+  .vf-cmp-col li::before{content:'•';color:#0F172A;font-weight:700}
+  .vf-cmp-col .vf-cmp-price{font-family:'Fraunces',serif;font-size:22px;color:#0F172A;margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0}
+  .vf-cmp-col .vf-cmp-price span{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px}
+  #vf-cmp-close{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;padding:4px}
+  #vf-cmp-cta{margin-top:20px;width:100%;background:#0F172A;color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+  #vf-cmp-cta:hover{background:#1e293b}
+
+  /* ── Why choose this tooltip ── */
+  #vf-why{position:fixed;z-index:998;background:#0F172A;color:#fff;border-radius:12px;padding:13px 16px;width:230px;box-shadow:0 8px 28px rgba(0,0,0,.2);pointer-events:none;opacity:0;transition:opacity .15s}
+  #vf-why.vf-show{opacity:1}
+  #vf-why .vf-why-title{font-size:12px;font-weight:700;margin-bottom:8px;color:#e2e8f0}
+  #vf-why ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+  #vf-why li{font-size:12px;color:#cbd5e1;display:flex;gap:6px;line-height:1.4}
+  #vf-why li::before{content:'✓';color:#4ade80;flex-shrink:0}
+
   /* ── Design summary ── */
   #vf-design-summary{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:20px}
   #vf-design-summary .vf-ds-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:10px}
@@ -90,6 +131,30 @@
   #vf-quote-btn{width:100%;margin-top:13px;background:#0F172A;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
   #vf-quote-btn:hover{background:#1e293b}
 </style>
+
+<!-- Why choose this tooltip -->
+<div id="vf-why">
+  <div class="vf-why-title" id="vf-why-title"></div>
+  <ul id="vf-why-list"></ul>
+</div>
+
+<!-- Compare tray -->
+<div id="vf-compare-tray">
+  <div id="vf-tray-cards" style="display:flex;gap:12px;flex:1;overflow-x:auto"></div>
+  <div class="vf-tray-spacer"></div>
+  <button id="vf-save-design-btn">+ Save design</button>
+  <button id="vf-compare-btn" style="display:none">Compare →</button>
+</div>
+
+<!-- Compare modal -->
+<div id="vf-cmp-overlay">
+  <div id="vf-cmp-modal">
+    <button id="vf-cmp-close">✕</button>
+    <h2>Compare your designs</h2>
+    <div id="vf-cmp-cols"></div>
+    <button id="vf-cmp-cta">Save my favourite design & get a quote →</button>
+  </div>
+</div>
 
 <!-- Booking modal -->
 <div id="vf-book-overlay">
@@ -415,6 +480,126 @@
   var obs=new MutationObserver(function(){inject();interceptShareBtn();});
   obs.observe(document.body,{childList:true,subtree:true});
   inject();
+
+  /* ── WHY CHOOSE THIS ── */
+  var WHY={
+    'Triple Glazing':['Best thermal efficiency','Significantly quieter home','Ideal for exposed or noisy locations'],
+    'Frosted':['Privacy without net curtains','Ideal for bathrooms & ground floor','Still lets natural light through'],
+    'Satin':['Softer look than frosted','Popular for kitchens','Subtle privacy with warmth'],
+    'Privacy Glass':['Maximum privacy','Maintains natural light','Eliminates need for blinds'],
+    'Cottage Bar':['Traditional Georgian look','Popular on period properties','Adds instant character'],
+    'Georgian Bar':['Classic divided-light appearance','Suits older & heritage homes','Timeless style'],
+    'Two Pane':['Clean, modern look','Slight privacy benefit','Most subtle bar option'],
+    'Premium Handle':['Solid brass or stainless steel','Smoother, longer-lasting action','Extended warranty included'],
+    'Traditional Handle':['Period-appropriate design','Matches older window styles','Wrought iron look available'],
+    'Bi-Fold Door':['Opens fully — no obstruction','Floods room with light','Premium feel, adds value'],
+    'Tilt & Turn Window':['Opens two ways for ventilation','Easy to clean from inside','Popular in flats & apartments'],
+    'Anthracite Grey':['Most popular contemporary colour','Suits modern & traditional homes','Strong kerb appeal'],
+    'Black':['Bold, architect-led aesthetic','Dramatic contrast on light walls','Increasingly in demand'],
+    'Chartwell Green':['Classic heritage colour','Pairs well with brick & stone','Distinctive without being loud'],
+    'Rosewood':['Warm wood-effect finish','No painting or maintenance','Popular on 1980s–2000s homes']
+  };
+  var whyEl=document.getElementById('vf-why');
+  var whyTitle=document.getElementById('vf-why-title');
+  var whyList=document.getElementById('vf-why-list');
+  var whyTimer;
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('button');
+    if(!btn)return;
+    var txt=btn.textContent.trim();
+    var info=WHY[txt];
+    if(!info)return;
+    clearTimeout(whyTimer);
+    whyTitle.textContent=txt;
+    whyList.innerHTML=info.map(function(i){return'<li>'+i+'</li>';}).join('');
+    var r=btn.getBoundingClientRect();
+    var top=r.bottom+8;
+    var left=r.left;
+    if(left+240>window.innerWidth)left=window.innerWidth-250;
+    whyEl.style.top=top+'px';
+    whyEl.style.left=left+'px';
+    whyEl.classList.add('vf-show');
+    whyTimer=setTimeout(function(){whyEl.classList.remove('vf-show');},4000);
+  });
+
+  /* ── COMPARE DESIGNS ── */
+  var savedDesigns=[];
+  var tray=document.getElementById('vf-compare-tray');
+  var trayCards=document.getElementById('vf-tray-cards');
+  var compareBtn=document.getElementById('vf-compare-btn');
+  var cmpOverlay=document.getElementById('vf-cmp-overlay');
+
+  function readDesign(){
+    var active=[];
+    var OPTS=['Casement Window','Tilt & Turn Window','Bi-Fold Door',
+      'White','Anthracite Grey','Black','Cream','Chartwell Green','Oak','Rosewood',
+      'Clear','Frosted','Satin','Privacy Glass','Triple Glazing',
+      'Plain (no bars)','Two Pane','Cottage Bar','Georgian Bar',
+      'Standard Handle','Premium Handle','Traditional Handle'];
+    document.querySelectorAll('button').forEach(function(b){
+      var bg=b.style.background||'';
+      if(bg.includes('var(--accent)')&&!bg.includes('dim')&&OPTS.indexOf(b.textContent.trim())>-1){
+        active.push(b.textContent.trim());
+      }
+    });
+    var total=document.querySelector('[class*="font-serif-brand"][class*="text-lg"]');
+    return{items:active,price:total?total.textContent.trim():'—'};
+  }
+
+  function renderTray(){
+    tray.classList.toggle('vf-show',savedDesigns.length>0);
+    compareBtn.style.display=savedDesigns.length>1?'block':'none';
+    trayCards.innerHTML='';
+    savedDesigns.forEach(function(d,i){
+      var card=document.createElement('div');
+      card.className='vf-saved-card';
+      card.innerHTML='<button class="vf-sc-del" data-i="'+i+'">✕</button>'
+        +'<div class="vf-sc-label">Design '+(i===0?'A':'B'+(i>1?i:''))+'</div>'
+        +'<div class="vf-sc-items">'+d.items.slice(0,3).join(' · ')+'</div>'
+        +'<div class="vf-sc-price">'+d.price+'</div>';
+      trayCards.appendChild(card);
+    });
+    trayCards.querySelectorAll('.vf-sc-del').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        savedDesigns.splice(parseInt(this.dataset.i),1);
+        renderTray();
+      });
+    });
+  }
+
+  document.getElementById('vf-save-design-btn').addEventListener('click',function(){
+    if(savedDesigns.length>=3){alert('You can save up to 3 designs to compare.');return;}
+    savedDesigns.push(readDesign());
+    renderTray();
+    this.textContent=savedDesigns.length===1?'+ Save another':'+ Save another';
+  });
+
+  compareBtn.addEventListener('click',function(){
+    var cols=document.getElementById('vf-cmp-cols');
+    cols.style.gridTemplateColumns='repeat('+savedDesigns.length+',1fr)';
+    cols.innerHTML=savedDesigns.map(function(d,i){
+      return'<div class="vf-cmp-col">'
+        +'<h3>Design '+(i===0?'A':String.fromCharCode(65+i))+'</h3>'
+        +'<ul>'+d.items.map(function(it){return'<li>'+it+'</li>';}).join('')+'</ul>'
+        +'<div class="vf-cmp-price"><span>Estimated price</span>'+d.price+'</div>'
+        +'</div>';
+    }).join('');
+    cmpOverlay.classList.add('vf-vis');
+    requestAnimationFrame(function(){cmpOverlay.classList.add('vf-in');});
+  });
+
+  document.getElementById('vf-cmp-close').addEventListener('click',function(){
+    cmpOverlay.classList.remove('vf-in');
+    setTimeout(function(){cmpOverlay.classList.remove('vf-vis');},200);
+  });
+  cmpOverlay.addEventListener('click',function(e){
+    if(e.target===cmpOverlay){cmpOverlay.classList.remove('vf-in');setTimeout(function(){cmpOverlay.classList.remove('vf-vis');},200);}
+  });
+  document.getElementById('vf-cmp-cta').addEventListener('click',function(){
+    cmpOverlay.classList.remove('vf-in');
+    setTimeout(function(){cmpOverlay.classList.remove('vf-vis');populateSummary();openModal();},200);
+  });
+
 })();
 </script>
 </body></html>
