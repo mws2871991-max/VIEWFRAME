@@ -36,6 +36,27 @@
   .vf-btn-dark{background:#0F172A;color:#fff}
   .vf-btn-light{background:#fff;color:#0F172A;border:1.5px solid #e2e8f0}
 
+  /* ── Booking modal ── */
+  #vf-book-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:10000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+  #vf-book-overlay.vf-vis{display:flex}
+  #vf-book-overlay.vf-in{opacity:1}
+  #vf-book-modal{background:#fff;border-radius:20px;padding:32px;width:440px;max-width:92vw;box-shadow:0 24px 64px rgba(0,0,0,.22);position:relative;transform:translateY(18px);transition:transform .22s;max-height:90vh;overflow-y:auto}
+  #vf-book-overlay.vf-in #vf-book-modal{transform:translateY(0)}
+  #vf-book-modal h2{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:#0F172A;margin:0 0 5px}
+  #vf-book-modal .vf-sub{font-size:14px;color:#64748b;margin:0 0 22px;line-height:1.55}
+  #vf-book-modal label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+  #vf-book-modal input,#vf-book-modal select{width:100%;box-sizing:border-box;border:1.5px solid #e2e8f0;border-radius:10px;padding:11px 14px;font-size:14px;color:#0F172A;outline:none;margin-bottom:14px;font-family:inherit;transition:border-color .15s;background:#fff}
+  #vf-book-modal input:focus,#vf-book-modal select:focus{border-color:#0F172A}
+  .vf-book-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  #vf-book-submit{width:100%;background:#0F172A;color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+  #vf-book-submit:hover{background:#1e293b}
+  #vf-book-submit:disabled{opacity:.6;cursor:default}
+  #vf-book-close{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;line-height:1;padding:4px}
+  #vf-book-success{display:none;text-align:center;padding:12px 0}
+  #vf-book-success .vf-tick{font-size:44px;margin-bottom:12px}
+  #vf-book-success h3{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:#0F172A;margin:0 0 10px}
+  #vf-book-success p{font-size:14px;color:#64748b;line-height:1.55;margin:0}
+
   /* ── Progress ── */
   #vf-prog{padding:16px 24px 0}
   .vf-prog-hd{display:flex;justify-content:space-between;margin-bottom:6px;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em}
@@ -59,6 +80,46 @@
   #vf-quote-btn{width:100%;margin-top:13px;background:#0F172A;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
   #vf-quote-btn:hover{background:#1e293b}
 </style>
+
+<!-- Booking modal -->
+<div id="vf-book-overlay">
+  <div id="vf-book-modal">
+    <button id="vf-book-close">✕</button>
+    <div id="vf-book-form">
+      <h2>Book a free home survey</h2>
+      <p class="vf-sub">One of our FENSA-registered local installers will visit at a time that suits you — no obligation.</p>
+      <label>Full name</label>
+      <input id="vf-bk-name" type="text" placeholder="Jane Smith" autocomplete="name" />
+      <label>Email address</label>
+      <input id="vf-bk-email" type="email" placeholder="jane@example.com" autocomplete="email" />
+      <label>Phone number</label>
+      <input id="vf-bk-phone" type="tel" placeholder="+44 7700 000000" autocomplete="tel" />
+      <label>Postcode</label>
+      <input id="vf-bk-postcode" type="text" placeholder="SW1A 1AA" autocomplete="postal-code" />
+      <div class="vf-book-row">
+        <div>
+          <label>Preferred date</label>
+          <input id="vf-bk-date" type="date" />
+        </div>
+        <div>
+          <label>Preferred time</label>
+          <select id="vf-bk-time">
+            <option value="">Any time</option>
+            <option>Morning (8am–12pm)</option>
+            <option>Afternoon (12pm–5pm)</option>
+            <option>Evening (5pm–7pm)</option>
+          </select>
+        </div>
+      </div>
+      <button id="vf-book-submit">Book my free survey →</button>
+    </div>
+    <div id="vf-book-success">
+      <div class="vf-tick">📅</div>
+      <h3>Survey booked!</h3>
+      <p>We'll confirm your appointment by email within a few hours. A local installer will be in touch to finalise the time.</p>
+    </div>
+  </div>
+</div>
 
 <!-- Lead capture modal -->
 <div id="vf-overlay">
@@ -110,6 +171,41 @@
 
 <script>
 (function(){
+  /* ── Booking modal ── */
+  var bookOverlay=document.getElementById('vf-book-overlay');
+  function openBooking(){
+    bookOverlay.classList.add('vf-vis');
+    requestAnimationFrame(function(){bookOverlay.classList.add('vf-in');});
+  }
+  function closeBooking(){
+    bookOverlay.classList.remove('vf-in');
+    setTimeout(function(){bookOverlay.classList.remove('vf-vis');},200);
+  }
+  bookOverlay.addEventListener('click',function(e){if(e.target===bookOverlay)closeBooking();});
+  document.getElementById('vf-book-close').addEventListener('click',closeBooking);
+
+  document.getElementById('vf-book-submit').addEventListener('click',async function(){
+    var name=document.getElementById('vf-bk-name').value.trim();
+    var email=document.getElementById('vf-bk-email').value.trim();
+    var phone=document.getElementById('vf-bk-phone').value.trim();
+    var postcode=document.getElementById('vf-bk-postcode').value.trim();
+    var date=document.getElementById('vf-bk-date').value;
+    var time=document.getElementById('vf-bk-time').value;
+    if(!name||!email){alert('Please enter your name and email.');return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Please enter a valid email address.');return;}
+    this.textContent='Booking…';
+    this.disabled=true;
+    try{
+      await fetch('/api/book-survey',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:name,email:email,phone:phone,postcode:postcode,date:date,time:time})
+      });
+    }catch(e){}
+    document.getElementById('vf-book-form').style.display='none';
+    document.getElementById('vf-book-success').style.display='block';
+  });
+
   /* ── Open / close modal ── */
   var overlay=document.getElementById('vf-overlay');
   function openModal(){
@@ -125,9 +221,7 @@
 
   /* ── Sticky CTAs ── */
   document.getElementById('vf-cta-quote').addEventListener('click',function(){resetModal();openModal();});
-  document.getElementById('vf-cta-survey').addEventListener('click',function(){
-    window.location.href='mailto:hello@viewframe.co.uk?subject=Book a free survey&body=I%20configured%20my%20windows%20on%20viewframe.co.uk%2Fconfigurator%20and%20would%20like%20to%20book%20a%20free%20survey.';
-  });
+  document.getElementById('vf-cta-survey').addEventListener('click',openBooking);
 
   /* ── Form submission ── */
   function resetModal(){
@@ -164,9 +258,7 @@
     var linkBox=document.getElementById('vf-link-box');
     linkBox.textContent=link;
     linkBox.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(link);document.getElementById('vf-link-copy').textContent='Copied!';};
-    document.getElementById('vf-survey-btn').onclick=function(){
-      window.location.href='mailto:hello@viewframe.co.uk?subject=Book a free home survey&body=Hi%2C%20I%20just%20saved%20my%20window%20design%20on%20viewframe.co.uk%2Fconfigurator%20and%20would%20like%20to%20book%20a%20free%20home%20survey.';
-    };
+    document.getElementById('vf-survey-btn').onclick=openBooking;
   });
 
   /* ── Read active config from sidebar ── */

@@ -264,6 +264,27 @@ app.post('/api/quote-request', (req, res) => {
   res.json({ ok: true });
 });
 
+// ── POST /api/book-survey ─────────────────────────────────────────────────────
+app.post('/api/book-survey', (req, res) => {
+  const { name, email, phone, postcode, date, time } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required.' });
+  }
+  if (!name || typeof name !== 'string' || name.trim().length < 2) {
+    return res.status(400).json({ error: 'Name required.' });
+  }
+  appendLog('survey_bookings.jsonl', {
+    ts: new Date().toISOString(),
+    name: name.trim().slice(0, 100),
+    email,
+    phone: (phone || '').slice(0, 30),
+    postcode: (postcode || '').trim().toUpperCase().slice(0, 10),
+    date: (date || '').slice(0, 20),
+    time: (time || '').slice(0, 20)
+  });
+  res.json({ ok: true });
+});
+
 // ── POST /api/lead ────────────────────────────────────────────────────────────
 // Rich lead from onboarding: includes chosen colour, style, and element count
 app.post('/api/lead', (req, res) => {
