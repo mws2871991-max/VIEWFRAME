@@ -13,7 +13,7 @@ async function sendNotification(subject, html) {
   if (!key) { console.log('No RESEND_API_KEY — skipping email:', subject); return; }
   try {
     const resend = new Resend(key);
-    await resend.emails.send({ from: 'Viewframe <onboarding@resend.dev>', to: NOTIFY, subject, html });
+    await resend.emails.send({ from: 'Viewframe <hello@viewframe.co.uk>', to: NOTIFY, subject, html });
   } catch(e) { console.error('Email error:', e.message); }
 }
 
@@ -23,7 +23,7 @@ async function sendEmailTo(to, subject, html) {
   try {
     const resend = new Resend(key);
     await resend.emails.send({
-      from: 'Viewframe <onboarding@resend.dev>',
+      from: 'Viewframe <hello@viewframe.co.uk>',
       to,
       subject,
       html: `<div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#0F172A">${html}</div>`
