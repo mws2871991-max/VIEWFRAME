@@ -14,12 +14,20 @@
   #vf-modal-submit:hover{background:#1e293b}
   #vf-modal-submit:disabled{opacity:.6;cursor:default}
   #vf-close{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:20px;line-height:1;padding:4px}
-  #vf-success{display:none;text-align:center;padding:8px 0}
-  #vf-success .vf-tick{font-size:44px;margin-bottom:12px}
-  #vf-success h3{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:#0F172A;margin:0 0 8px}
-  #vf-success p{font-size:14px;color:#64748b;margin:0 0 18px;line-height:1.55}
-  #vf-link-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:13px;color:#2563eb;word-break:break-all;cursor:pointer;text-align:left}
-  #vf-link-copy{margin-top:8px;font-size:12px;color:#94a3b8;text-align:center}
+  #vf-success{display:none;padding:4px 0}
+  #vf-success h3{font-family:'Fraunces',serif;font-size:21px;font-weight:300;color:#0F172A;margin:0 0 18px;text-align:center}
+  .vf-steps{display:flex;flex-direction:column;gap:0;margin-bottom:20px;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden}
+  .vf-step{display:flex;align-items:flex-start;gap:13px;padding:14px 16px;background:#fff;border-bottom:1px solid #f1f5f9}
+  .vf-step:last-child{border-bottom:none}
+  .vf-step-icon{width:28px;height:28px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#16a34a;font-weight:700;margin-top:1px}
+  .vf-step-text strong{display:block;font-size:13px;font-weight:600;color:#0F172A;margin-bottom:2px}
+  .vf-step-text span{font-size:12px;color:#64748b;line-height:1.45}
+  .vf-eta{text-align:center;font-size:12px;color:#64748b;margin-bottom:20px;padding:10px 14px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0}
+  .vf-eta strong{color:#0F172A;display:block;font-size:13px;margin-bottom:2px}
+  #vf-survey-btn{width:100%;background:#0F172A;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;margin-bottom:10px}
+  #vf-survey-btn:hover{background:#1e293b}
+  #vf-link-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:8px;padding:10px 14px;font-size:12px;color:#2563eb;word-break:break-all;cursor:pointer;text-align:left}
+  #vf-link-copy{margin-top:6px;font-size:11px;color:#94a3b8;text-align:center}
 
   /* ── Sticky CTA ── */
   #vf-cta{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
@@ -70,10 +78,24 @@
       <button id="vf-modal-submit">Save design &amp; get quote →</button>
     </div>
     <div id="vf-success">
-      <div class="vf-tick">✓</div>
-      <h3>Your design is saved!</h3>
-      <p>We've sent your configuration by email. A local installer will be in touch within 24 hours with a fixed quote.</p>
-      <p style="font-size:12px;color:#94a3b8;margin-bottom:6px">Your shareable link:</p>
+      <h3>Your Design Has Been Saved</h3>
+      <div class="vf-steps">
+        <div class="vf-step">
+          <div class="vf-step-icon">✓</div>
+          <div class="vf-step-text"><strong>Configuration emailed to you</strong><span>Check your inbox for a full summary of your design choices</span></div>
+        </div>
+        <div class="vf-step">
+          <div class="vf-step-icon">✓</div>
+          <div class="vf-step-text"><strong>Fixed quotation being prepared</strong><span>Based on your exact specification and postcode</span></div>
+        </div>
+        <div class="vf-step">
+          <div class="vf-step-icon">✓</div>
+          <div class="vf-step-text"><strong>Local installer notified</strong><span>A FENSA-registered installer in your area has been alerted</span></div>
+        </div>
+      </div>
+      <div class="vf-eta"><strong>Estimated response: within 24 hours</strong>Most customers hear back the same day</div>
+      <button id="vf-survey-btn">📅 Book your free home survey →</button>
+      <p style="font-size:12px;color:#94a3b8;margin-bottom:6px;text-align:center">Your shareable link:</p>
       <div id="vf-link-box">Generating…</div>
       <p id="vf-link-copy">Click to copy</p>
     </div>
@@ -142,6 +164,9 @@
     var linkBox=document.getElementById('vf-link-box');
     linkBox.textContent=link;
     linkBox.onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(link);document.getElementById('vf-link-copy').textContent='Copied!';};
+    document.getElementById('vf-survey-btn').onclick=function(){
+      window.location.href='mailto:hello@viewframe.co.uk?subject=Book a free home survey&body=Hi%2C%20I%20just%20saved%20my%20window%20design%20on%20viewframe.co.uk%2Fconfigurator%20and%20would%20like%20to%20book%20a%20free%20home%20survey.';
+    };
   });
 
   /* ── Read active config from sidebar ── */
